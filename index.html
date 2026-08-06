@@ -103,10 +103,10 @@
   .nav-cta .btn-navy{padding:clamp(9px,1vw,14px) clamp(13px,1.8vw,26px);font-size:clamp(.78rem,.4vw + .66rem,.94rem);white-space:nowrap;}
 
   /* HERO */
-  .hero{padding:64px 0 0;background:var(--soft);}
+  .hero{padding:64px 0 56px;background:var(--soft);}
   .hero-card{
     background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
-    padding:64px 60px;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;
+    padding:56px;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:stretch;
     box-shadow:0 30px 60px -30px rgba(18,48,92,.12);
   }
   .hero h1{font-size:2.7rem;letter-spacing:-.02em;margin-bottom:20px;}
@@ -135,7 +135,7 @@
   .hero-visual .ring{position:absolute;border-radius:50%;border:1.5px solid rgba(63,182,174,.3);}
   .hero-visual .ring.r1{width:260px;height:260px;}
   .hero-visual .ring.r2{width:200px;height:200px;}
-  .hero-visual .heart{position:relative;z-index:2;width:96px;height:96px;color:var(--teal);}
+  .hero-visual .heart{position:relative;z-index:2;width:96px;height:96px;color:var(--teal);fill:currentColor;}
   .hero-partners{padding:36px 0 64px;}
   .partners-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
   .partner-pill{
@@ -156,7 +156,7 @@
     display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
     border:1px solid var(--line);
   }
-  .about-visual .icon-big{width:84px;height:84px;color:var(--navy);opacity:.9;position:relative;z-index:2;}
+  .about-visual .icon-big{width:84px;height:84px;color:var(--navy);opacity:.9;position:relative;z-index:2;fill:currentColor;}
   .about-visual .blob{position:absolute;border-radius:50%;}
   .about-visual .blob.sky{width:130px;height:130px;background:var(--sky);opacity:.5;top:-30px;left:-30px;}
   .about-visual .blob.green{width:110px;height:110px;background:var(--green);opacity:.5;bottom:-26px;right:-20px;}
@@ -311,7 +311,7 @@
   .team-text h2{font-size:2rem;margin-bottom:16px;letter-spacing:-.01em;}
   .team-text p{color:var(--muted);margin-bottom:14px;}
   .quote-card{background:var(--soft);border:1px solid var(--line);border-radius:var(--r-md);padding:36px;}
-  .quote-card .icon{width:30px;height:30px;color:var(--teal);margin-bottom:16px;}
+  .quote-card .icon{width:30px;height:30px;color:var(--teal);margin-bottom:16px;fill:currentColor;}
   .quote-card p{font-size:1.08rem;color:var(--navy);font-style:italic;margin-bottom:22px;}
   .quote-author{display:flex;align-items:center;gap:12px;}
   .quote-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--sand));flex:none;}
@@ -335,16 +335,6 @@
   .aide-card:nth-of-type(5) .num{background:rgba(143,201,163,.3);color:var(--green-dark);}
   .aide-card h4{font-size:.98rem;margin-bottom:8px;}
   .aide-card p{font-size:.88rem;color:var(--muted);}
-
-  /* CTA BAND */
-  .cta-band-wrap{padding:0 0 96px;}
-  .cta-band{
-    background:var(--soft);border:1px solid var(--line);border-radius:var(--r-lg);
-    padding:52px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;
-  }
-  .cta-band h2{font-size:1.5rem;margin-bottom:8px;}
-  .cta-band p{color:var(--muted);font-size:.96rem;}
-  .cta-actions{display:flex;gap:12px;flex-wrap:wrap;}
 
   /* CONTACT */
   .contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:52px;}
@@ -394,7 +384,6 @@
     .hero h1{font-size:2.2rem;}
     .hero-card{padding:44px 32px;}
     .about-visual,.hero-visual{min-height:260px;}
-    .cta-band{padding:40px 32px;}
     .contact-grid{gap:40px;}
   }
   @media (max-width: 640px){
@@ -405,7 +394,6 @@
     .form-row{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
     .footer-bottom{flex-direction:column;align-items:flex-start;gap:6px;}
-    .cta-band{flex-direction:column;align-items:flex-start;padding:32px 24px;}
     .aide-highlight{flex-direction:column;align-items:flex-start;padding:28px 24px;}
     .hero-card{padding:32px 22px;border-radius:22px;}
     .hero h1{font-size:1.8rem;}
@@ -811,21 +799,6 @@
     </div>
   </div>
 </section>
-
-<div class="cta-band-wrap">
-  <div class="container">
-    <div class="cta-band">
-      <div>
-        <h2>Parlons de votre situation</h2>
-        <p>Chaque accompagnement est unique. Contactez-nous pour un échange gratuit et sans engagement.</p>
-      </div>
-      <div class="cta-actions">
-        <a href="tel:0664269303" class="btn btn-primary"><svg class="icon" style="width:16px;height:16px"><use href="#ic-phone"/></svg>06 64 26 93 03</a>
-        <a href="mailto:contact@caparel.fr" class="btn btn-outline"><svg class="icon" style="width:16px;height:16px"><use href="#ic-mail"/></svg>contact@caparel.fr</a>
-      </div>
-    </div>
-  </div>
-</div>
 
 <section id="contact">
   <div class="container contact-grid">
