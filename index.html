@@ -79,15 +79,15 @@
 
   /* HEADER */
   header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-  .nav{display:flex;align-items:center;gap:clamp(10px,2vw,28px);padding:14px clamp(14px,3vw,24px);max-width:1240px;margin:0 auto;}
+  .nav{display:flex;align-items:center;gap:clamp(16px,3vw,48px);padding:14px clamp(20px,4vw,48px);max-width:1440px;margin:0 auto;}
   .logo{display:flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:clamp(1rem,1vw + .6rem,1.2rem);color:var(--navy);letter-spacing:-.01em;flex:none;}
   .logo-mark{width:30px;height:30px;flex:none;}
 
-  /* Nav links stay on one row in the top bar at every width — they scroll horizontally instead of wrapping or hiding behind a menu */
+  /* Nav links spread out to fill the full width between the logo and the CTA, staying on one row and scrolling instead of wrapping if space ever runs out */
   .nav-links{
-    display:flex;flex-wrap:nowrap;align-items:center;
-    gap:clamp(14px,2vw,28px);
-    font-weight:600;font-size:clamp(.8rem,.35vw + .7rem,.92rem);color:var(--navy);
+    display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-evenly;
+    gap:clamp(10px,2vw,32px);
+    font-weight:600;font-size:clamp(.82rem,.35vw + .7rem,.96rem);color:var(--navy);
     flex:1 1 auto;min-width:0;
     overflow-x:auto;
     scrollbar-width:none;-ms-overflow-style:none;
