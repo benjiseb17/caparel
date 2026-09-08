@@ -1,15 +1,26 @@
 import Airtable from "airtable";
 
-const apiKey = process.env.AIRTABLE_API_KEY;
-const baseId = process.env.AIRTABLE_BASE_ID;
+// Connexion Airtable initialisée à la demande (pas au chargement du module),
+// pour ne pas planter le build/le mode démo quand ces variables ne sont pas
+// définies (elles ne sont nécessaires qu'en dehors du mode démo).
+let cachedBase: Airtable.Base | null = null;
 
-if (!apiKey || !baseId) {
-  console.warn(
-    "AIRTABLE_API_KEY ou AIRTABLE_BASE_ID manquant(s) dans les variables d'environnement."
-  );
+function base(table: string) {
+  if (!cachedBase) {
+    const apiKey = process.env.AIRTABLE_API_KEY;
+    const baseId = process.env.AIRTABLE_BASE_ID;
+
+    if (!apiKey || !baseId) {
+      throw new Error(
+        "AIRTABLE_API_KEY ou AIRTABLE_BASE_ID manquant(s) dans les variables d'environnement."
+      );
+    }
+
+    cachedBase = new Airtable({ apiKey }).base(baseId);
+  }
+
+  return cachedBase(table);
 }
-
-const base = new Airtable({ apiKey }).base(baseId ?? "");
 
 export const TABLES = {
   intervenants: process.env.AIRTABLE_TABLE_INTERVENANTS || "Intervenants",
