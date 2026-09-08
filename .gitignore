@@ -1,0 +1,6 @@
+.DS_Store
+
+# Documents administratifs personnels, ne doivent pas atterrir sur le repo public
+Brouillon/
+Dossier NOVA/
+images Caparel/
