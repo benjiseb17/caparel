@@ -28,7 +28,7 @@ export default function AppHeader({ active }: { active: Onglet }) {
           <LogoutButton />
         </div>
       </div>
-      <nav className="flex items-center gap-4 sm:gap-5 overflow-x-auto">
+      <nav className="flex items-center justify-center sm:justify-start gap-4 sm:gap-5 overflow-x-auto">
         {LIENS.map((lien) => (
           <Link
             key={lien.key}

@@ -66,7 +66,7 @@ export default async function AccueilPage() {
   return (
     <div className="min-h-screen bg-soft flex flex-col">
       <AppHeader active="accueil" />
-      <main className="flex-1 flex flex-col items-center px-4 pb-12 pt-2 sm:pt-8">
+      <main className="flex-1 flex flex-col items-center px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] pt-2 sm:pt-8">
         <div className="w-full max-w-md lg:max-w-4xl space-y-4">
           <div className="relative rounded-2xl border border-line bg-white p-6 overflow-hidden">
             <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-navylogo via-teal to-teal-dark" />
