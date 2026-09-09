@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
+import { tmpdir } from "os";
 import type {
   Client,
   FicheDePaie,
@@ -74,7 +75,9 @@ export function getDemoFichesDePaie(): FicheDePaie[] {
 // Nécessaire car en dev, Next.js peut charger ce module dans des instances
 // séparées selon la route : un simple tableau en mémoire ne serait pas partagé
 // de façon fiable entre la route API et la page historique.
-const DEMO_STORE_PATH = join(process.cwd(), ".demo-releves.json");
+// On utilise le dossier temporaire du système (pas le dossier du projet) car
+// sur Vercel, seul /tmp est accessible en écriture.
+const DEMO_STORE_PATH = join(tmpdir(), "releve-heures-demo.json");
 
 function readDemoStore(): Releve[] {
   if (!existsSync(DEMO_STORE_PATH)) return [];
