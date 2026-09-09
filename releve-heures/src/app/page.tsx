@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import { auth } from "@/auth";
 import AppHeader from "@/components/AppHeader";
 import BarChart from "@/components/BarChart";
@@ -70,6 +71,14 @@ export default async function AccueilPage() {
           <div className="relative rounded-2xl border border-line bg-white p-6 overflow-hidden">
             <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-navylogo via-teal to-teal-dark" />
             <div className="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-teal/10" />
+            <Image
+              src="/caparel-icon.png"
+              alt=""
+              width={200}
+              height={200}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-16 h-16 sm:w-20 sm:h-20 object-contain opacity-90 mix-blend-multiply pointer-events-none"
+              aria-hidden="true"
+            />
             <div className="relative flex items-center gap-4">
               {profil?.photoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
