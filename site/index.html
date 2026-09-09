@@ -78,19 +78,22 @@
   .btn-navy{background:var(--navylogo);color:#fff;}
   .btn-navy:hover{background:var(--navy-2);transform:translateY(-1px);}
   .btn-block{width:100%;}
+  .btn:disabled{opacity:.6;cursor:default;transform:none;}
 
   /* HEADER */
   header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-  .nav{display:flex;align-items:center;gap:clamp(16px,3vw,48px);padding:14px clamp(20px,4vw,48px);max-width:1440px;margin:0 auto;}
-  .logo{display:flex;align-items:center;gap:8px;flex:none;}
+  .nav{
+    display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"logo links cta";
+    align-items:center;gap:clamp(16px,3vw,48px);padding:14px clamp(20px,4vw,48px);max-width:1440px;margin:0 auto;
+  }
+  .logo{display:flex;align-items:center;gap:8px;grid-area:logo;justify-self:start;}
   .logo-img{height:58px;width:auto;display:block;}
 
-  /* Nav links spread out to fill the full width between the logo and the CTA, staying on one row and scrolling instead of wrapping if space ever runs out */
   .nav-links{
-    display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-evenly;
-    gap:clamp(10px,2vw,32px);
-    font-weight:600;font-size:clamp(.82rem,.35vw + .7rem,.96rem);color:var(--navy);
-    flex:1 1 auto;min-width:0;
+    display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;
+    gap:clamp(18px,3vw,40px);
+    font-weight:600;font-size:clamp(.88rem,.35vw + .76rem,1rem);color:var(--navy);
+    grid-area:links;justify-self:center;max-width:100%;
     overflow-x:auto;
     scrollbar-width:none;-ms-overflow-style:none;
     -webkit-overflow-scrolling:touch;
@@ -100,9 +103,14 @@
   .nav-links::-webkit-scrollbar{display:none;}
   .nav-links a{opacity:.75;transition:opacity .15s;white-space:nowrap;flex:0 0 auto;}
   .nav-links a:hover{opacity:1;}
-  .nav-cta{display:flex;align-items:center;gap:10px;flex:none;}
-  .nav-phone{font-weight:600;color:var(--navy);font-size:.86rem;display:none;align-items:center;gap:7px;white-space:nowrap;}
+  .nav-links a.active{opacity:1;color:var(--teal-dark);}
+  .nav-cta{display:flex;align-items:center;gap:18px;grid-area:cta;justify-self:end;}
+  .nav-phone{font-weight:600;color:var(--navy);font-size:.86rem;display:none;align-items:center;gap:7px;white-space:nowrap;border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;transition:border-color .15s;}
+  .nav-phone:hover{border-color:var(--teal);}
   .nav-cta .btn-navy{padding:clamp(9px,1vw,14px) clamp(13px,1.8vw,26px);font-size:clamp(.78rem,.4vw + .66rem,.94rem);white-space:nowrap;}
+  @media (min-width: 641px){
+    .nav-phone{display:flex;}
+  }
 
   /* HERO */
   .hero{padding:64px 0 56px;background:var(--soft);}
@@ -120,8 +128,6 @@
   .hero-fact:nth-child(2) .icon{color:var(--sky-dark);}
   .hero-fact:nth-child(3) .icon{color:var(--coral-dark);}
   .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
-  .hero-rating{display:flex;align-items:center;gap:10px;margin-top:26px;font-size:.88rem;color:var(--muted);}
-  .hero-rating .stars{color:var(--sand);letter-spacing:2px;}
   .hero-visual{
     background:var(--soft-2);
     border:1px solid var(--line);
@@ -131,7 +137,8 @@
     position:relative;overflow:hidden;
   }
   .hero-photo{width:100%;height:100%;object-fit:cover;}
-  .hero-partners{padding:36px 0 64px;}
+  .hero-partners{padding:36px 0 20px;}
+  #apropos{padding-top:32px;}
   .partners-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
   .partner-pill{
     display:flex;align-items:center;gap:8px;
@@ -147,18 +154,11 @@
   /* ABOUT */
   .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:center;}
   .about-visual{
-    background:linear-gradient(150deg,var(--soft-2),var(--soft) 65%);border-radius:var(--r-md);min-height:340px;
+    border-radius:var(--r-md);min-height:340px;
     display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
     border:1px solid var(--line);
   }
-  .about-visual .icon-big{width:84px;height:84px;color:var(--navy);opacity:.9;position:relative;z-index:2;fill:currentColor;}
-  .about-visual .blob{position:absolute;border-radius:50%;}
-  .about-visual .blob.sky{width:130px;height:130px;background:var(--sky);opacity:.5;top:-30px;left:-30px;}
-  .about-visual .blob.green{width:110px;height:110px;background:var(--green);opacity:.5;bottom:-26px;right:-20px;}
-  .about-visual .dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--coral);z-index:2;}
-  .about-visual .dot.d1{top:36px;left:44px;}
-  .about-visual .dot.d2{bottom:44px;right:56px;background:var(--sand);}
-  .about-visual .dot.d3{top:50%;right:36px;background:var(--pink);}
+  .about-photo{width:100%;height:100%;object-fit:cover;}
   .about h2{font-size:2rem;margin-bottom:18px;letter-spacing:-.01em;}
   .about p{color:var(--muted);margin-bottom:15px;}
   .about-points{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px;}
@@ -173,154 +173,19 @@
   .about-point:nth-child(3) .icon{color:var(--sand-dark);}
   .about-point:nth-child(4) .icon{color:var(--coral-dark);}
 
-  /* SERVICES */
-  .services{background:var(--soft);}
-  .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
-  .service-card{background:#fff;border-radius:var(--r-md);padding:28px 24px;border:1px solid var(--line);transition:transform .18s ease, box-shadow .18s ease;}
-  .service-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -24px rgba(18,48,92,.18);}
-  .service-ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
-  .service-ic .icon{width:22px;height:22px;}
-  .service-card:nth-child(1) .service-ic{background:rgba(91,194,222,.28);color:var(--green-dark);}
-  .service-card:nth-child(2) .service-ic{background:rgba(247,192,101,.3);color:var(--sand-dark);}
-  .service-card:nth-child(3) .service-ic{background:rgba(174,212,232,.4);color:var(--sky-dark);}
-  .service-card:nth-child(4) .service-ic{background:rgba(63,182,174,.22);color:var(--teal-dark);}
-  .service-card:nth-child(1) ul li::before{background:var(--green-dark);}
-  .service-card:nth-child(2) ul li::before{background:var(--sand-dark);}
-  .service-card:nth-child(3) ul li::before{background:var(--sky-dark);}
-  .service-card:nth-child(4) ul li::before{background:var(--teal-dark);}
-  .service-card h3{font-size:1.02rem;margin-bottom:12px;}
-  .service-card ul li{font-size:.86rem;color:var(--muted);padding:5px 0 5px 15px;position:relative;}
-  .service-card ul li::before{content:"";position:absolute;left:0;top:12px;width:5px;height:5px;border-radius:50%;background:var(--teal);}
-  .services-note{
-    margin-top:36px;text-align:center;color:var(--muted);font-size:.94rem;
-    background:#fff;border:1px solid var(--line);border-radius:999px;padding:16px 28px;
-    display:flex;justify-content:center;gap:8px;flex-wrap:wrap;
-  }
-  .services-note b{color:var(--navy);}
-
-  /* MANDATAIRE */
-  .mand-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-bottom:40px;}
-  .mand-card{border-radius:var(--r-md);padding:32px;background:var(--soft);border:1px solid var(--line);}
-  .mand-card h3{font-size:1.12rem;margin-bottom:18px;display:flex;align-items:center;gap:10px;}
-  .mand-card .tag{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;flex:none;}
-  .mand-card:nth-child(2) .tag{background:var(--teal-dark);}
-  .mand-card ul li{font-size:.92rem;color:var(--muted);padding:7px 0 7px 24px;position:relative;}
-  .mand-card ul li::before{content:"";position:absolute;left:0;top:13px;width:6px;height:6px;border-radius:50%;background:var(--teal-dark);}
-  .advantages h3{margin-bottom:18px;font-size:1.1rem;text-align:center;}
-  .advantages-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-  .adv-item{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:16px 18px;font-size:.88rem;font-weight:600;color:var(--navy);}
-  .adv-item .icon{width:18px;height:18px;color:var(--teal-dark);flex:none;}
-  .adv-item:nth-child(1) .icon{color:var(--coral-dark);}
-  .adv-item:nth-child(2) .icon{color:var(--teal-dark);}
-  .adv-item:nth-child(3) .icon{color:var(--sky-dark);}
-  .adv-item:nth-child(4) .icon{color:var(--sand-dark);}
-  .adv-item:nth-child(5) .icon{color:var(--green-dark);}
-  .adv-item:nth-child(6) .icon{color:var(--navy);}
-
-  /* TARIFS */
-  .tarifs{background:var(--soft);}
-  .tarif-block{margin-bottom:32px;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;}
-  .tarif-block h3{font-size:1.02rem;padding:22px 26px 0;}
-  table{width:100%;border-collapse:collapse;margin-top:14px;}
-  th{padding:12px 26px;text-align:left;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);}
-  td{padding:15px 26px;text-align:left;font-size:.92rem;border-bottom:1px solid var(--line);}
-  tbody tr:last-child td{border-bottom:none;}
-  td:first-child{font-weight:600;color:var(--navy);}
-  td:last-child{font-weight:700;color:var(--teal-dark);}
-  .tarifs-foot{
-    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
-    background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:22px 28px;font-size:.9rem;color:var(--muted);
-  }
-
-  /* SIMULATEUR */
-  .simulateur{background:#fff;}
-  .sim-card{
-    background:var(--navy);border-radius:var(--r-lg);padding:56px;color:#fff;
-    display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;
-  }
-  .sim-side h3{color:#fff;font-size:1.3rem;margin-bottom:10px;}
-  .sim-side > p{color:rgba(255,255,255,.72);font-size:.94rem;margin-bottom:32px;}
-  .sim-field{margin-bottom:26px;}
-  .sim-field-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
-  .sim-field-head label{font-size:.88rem;font-weight:600;color:rgba(255,255,255,.85);}
-  .sim-hours-value{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.6rem;font-weight:800;color:var(--teal);}
-  .sim-hours-value span{font-size:.9rem;font-weight:600;color:rgba(255,255,255,.6);margin-left:4px;}
-  input[type="range"]{
-    -webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;
-    background:rgba(255,255,255,.18);outline:none;cursor:pointer;
-  }
-  input[type="range"]::-webkit-slider-thumb{
-    -webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;
-    background:var(--teal);border:4px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.25);cursor:pointer;
-  }
-  input[type="range"]::-moz-range-thumb{
-    width:24px;height:24px;border-radius:50%;background:var(--teal);border:4px solid #fff;cursor:pointer;
-  }
-  .sim-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
-  .sim-preset{
-    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;
-    border-radius:999px;padding:8px 16px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;
-  }
-  .sim-preset:hover,.sim-preset.active{background:var(--teal);border-color:var(--teal);}
-  .sim-select-row{display:flex;flex-direction:column;gap:10px;}
-  .sim-radio{
-    display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.16);border-radius:var(--r-sm);padding:13px 16px;
-    font-size:.86rem;cursor:pointer;color:rgba(255,255,255,.85);transition:border-color .15s, background .15s;
-  }
-  .sim-radio:hover{border-color:rgba(255,255,255,.4);}
-  .sim-radio input{accent-color:var(--teal);width:16px;height:16px;flex:none;}
-  .sim-radio.active{background:rgba(63,182,174,.16);border-color:var(--teal);color:#fff;}
-  .sim-tranche-note{margin-top:20px;font-size:.82rem;color:rgba(255,255,255,.6);}
-  .sim-tranche-note b{color:var(--teal);}
-
-  .sim-result{background:#fff;border-radius:var(--r-md);padding:32px;color:var(--ink);}
-  .sim-result-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--line);}
-  .sim-result-top span{display:block;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;font-weight:600;margin-bottom:6px;}
-  .sim-result-top b{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.7rem;color:var(--navy);}
-  .sim-tranche-badge{
-    background:var(--soft-2);color:var(--teal-dark);font-size:.78rem;font-weight:700;
-    border-radius:999px;padding:7px 14px;white-space:nowrap;
-  }
-  .sim-lines{display:flex;flex-direction:column;gap:0;}
-  .sim-line{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:.9rem;}
-  .sim-line:last-child{border-bottom:none;}
-  .sim-line .lbl{color:var(--muted);}
-  .sim-line .val{font-weight:700;color:var(--navy);}
-  .sim-highlight-line{
-    display:flex;justify-content:space-between;align-items:center;
-    background:var(--soft-2);border-radius:var(--r-sm);padding:16px 18px;margin-top:16px;
-  }
-  .sim-highlight-line .lbl{font-size:.88rem;font-weight:700;color:var(--navy);}
-  .sim-highlight-line .val{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.35rem;font-weight:800;color:var(--teal-dark);}
-  .sim-warning{
-    margin-top:16px;display:flex;gap:10px;align-items:flex-start;
-    background:#fdf3e8;border:1px solid #f3dcb8;border-radius:var(--r-sm);padding:13px 15px;
-    font-size:.82rem;color:#9a6a1f;
-  }
-  .sim-warning .icon{width:16px;height:16px;color:#c9812a;flex:none;margin-top:2px;}
-  .sim-cta{margin-top:22px;}
-
-  /* AIDES */
-  .aides{background:var(--soft);}
-  .aides-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
-  .aide-highlight{
-    grid-column:1/-1;background:var(--navy);color:#fff;border-radius:var(--r-md);
-    padding:34px 36px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;
-  }
-  .aide-highlight b{color:var(--teal);font-size:1.4rem;display:block;margin-bottom:4px;}
-  .aide-highlight span{color:rgba(255,255,255,.75);font-size:.9rem;}
-  .aide-card{border-radius:var(--r-md);padding:26px;border:1px solid var(--line);background:#fff;}
-  .aide-card .num{display:inline-flex;width:28px;height:28px;border-radius:8px;background:var(--soft-2);color:var(--teal-dark);align-items:center;justify-content:center;font-weight:700;font-size:.82rem;margin-bottom:14px;}
-  .aide-card:nth-of-type(2) .num{background:rgba(63,182,174,.2);color:var(--teal-dark);}
-  .aide-card:nth-of-type(3) .num{background:rgba(247,192,101,.28);color:var(--sand-dark);}
-  .aide-card:nth-of-type(4) .num{background:rgba(174,212,232,.4);color:var(--sky-dark);}
-  .aide-card:nth-of-type(5) .num{background:rgba(91,194,222,.3);color:var(--green-dark);}
-  .aide-card h4{font-size:.98rem;margin-bottom:8px;}
-  .aide-card p{font-size:.88rem;color:var(--muted);}
+  /* APERCU (teasers Services / Tarifs) */
+  .apercu{background:var(--soft);}
+  .teaser-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .teaser-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:32px;transition:transform .18s ease, box-shadow .18s ease;display:block;}
+  .teaser-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -24px rgba(18,48,92,.18);}
+  .teaser-card .service-ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+  .teaser-card .service-ic .icon{width:22px;height:22px;}
+  .teaser-card h3{font-size:1.25rem;margin-bottom:10px;}
+  .teaser-card p{color:var(--muted);font-size:.94rem;margin-bottom:18px;}
+  .teaser-link{color:var(--teal-dark);font-weight:700;font-size:.9rem;}
 
   /* CONTACT */
-  .contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:52px;}
+  .contact-grid{display:grid;grid-template-columns:1fr;gap:40px;}
   .contact-info h2{font-size:1.9rem;margin-bottom:14px;letter-spacing:-.01em;}
   .contact-info p{color:var(--muted);margin-bottom:30px;}
   .contact-item{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px;}
@@ -345,6 +210,20 @@
   textarea{resize:vertical;min-height:96px;}
   .contact-form button{margin-top:6px;}
 
+  .checkbox-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .checkbox-item{
+    display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);
+    padding:11px 14px;font-size:.86rem;color:var(--ink);cursor:pointer;transition:border-color .15s;
+  }
+  .checkbox-item:hover{border-color:var(--teal);}
+  .checkbox-item input{accent-color:var(--teal);width:16px;height:16px;flex:none;}
+  .checkbox-item.other-item{grid-column:1/-1;}
+
+  .form-status{margin-top:14px;font-size:.88rem;padding:12px 14px;border-radius:var(--r-sm);display:none;}
+  .form-status.show{display:block;}
+  .form-status.success{background:#e8f7f0;color:#1d7a4c;border:1px solid #bfe8d3;}
+  .form-status.error{background:#fdecec;color:#b3261e;border:1px solid #f3c6c4;}
+
   /* FOOTER */
   footer{background:var(--soft);border-top:1px solid var(--line);padding:60px 0 28px;}
   .footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;margin-bottom:44px;}
@@ -358,11 +237,7 @@
 
   @media (max-width: 960px){
     section{padding:76px 0;}
-    .hero-card,.about-grid,.mand-grid,.contact-grid,.sim-card{grid-template-columns:1fr;}
-    .sim-card{padding:40px 32px;gap:36px;}
-    .services-grid{grid-template-columns:repeat(2,1fr);}
-    .advantages-grid{grid-template-columns:1fr 1fr;}
-    .aides-grid{grid-template-columns:1fr;}
+    .hero-card,.about-grid,.contact-grid{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr 1fr;}
     .hero h1{font-size:2.2rem;}
     .hero-card{padding:44px 32px;}
@@ -372,27 +247,22 @@
   @media (max-width: 640px){
     section{padding:60px 0;}
     .container{padding:0 20px;}
-    .services-grid{grid-template-columns:1fr;}
-    .advantages-grid{grid-template-columns:1fr;}
     .form-row{grid-template-columns:1fr;}
+    .checkbox-grid{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
     .footer-bottom{flex-direction:column;align-items:flex-start;gap:6px;}
-    .aide-highlight{flex-direction:column;align-items:flex-start;padding:28px 24px;}
     .hero-card{padding:32px 22px;border-radius:22px;}
     .hero h1{font-size:1.8rem;}
     .hero p.lead{font-size:1rem;}
     .about-points{grid-template-columns:1fr;}
-    .sim-card{padding:28px 20px;}
-    .sim-lines .sim-line{font-size:.86rem;}
+    .teaser-grid{grid-template-columns:1fr;}
     .section-head h2{font-size:1.6rem;}
-    .nav{padding:14px 18px;}
-    .mand-card{padding:24px;}
+    .nav{padding:12px 18px;grid-template-columns:1fr 1fr;grid-template-areas:"logo cta" "links links";row-gap:8px;}
+    .nav-links{justify-content:center;gap:20px;overflow-x:visible;mask-image:none;padding:0;}
   }
   @media (max-width: 420px){
     .nav-cta .btn-navy{padding:11px 14px;font-size:.82rem;}
     .logo-img{height:44px;}
-    .sim-presets{gap:6px;}
-    .sim-preset{padding:7px 12px;font-size:.76rem;}
   }
 </style>
 </head>
@@ -401,7 +271,6 @@
 <!-- SVG ICON SPRITE -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
-    <symbol id="ic-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.5 8 2.2 4.5 5.6 4c2.2-.3 4 .8 6.4 3 2.4-2.2 4.2-3.3 6.4-3 3.4.5 5.1 4 3.6 7.7C19.5 16.4 12 21 12 21Z"/></symbol>
     <symbol id="ic-phone" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.7 3.6 4.9 6.3 6.3l2.1-2.1c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1.1.5 1.1 1.1V20c0 .6-.5 1.1-1.1 1.1C10.6 21.1 2.9 13.4 2.9 3.2 2.9 2.6 3.4 2 4 2h3.5c.6 0 1.1.5 1.1 1.1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1L6.6 10.8Z"/></symbol>
     <symbol id="ic-mail" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 7 9-7"/></symbol>
     <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 21.5S4.5 14.9 4.5 9.5a7.5 7.5 0 1 1 15 0c0 5.4-7.5 12-7.5 12Z"/><circle cx="12" cy="9.5" r="2.6"/></symbol>
@@ -415,8 +284,6 @@
     <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2"/><path d="M12 7v5.3l3.6 2.1"/></symbol>
     <symbol id="ic-euro" viewBox="0 0 24 24"><path d="M18 5.5A8.5 8.5 0 1 0 18 18.5"/><path d="M3.5 10h9M3.5 14h7.5"/></symbol>
     <symbol id="ic-repeat" viewBox="0 0 24 24"><path d="M4 9.5A7.5 7.5 0 0 1 19.8 7.2M20 3.5v4h-4M20 14.5A7.5 7.5 0 0 1 4.2 16.8M4 20.5v-4h4"/></symbol>
-    <symbol id="ic-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="1.8"/><path d="M9 20.5l2-6 2 2 3 1.5M11 14.5l1.5-4.5-3-1.5-3 3M9.5 9.5l3-2 3.5 1"/></symbol>
-    <symbol id="ic-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></symbol>
   </defs>
 </svg>
 
@@ -426,13 +293,9 @@
       <img src="images/logo.png" alt="Caparel - Aide à domicile aux personnes âgées" class="logo-img" width="1872" height="562" decoding="async">
     </a>
     <nav class="nav-links">
-      <a href="#apropos">À propos</a>
-      <a href="#services">Services</a>
-      <a href="#mandataire">Mandataire</a>
-      <a href="#tarifs">Tarifs</a>
-      <a href="#simulateur">Simulateur</a>
-      <a href="#aides">Aides</a>
-      <a href="#contact">Contact</a>
+      <a href="index.html" class="active">Accueil</a>
+      <a href="services.html">Services</a>
+      <a href="tarifs.html">Tarifs</a>
     </nav>
     <div class="nav-cta">
       <a href="tel:0664269303" class="nav-phone"><svg class="icon" style="width:16px;height:16px"><use href="#ic-phone"/></svg>06 64 26 93 03</a>
@@ -479,22 +342,17 @@
 <section id="apropos">
   <div class="container about-grid">
     <div class="about-visual">
-      <div class="blob sky"></div>
-      <div class="blob green"></div>
-      <div class="dot d1"></div>
-      <div class="dot d2"></div>
-      <div class="dot d3"></div>
-      <svg class="icon-big" viewBox="0 0 24 24"><use href="#ic-heart"/></svg>
+      <img src="images/apropos.jpg" alt="Auxiliaire de vie Caparel avec une personne âgée" class="about-photo" width="1385" height="1136" loading="lazy" decoding="async">
     </div>
     <div class="about">
       <span class="eyebrow">Qui sommes-nous</span>
       <h2>Mettre l'humain au centre de l'accompagnement</h2>
-      <p>Caparel est un service d'aide à domicile qui permet à chacun de vivre chez soi, quels que soient l'âge, la santé ou la situation de vie.</p>
+      <p>Caparel est un service mandataire d'aide à domicile qui permet à chacun de vivre chez soi, quels que soient l'âge, la santé ou la situation de vie.</p>
       <p>Notre ambition : adapter nos services à vos besoins, respecter vos habitudes et votre intimité, tout en garantissant le professionnalisme et la fiabilité de notre accompagnement. Nos intervenants sont choisis pour leurs compétences, leur expérience et surtout leur sens de l'écoute et de la bienveillance.</p>
-      <p>Nous travaillons de concert avec les familles, les aidants, les proches et les partenaires sociaux ou médicaux pour offrir une prise en charge complète, stable et coordonnée.</p>
+      <p>Nous fonctionnons en <b>mode mandataire</b> : vous restez l'employeur de votre auxiliaire de vie et choisissez qui intervient chez vous, tandis que Caparel s'occupe de toutes les démarches administratives liées à cet emploi. Nous travaillons de concert avec les familles, les aidants, les proches et les partenaires sociaux ou médicaux pour offrir une prise en charge complète, stable et coordonnée.</p>
       <div class="about-points">
         <div class="about-point"><svg class="icon"><use href="#ic-users"/></svg>Employeur : vous</div>
-        <div class="about-point"><svg class="icon"><use href="#ic-shield"/></svg>Mandataire : Caparel</div>
+        <div class="about-point"><svg class="icon"><use href="#ic-shield"/></svg>Mode mandataire : Caparel</div>
         <div class="about-point"><svg class="icon"><use href="#ic-repeat"/></svg>Intervenant stable et dédié</div>
         <div class="about-point"><svg class="icon"><use href="#ic-clock"/></svg>Suivi continu assuré</div>
       </div>
@@ -502,260 +360,65 @@
   </div>
 </section>
 
-<section class="services" id="services">
+<section class="apercu">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">Nos services</span>
-      <h2>Un accompagnement complet, à la carte</h2>
-      <p>Nous construisons avec vous un accompagnement personnalisé, ajustable à tout moment selon vos besoins.</p>
+      <span class="eyebrow">Découvrir Caparel</span>
+      <h2>Ce que nous proposons</h2>
+      <p>Un accompagnement à la carte et des tarifs transparents, avec crédit d'impôt de 50 %.</p>
     </div>
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-ic"><svg class="icon"><use href="#ic-bed"/></svg></div>
-        <h3>Aide à la personne</h3>
-        <ul>
-          <li>Aide au lever et au coucher</li>
-          <li>Toilette et habillage</li>
-          <li>Assistance aux repas</li>
-          <li>Prévention des chutes</li>
-          <li>Présence de nuit si besoin</li>
-        </ul>
-      </div>
-      <div class="service-card">
-        <div class="service-ic"><svg class="icon"><use href="#ic-home"/></svg></div>
-        <h3>Aide au quotidien</h3>
-        <ul>
-          <li>Entretien courant du logement</li>
-          <li>Linge et repassage</li>
-          <li>Préparation des repas</li>
-          <li>Courses et approvisionnement</li>
-          <li>Sécurisation du domicile</li>
-        </ul>
-      </div>
-      <div class="service-card">
-        <div class="service-ic"><svg class="icon"><use href="#ic-doc"/></svg></div>
-        <h3>Assistance administrative</h3>
-        <ul>
-          <li>Tri et traitement du courrier</li>
-          <li>Classement des documents</li>
-          <li>Formalités courantes</li>
-          <li>Démarches en ligne</li>
-        </ul>
-      </div>
-      <div class="service-card">
-        <div class="service-ic"><svg class="icon"><use href="#ic-walk"/></svg></div>
-        <h3>Accompagnement et vie sociale</h3>
-        <ul>
-          <li>Rendez-vous médicaux</li>
-          <li>Promenades et sorties</li>
-          <li>Activités de stimulation</li>
-          <li>Lutte contre l'isolement</li>
-          <li>Soutien aux proches aidants</li>
-        </ul>
-      </div>
-    </div>
-    <div class="services-note">Nos interventions débutent dès <b>4 heures par semaine</b> et peuvent être assurées en continu, <b>24h/24 et 7j/7</b>.</div>
-  </div>
-</section>
-
-<section id="mandataire">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Mode mandataire</span>
-      <h2>Vous restez employeur, nous gérons l'administratif</h2>
-      <p>Le mode mandataire repose sur un contrat de mandat administratif : vous confiez à Caparel la réalisation, en votre nom, des démarches liées à l'emploi de votre auxiliaire de vie.</p>
-    </div>
-    <div class="mand-grid">
-      <div class="mand-card">
-        <h3><span class="tag">C</span> Notre rôle en tant que mandataire</h3>
-        <ul>
-          <li>Recherche et présentation d'auxiliaires de vie qualifiées</li>
-          <li>Aide aux formalités d'embauche</li>
-          <li>Établissement du contrat de travail</li>
-          <li>Assistance au compte CESU / CESU+ (URSSAF)</li>
-          <li>Bulletins de salaire et documents associés</li>
-          <li>Déclaration des heures auprès de l'URSSAF CESU</li>
-          <li>Proposition d'un remplaçant en cas d'absence</li>
-          <li>Documents annuels pour le crédit d'impôt</li>
-        </ul>
-      </div>
-      <div class="mand-card">
-        <h3><span class="tag">V</span> Votre rôle en tant qu'employeur</h3>
-        <ul>
-          <li>Signature du contrat de travail (CDI ou CDD)</li>
-          <li>Application de la convention collective du particulier employeur</li>
-          <li>Un même intervenant au quotidien</li>
-          <li>Versement du salaire et des cotisations via CESU</li>
-          <li>Respect du droit du travail</li>
-          <li>Décisions relevant de l'employeur (sanctions, rupture, etc.)</li>
-        </ul>
-      </div>
-    </div>
-    <div class="advantages">
-      <h3>Les avantages du mode mandataire pour vous</h3>
-      <div class="advantages-grid">
-        <div class="adv-item"><svg class="icon"><use href="#ic-target"/></svg>Maîtrise du choix de votre intervenant</div>
-        <div class="adv-item"><svg class="icon"><use href="#ic-repeat"/></svg>Relation de confiance et de continuité</div>
-        <div class="adv-item"><svg class="icon"><use href="#ic-doc"/></svg>Allègement des démarches administratives</div>
-        <div class="adv-item"><svg class="icon"><use href="#ic-clock"/></svg>Intervention 24h/24 et 7j/7</div>
-        <div class="adv-item"><svg class="icon"><use href="#ic-euro"/></svg>Crédit d'impôt de 50 %</div>
-        <div class="adv-item"><svg class="icon"><use href="#ic-shield"/></svg>Aides mobilisables : APA, PCH</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="tarifs" id="tarifs">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Nos tarifs</span>
-      <h2>Des tarifs clairs, sans frais cachés</h2>
-      <p>Tarifs applicables au 1er novembre 2025 — mode mandataire. Aucun frais d'inscription, ni de résiliation n'est facturé.</p>
-    </div>
-
-    <div class="tarif-block">
-      <h3>Tarif à l'heure</h3>
-      <table>
-        <thead>
-          <tr><th>Heures</th><th>Tarif horaire TTC</th><th>Dont frais de mandat HT</th><th>Dont TVA</th><th>Coût réel après crédit d'impôt</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Tranche A — jusqu'à 25h/semaine</td><td>32,70 €</td><td>13,36 €</td><td>2,67 €</td><td>16,35 €</td></tr>
-          <tr><td>Tranche B — de 26h à 40h/semaine</td><td>31,70 €</td><td>12,53 €</td><td>2,51 €</td><td>15,85 €</td></tr>
-          <tr><td>Tranche C — plus de 40h/semaine</td><td>28,70 €</td><td>10,03 €</td><td>2,01 €</td><td>14,35 €</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="tarif-block">
-      <h3>Prix des forfaits</h3>
-      <table>
-        <thead>
-          <tr><th>Forfait</th><th>Tarif TTC</th><th>Dont frais de mandat HT</th><th>Dont TVA</th><th>Coût réel après crédit d'impôt</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Forfait nuit de 12h</td><td>180,00 €</td><td>58,42 €</td><td>11,69 €</td><td>90,00 €</td></tr>
-          <tr><td>Forfait journée de 12h</td><td>250,00 €</td><td>71,13 €</td><td>14,23 €</td><td>125,00 €</td></tr>
-          <tr><td>Forfait 24h/24</td><td>380,00 €</td><td>79,88 €</td><td>15,98 €</td><td>190,00 €</td></tr>
-          <tr><td>Garde malade de nuit de 12h</td><td>286,00 €</td><td>73,76 €</td><td>14,75 €</td><td>143,00 €</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="tarifs-foot">
-      <span>Le « coût réel après crédit d'impôt » suppose un crédit d'impôt de 50 % sur les sommes engagées.</span>
-      <a href="#contact" class="btn btn-navy">Obtenir un devis personnalisé</a>
-    </div>
-  </div>
-</section>
-
-<section class="simulateur" id="simulateur">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow"><svg class="icon" style="width:14px;height:14px"><use href="#ic-euro"/></svg>Simulateur</span>
-      <h2>Combien ça coûte, avec le crédit d'impôt ?</h2>
-      <p>Indiquez le nombre d'heures d'aide à domicile souhaité par semaine pour estimer votre coût réel, crédit d'impôt de 50 % déduit.</p>
-    </div>
-    <div class="sim-card">
-      <div class="sim-side">
-        <h3>Votre besoin</h3>
-        <p>Ajustez le curseur ou choisissez une durée type.</p>
-
-        <div class="sim-field">
-          <div class="sim-field-head">
-            <label for="simHours">Heures par semaine</label>
-            <div class="sim-hours-value"><span id="simHoursOut">10</span><span>h / semaine</span></div>
-          </div>
-          <input type="range" id="simHours" min="4" max="70" step="1" value="10">
-          <div class="sim-presets">
-            <button type="button" class="sim-preset" data-hours="4">4h</button>
-            <button type="button" class="sim-preset" data-hours="10">10h</button>
-            <button type="button" class="sim-preset" data-hours="20">20h</button>
-            <button type="button" class="sim-preset" data-hours="35">35h</button>
-            <button type="button" class="sim-preset" data-hours="50">50h</button>
-            <button type="button" class="sim-preset" data-hours="70">70h (24h/24)</button>
-          </div>
-        </div>
-
-        <div class="sim-field">
-          <div class="sim-field-head"><label>Plafond de dépenses éligible au crédit d'impôt</label></div>
-          <div class="sim-select-row" id="simPlafondGroup">
-            <label class="sim-radio active"><input type="radio" name="plafond" value="12000" checked>Standard — 12 000 € / an</label>
-            <label class="sim-radio"><input type="radio" name="plafond" value="13500">Avec une personne de + de 65 ans dans le foyer — 13 500 € / an</label>
-            <label class="sim-radio"><input type="radio" name="plafond" value="15000">Plafond majoré maximum — 15 000 € / an</label>
-          </div>
-        </div>
-
-        <p class="sim-tranche-note">Tranche appliquée automatiquement : <b>A</b> jusqu'à 25h/semaine (32,70 €/h), <b>B</b> de 26h à 40h (31,70 €/h), <b>C</b> au-delà de 40h (28,70 €/h).</p>
-      </div>
-
-      <div class="sim-result">
-        <div class="sim-result-top">
-          <div>
-            <span>Coût réel mensuel</span>
-            <b id="simMonthlyReal">—</b>
-          </div>
-          <div class="sim-tranche-badge" id="simTrancheBadge">Tranche A</div>
-        </div>
-        <div class="sim-lines">
-          <div class="sim-line"><span class="lbl">Tarif horaire TTC</span><span class="val" id="simRate">—</span></div>
-          <div class="sim-line"><span class="lbl">Coût hebdomadaire TTC</span><span class="val" id="simWeeklyTTC">—</span></div>
-          <div class="sim-line"><span class="lbl">Coût mensuel TTC</span><span class="val" id="simMonthlyTTC">—</span></div>
-          <div class="sim-line"><span class="lbl">Coût annuel TTC</span><span class="val" id="simAnnualTTC">—</span></div>
-          <div class="sim-line"><span class="lbl">Crédit d'impôt estimé (50 %)</span><span class="val" id="simCredit">—</span></div>
-        </div>
-        <div class="sim-highlight-line">
-          <span class="lbl">Coût réel annuel après crédit</span>
-          <span class="val" id="simAnnualReal">—</span>
-        </div>
-        <div class="sim-warning" id="simWarning" style="display:none;">
-          <svg class="icon" viewBox="0 0 24 24"><use href="#ic-shield"/></svg>
-          <span id="simWarningText"></span>
-        </div>
-        <a href="#contact" class="btn btn-primary btn-block sim-cta">Obtenir un devis personnalisé</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="aides" id="aides">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Les aides fiscales</span>
-      <h2>Des dispositifs pour alléger votre budget</h2>
-      <p>Pour toute question fiscale relative à vos services à la personne, notre équipe vous accompagne.</p>
-    </div>
-    <div class="aides-grid">
-      <div class="aide-highlight">
-        <div><b>Crédit d'impôt de 50 %</b><span>Sur les sommes versées pour l'emploi d'un salarié à domicile (art. 199 sexdécies du CGI).</span></div>
-        <div><span>Plafond : 12 000 € par foyer (majoré jusqu'à 15 000 €). Remboursable même sans imposition.</span></div>
-      </div>
-      <div class="aide-card">
-        <span class="num">1</span>
-        <h4>Avance Immédiate (AICI)</h4>
-        <p>Depuis 2022, déduisez directement votre crédit d'impôt de chaque facture via Urssaf.fr : vous ne payez que la moitié du montant facturé. Caparel vous accompagne dans l'inscription.</p>
-      </div>
-      <div class="aide-card">
-        <span class="num">2</span>
-        <h4>Obligations déclaratives</h4>
-        <p>Reportez chaque année sur votre déclaration de revenus (formulaire 2042, case 7DB) le montant figurant sur votre attestation fiscale annuelle, remise par Caparel avant le 31 mars.</p>
-      </div>
-      <div class="aide-card">
-        <span class="num">3</span>
-        <h4>APA et PCH</h4>
-        <p>Les sommes prises en charge par l'APA ou la PCH ne sont pas éligibles au crédit d'impôt. Seul le montant net restant à votre charge ouvre droit au crédit d'impôt.</p>
-      </div>
-      <div class="aide-card">
-        <span class="num">4</span>
-        <h4>CESU préfinancé</h4>
-        <p>Si vous réglez en CESU préfinancé (employeur ou CSE), leur valeur doit être déduite des dépenses éligibles. Seule la part personnellement financée ouvre droit au crédit d'impôt.</p>
-      </div>
+    <div class="teaser-grid">
+      <a href="services.html" class="teaser-card">
+        <div class="service-ic" style="background:rgba(63,182,174,.22);color:var(--teal-dark);"><svg class="icon"><use href="#ic-home"/></svg></div>
+        <h3>Nos services</h3>
+        <p>Aide à la personne, entretien du logement, démarches administratives, accompagnement — et le mode mandataire qui vous laisse la main sur le choix de votre intervenant.</p>
+        <span class="teaser-link">Voir tous les services →</span>
+      </a>
+      <a href="tarifs.html" class="teaser-card">
+        <div class="service-ic" style="background:rgba(247,192,101,.3);color:var(--sand-dark);"><svg class="icon"><use href="#ic-euro"/></svg></div>
+        <h3>Nos tarifs</h3>
+        <p>Des tarifs clairs à l'heure ou au forfait, sans frais cachés, et le détail des aides fiscales pour alléger votre budget.</p>
+        <span class="teaser-link">Voir les tarifs et aides →</span>
+      </a>
     </div>
   </div>
 </section>
 
 <section id="contact">
   <div class="container contact-grid">
+    <div class="contact-form">
+      <h3>Demande de renseignements</h3>
+      <p class="hint">Réponse sous 24 à 48h ouvrées.</p>
+      <form id="contactForm">
+        <div class="form-row">
+          <div><label for="nom">Nom</label><input id="nom" name="nom" type="text" placeholder="Votre nom" required></div>
+          <div><label for="prenom">Prénom</label><input id="prenom" name="prenom" type="text" placeholder="Votre prénom" required></div>
+        </div>
+        <div class="form-row">
+          <div><label for="tel">Téléphone</label><input id="tel" name="tel" type="tel" placeholder="06 00 00 00 00" required></div>
+          <div><label for="email">Email</label><input id="email" name="email" type="email" placeholder="vous@email.fr" required></div>
+        </div>
+        <div class="form-row full">
+          <label>Besoins d'aide à domicile</label>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="besoins" value="Lever, coucher, toilette et habillage">Lever, coucher, toilette et habillage</label>
+            <label class="checkbox-item"><input type="checkbox" name="besoins" value="Aide aux repas">Aide aux repas</label>
+            <label class="checkbox-item"><input type="checkbox" name="besoins" value="Présence de nuit / garde malade">Présence de nuit / garde malade</label>
+            <label class="checkbox-item"><input type="checkbox" name="besoins" value="Ménage et linge">Ménage et linge</label>
+            <label class="checkbox-item"><input type="checkbox" name="besoins" value="Courses et préparation des repas">Courses et préparation des repas</label>
+            <label class="checkbox-item"><input type="checkbox" name="besoins" value="Courrier et démarches administratives">Courrier et démarches administratives</label>
+            <label class="checkbox-item"><input type="checkbox" name="besoins" value="Accompagnement aux rendez-vous médicaux">Accompagnement aux rendez-vous médicaux</label>
+            <label class="checkbox-item"><input type="checkbox" name="besoins" value="Sorties, promenades et activités">Sorties, promenades et activités</label>
+            <label class="checkbox-item other-item"><input type="checkbox" name="besoins" value="Autre besoin">Autre besoin (précisez dans le message)</label>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div><label for="message">Message</label><textarea id="message" name="message" placeholder="Décrivez votre situation ou vos besoins..."></textarea></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Envoyer ma demande</button>
+        <div class="form-status" id="formStatus"></div>
+      </form>
+    </div>
     <div class="contact-info">
       <span class="eyebrow">Contact</span>
       <h2>Échangeons sur vos besoins</h2>
@@ -777,35 +440,6 @@
         <div><b>Site</b><span>caparel.fr</span></div>
       </div>
     </div>
-    <div class="contact-form">
-      <h3>Demande de renseignements</h3>
-      <p class="hint">Réponse sous 24 à 48h ouvrées.</p>
-      <form onsubmit="event.preventDefault(); alert('Merci, votre demande a bien été enregistrée. Notre équipe vous recontactera rapidement.');">
-        <div class="form-row">
-          <div><label for="nom">Nom</label><input id="nom" type="text" placeholder="Votre nom" required></div>
-          <div><label for="prenom">Prénom</label><input id="prenom" type="text" placeholder="Votre prénom" required></div>
-        </div>
-        <div class="form-row">
-          <div><label for="tel">Téléphone</label><input id="tel" type="tel" placeholder="06 00 00 00 00" required></div>
-          <div><label for="email">Email</label><input id="email" type="email" placeholder="vous@email.fr" required></div>
-        </div>
-        <div class="form-row full">
-          <div><label for="besoin">Type de besoin</label>
-            <select id="besoin">
-              <option>Aide à la personne</option>
-              <option>Aide au quotidien</option>
-              <option>Assistance administrative</option>
-              <option>Accompagnement et vie sociale</option>
-              <option>Je ne sais pas encore</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row full">
-          <div><label for="message">Message</label><textarea id="message" placeholder="Décrivez votre situation ou vos besoins..."></textarea></div>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Envoyer ma demande</button>
-      </form>
-    </div>
   </div>
 </section>
 
@@ -821,12 +455,10 @@
       <div>
         <h4>Navigation</h4>
         <ul>
-          <li><a href="#apropos">Qui sommes-nous</a></li>
-          <li><a href="#services">Nos services</a></li>
-          <li><a href="#mandataire">Mode mandataire</a></li>
-          <li><a href="#tarifs">Tarifs</a></li>
-          <li><a href="#simulateur">Simulateur</a></li>
-          <li><a href="#aides">Aides fiscales</a></li>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
       <div>
@@ -847,100 +479,60 @@
 
 <script>
 (function(){
-  var eur = new Intl.NumberFormat('fr-FR', {style:'currency', currency:'EUR', maximumFractionDigits:0});
-  var eur2 = new Intl.NumberFormat('fr-FR', {style:'currency', currency:'EUR', maximumFractionDigits:2});
+  // À compléter : identifiants Airtable (Personal Access Token restreint à la table "Leads" uniquement)
+  var AIRTABLE_BASE_ID = "REMPLACER_PAR_VOTRE_BASE_ID";
+  var AIRTABLE_TABLE_NAME = "Leads";
+  var AIRTABLE_TOKEN = "REMPLACER_PAR_VOTRE_TOKEN";
 
-  var hoursInput = document.getElementById('simHours');
-  var hoursOut = document.getElementById('simHoursOut');
-  var presets = document.querySelectorAll('.sim-preset');
-  var plafondInputs = document.querySelectorAll('input[name="plafond"]');
+  var form = document.getElementById('contactForm');
+  var statusEl = document.getElementById('formStatus');
+  var submitBtn = form.querySelector('button[type="submit"]');
 
-  var elTrancheBadge = document.getElementById('simTrancheBadge');
-  var elRate = document.getElementById('simRate');
-  var elWeeklyTTC = document.getElementById('simWeeklyTTC');
-  var elMonthlyTTC = document.getElementById('simMonthlyTTC');
-  var elAnnualTTC = document.getElementById('simAnnualTTC');
-  var elCredit = document.getElementById('simCredit');
-  var elAnnualReal = document.getElementById('simAnnualReal');
-  var elMonthlyReal = document.getElementById('simMonthlyReal');
-  var elWarning = document.getElementById('simWarning');
-  var elWarningText = document.getElementById('simWarningText');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
 
-  function getTranche(h){
-    if(h <= 25) return {label:'Tranche A', rate:32.70};
-    if(h <= 40) return {label:'Tranche B', rate:31.70};
-    return {label:'Tranche C', rate:28.70};
-  }
+    var besoins = Array.prototype.slice.call(form.querySelectorAll('input[name="besoins"]:checked')).map(function(i){ return i.value; });
 
-  function getPlafond(){
-    var checked = document.querySelector('input[name="plafond"]:checked');
-    return checked ? parseFloat(checked.value) : 12000;
-  }
+    var fields = {
+      "Nom": form.nom.value,
+      "Prénom": form.prenom.value,
+      "Téléphone": form.tel.value,
+      "Email": form.email.value,
+      "Besoins": besoins.join(', '),
+      "Message": form.message.value
+    };
 
-  function updatePresets(h){
-    presets.forEach(function(btn){
-      btn.classList.toggle('active', parseInt(btn.dataset.hours, 10) === h);
-    });
-  }
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Envoi en cours...";
+    statusEl.className = 'form-status';
 
-  function updatePlafondActive(){
-    document.querySelectorAll('.sim-radio').forEach(function(label){
-      var input = label.querySelector('input');
-      label.classList.toggle('active', input.checked);
-    });
-  }
-
-  function compute(){
-    var h = parseInt(hoursInput.value, 10);
-    hoursOut.textContent = h;
-    updatePresets(h);
-
-    var tranche = getTranche(h);
-    var plafond = getPlafond();
-
-    var weeklyTTC = h * tranche.rate;
-    var annualTTC = weeklyTTC * 52;
-    var monthlyTTC = annualTTC / 12;
-
-    var eligibleBase = Math.min(annualTTC, plafond);
-    var credit = eligibleBase * 0.5;
-    var annualReal = annualTTC - credit;
-    var monthlyReal = annualReal / 12;
-
-    elTrancheBadge.textContent = tranche.label;
-    elRate.textContent = eur2.format(tranche.rate) + ' / h';
-    elWeeklyTTC.textContent = eur.format(weeklyTTC);
-    elMonthlyTTC.textContent = eur.format(monthlyTTC);
-    elAnnualTTC.textContent = eur.format(annualTTC);
-    elCredit.textContent = '− ' + eur.format(credit);
-    elAnnualReal.textContent = eur.format(annualReal);
-    elMonthlyReal.textContent = eur.format(monthlyReal);
-
-    if(annualTTC > plafond){
-      var excess = annualTTC - plafond;
-      elWarning.style.display = 'flex';
-      elWarningText.innerHTML = 'Au-delà de ' + eur.format(plafond) + ' de dépenses par an, le crédit d\'impôt de 50 % ne s\'applique plus : ' + eur.format(excess) + ' de dépenses annuelles restent hors plafond. Le calcul ci-dessus en tient compte.';
-    } else {
-      elWarning.style.display = 'none';
-    }
-  }
-
-  hoursInput.addEventListener('input', compute);
-  presets.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      hoursInput.value = btn.dataset.hours;
-      compute();
+    fetch('https://api.airtable.com/v0/' + AIRTABLE_BASE_ID + '/' + encodeURIComponent(AIRTABLE_TABLE_NAME), {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + AIRTABLE_TOKEN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ fields: fields })
+    })
+    .then(function(res){
+      if(!res.ok) throw new Error('Airtable error ' + res.status);
+      return res.json();
+    })
+    .then(function(){
+      form.reset();
+      statusEl.textContent = "Merci, votre demande a bien été enregistrée. Notre équipe vous recontactera rapidement.";
+      statusEl.className = 'form-status show success';
+    })
+    .catch(function(err){
+      statusEl.textContent = "Une erreur est survenue lors de l'envoi. Merci de nous appeler au 06 64 26 93 03.";
+      statusEl.className = 'form-status show error';
+      console.error(err);
+    })
+    .finally(function(){
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Envoyer ma demande";
     });
   });
-  plafondInputs.forEach(function(input){
-    input.addEventListener('change', function(){
-      updatePlafondActive();
-      compute();
-    });
-  });
-
-  updatePlafondActive();
-  compute();
 })();
 </script>
 
