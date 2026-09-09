@@ -26,6 +26,7 @@ export const TABLES = {
   intervenants: process.env.AIRTABLE_TABLE_INTERVENANTS || "Intervenants",
   clients: process.env.AIRTABLE_TABLE_CLIENTS || "Clients",
   releves: process.env.AIRTABLE_TABLE_RELEVES || "Releves",
+  fichesDePaie: process.env.AIRTABLE_TABLE_FICHES_PAIE || "FichesDePaie",
 };
 
 export type Intervenant = {
@@ -39,6 +40,8 @@ export type Intervenant = {
 export type Client = {
   id: string;
   nom: string;
+  adresse: string;
+  numeroClient: string;
 };
 
 export async function getIntervenantByEmail(
@@ -63,7 +66,9 @@ export async function getIntervenantByEmail(
   };
 }
 
-export async function getActiveClients(): Promise<Client[]> {
+export async function getClientsForIntervenant(
+  intervenantId: string
+): Promise<Client[]> {
   const records = await base(TABLES.clients)
     .select({
       filterByFormula: `{Actif} = 1`,
@@ -71,10 +76,18 @@ export async function getActiveClients(): Promise<Client[]> {
     })
     .all();
 
-  return records.map((record) => ({
-    id: record.id,
-    nom: (record.get("Nom") as string) || "",
-  }));
+  return records
+    .filter((record) => {
+      const ids =
+        (record.get("Intervenants assignes") as string[] | undefined) || [];
+      return ids.includes(intervenantId);
+    })
+    .map((record) => ({
+      id: record.id,
+      nom: (record.get("Nom") as string) || "",
+      adresse: (record.get("Adresse") as string) || "",
+      numeroClient: (record.get("Numero client") as string) || "",
+    }));
 }
 
 export type NouveauReleve = {
@@ -85,6 +98,7 @@ export type NouveauReleve = {
   heureDepart: string;
   heuresRealisees: number;
   commentaire?: string;
+  certifie: boolean;
 };
 
 export async function creerReleve(releve: NouveauReleve) {
@@ -96,6 +110,7 @@ export async function creerReleve(releve: NouveauReleve) {
     "Heure de depart": releve.heureDepart,
     "Heures realisees": releve.heuresRealisees,
     Commentaire: releve.commentaire || "",
+    Certification: releve.certifie,
   });
 
   return record.id;
@@ -142,6 +157,42 @@ export async function getRelevesByIntervenant(
         heureDepart: (r.get("Heure de depart") as string) || "",
         heuresRealisees: (r.get("Heures realisees") as number) || 0,
         commentaire: (r.get("Commentaire") as string) || "",
+      };
+    });
+}
+
+export type FicheDePaie = {
+  id: string;
+  mois: string;
+  fichierUrl: string;
+  fichierNom: string;
+};
+
+type AirtableAttachment = {
+  url: string;
+  filename: string;
+};
+
+export async function getFichesDePaieByIntervenant(
+  intervenantId: string
+): Promise<FicheDePaie[]> {
+  const records = await base(TABLES.fichesDePaie)
+    .select({ sort: [{ field: "Mois", direction: "desc" }] })
+    .all();
+
+  return records
+    .filter((r) => {
+      const ids = (r.get("Intervenant") as string[] | undefined) || [];
+      return ids.includes(intervenantId);
+    })
+    .map((r) => {
+      const fichiers =
+        (r.get("Fichier") as AirtableAttachment[] | undefined) || [];
+      return {
+        id: r.id,
+        mois: (r.get("Mois") as string) || "",
+        fichierUrl: fichiers[0]?.url || "",
+        fichierNom: fichiers[0]?.filename || "Fiche de paie",
       };
     });
 }

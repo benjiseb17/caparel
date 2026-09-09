@@ -48,17 +48,26 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { clientId, date, heureArrivee, heureDepart, commentaire } = body as {
-    clientId?: string;
-    date?: string;
-    heureArrivee?: string;
-    heureDepart?: string;
-    commentaire?: string;
-  };
+  const { clientId, date, heureArrivee, heureDepart, commentaire, certifie } =
+    body as {
+      clientId?: string;
+      date?: string;
+      heureArrivee?: string;
+      heureDepart?: string;
+      commentaire?: string;
+      certifie?: boolean;
+    };
 
   if (!clientId || !date || !heureArrivee || !heureDepart) {
     return NextResponse.json(
       { error: "Champs requis manquants" },
+      { status: 400 }
+    );
+  }
+
+  if (!certifie) {
+    return NextResponse.json(
+      { error: "Vous devez certifier l'exactitude des informations." },
       { status: 400 }
     );
   }
@@ -79,6 +88,7 @@ export async function POST(request: Request) {
     heureDepart,
     heuresRealisees,
     commentaire,
+    certifie,
   };
 
   try {

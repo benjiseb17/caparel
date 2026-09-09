@@ -4,7 +4,7 @@ Application Next.js pour la saisie des heures des intervenants à domicile. Le b
 
 ## 1. Créer la base Airtable
 
-Crée une base Airtable avec **3 tables** :
+Crée une base Airtable avec **4 tables** :
 
 ### Table `Intervenants`
 
@@ -17,10 +17,15 @@ Crée une base Airtable avec **3 tables** :
 
 ### Table `Clients`
 
-| Champ  | Type                |
-| ------ | -------------------- |
-| `Nom`   | Texte sur une ligne  |
-| `Actif` | Case à cocher        |
+| Champ                  | Type                                              |
+| ----------------------- | -------------------------------------------------- |
+| `Nom`                   | Texte sur une ligne                                 |
+| `Adresse`               | Texte sur une ligne                                 |
+| `Numero client`         | Texte sur une ligne                                 |
+| `Actif`                 | Case à cocher                                       |
+| `Intervenants assignes` | Lien vers un autre enregistrement → `Intervenants` (plusieurs possibles) |
+
+> `Intervenants assignes` détermine quels intervenants voient ce client (sur la page d'accueil et dans le menu déroulant de saisie).
 
 ### Table `Releves`
 
@@ -33,6 +38,17 @@ Crée une base Airtable avec **3 tables** :
 | `Heure de depart`      | Texte sur une ligne (format `HH:mm`)   |
 | `Heures realisees`     | Nombre (décimal)                       |
 | `Commentaire`          | Texte long (optionnel)                 |
+| `Certification`        | Case à cocher (l'intervenant certifie sur l'honneur l'exactitude des informations) |
+
+### Table `FichesDePaie`
+
+| Champ         | Type                                                |
+| -------------- | ---------------------------------------------------- |
+| `Intervenant`  | Lien vers un autre enregistrement → `Intervenants`    |
+| `Mois`         | Date (ex. premier jour du mois : `2026-08-01`)        |
+| `Fichier`      | Pièce jointe (le PDF de la fiche de paie)             |
+
+> Chaque intervenant ne voit que ses propres fiches de paie, listées dans l'onglet Historique.
 
 > Les noms de champs doivent correspondre exactement (accents non inclus, comme indiqué ci-dessus) à ceux utilisés dans `src/lib/airtable.ts`.
 
@@ -77,8 +93,9 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 ## Fonctionnement
 
 - **Connexion** (`/login`) : email + mot de passe, vérifiés contre la table `Intervenants`.
-- **Saisie** (`/`) : l'intervenant connecté choisit un client (liste chargée depuis la table `Clients` où `Actif` est coché), une date (aujourd'hui par défaut), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct.
-- **Validation** : le bouton "Valider" envoie les données à `/api/releves`, qui recalcule les heures côté serveur (pour éviter toute manipulation côté client) et crée un enregistrement dans la table `Releves`, lié à l'intervenant connecté et au client choisi.
+- **Saisie** (`/`) : dès la connexion, l'intervenant voit les informations (nom, adresse, numéro client) des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`). Il choisit ensuite un client (parmi les siens), une date (aujourd'hui par défaut), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.
+- **Validation** : le bouton "Valider" envoie les données à `/api/releves`, qui recalcule les heures côté serveur (pour éviter toute manipulation côté client), vérifie que la certification a bien été cochée, et crée un enregistrement dans la table `Releves`, lié à l'intervenant connecté et au client choisi.
+- **Historique** (`/historique`) : liste des relevés déjà saisis par l'intervenant, ainsi qu'une section "Mes fiches de paie" listant ses bulletins (table `FichesDePaie`) avec un lien de téléchargement direct.
 
 ## Déploiement
 

@@ -1,8 +1,12 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { getRelevesByIntervenant } from "@/lib/airtable";
-import { isDemoMode, getDemoReleves } from "@/lib/demo";
-import { formatHeures, formatDateFr } from "@/lib/format";
+import { getRelevesByIntervenant, getFichesDePaieByIntervenant } from "@/lib/airtable";
+import {
+  isDemoMode,
+  getDemoReleves,
+  getDemoFichesDePaie,
+} from "@/lib/demo";
+import { formatHeures, formatDateFr, formatMoisFr } from "@/lib/format";
 import AppHeader from "@/components/AppHeader";
 
 export default async function HistoriquePage() {
@@ -12,9 +16,12 @@ export default async function HistoriquePage() {
     redirect("/login");
   }
 
-  const releves = isDemoMode()
-    ? getDemoReleves()
-    : await getRelevesByIntervenant(session.user.id);
+  const [releves, fiches] = isDemoMode()
+    ? [getDemoReleves(), getDemoFichesDePaie()]
+    : await Promise.all([
+        getRelevesByIntervenant(session.user.id),
+        getFichesDePaieByIntervenant(session.user.id),
+      ]);
 
   return (
     <div className="min-h-screen bg-soft flex flex-col">
@@ -55,6 +62,45 @@ export default async function HistoriquePage() {
                     <p className="text-sm text-ink mt-2 pt-2 border-t border-line">
                       {r.commentaire}
                     </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <h2 className="font-heading text-lg font-bold text-navy mt-10 mb-4">
+            Mes fiches de paie
+          </h2>
+
+          {fiches.length === 0 ? (
+            <div className="bg-white rounded-2xl border border-line p-6 text-center">
+              <p className="text-sm text-muted">
+                Aucune fiche de paie disponible pour le moment.
+              </p>
+            </div>
+          ) : (
+            <ul className="space-y-2">
+              {fiches.map((f) => (
+                <li
+                  key={f.id}
+                  className="bg-white rounded-2xl border border-line p-4 flex items-center justify-between"
+                >
+                  <span className="text-sm font-medium text-ink">
+                    {formatMoisFr(f.mois)}
+                  </span>
+                  {f.fichierUrl ? (
+                    <a
+                      href={f.fichierUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-medium text-teal-dark hover:text-teal underline underline-offset-2"
+                    >
+                      Télécharger
+                    </a>
+                  ) : (
+                    <span className="text-sm text-muted">
+                      Indisponible (démo)
+                    </span>
                   )}
                 </li>
               ))}

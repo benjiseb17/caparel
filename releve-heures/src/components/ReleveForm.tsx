@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, FormEvent } from "react";
+import { useMemo, useState, FormEvent } from "react";
 import { formatHeures } from "@/lib/format";
 
 type Client = {
@@ -29,31 +29,23 @@ function calculerHeures(heureArrivee: string, heureDepart: string): number | nul
   return Math.round((minutes / 60) * 100) / 100;
 }
 
-export default function ReleveForm({ intervenantNom }: { intervenantNom: string }) {
-  const [clients, setClients] = useState<Client[]>([]);
-  const [clientsLoading, setClientsLoading] = useState(true);
-  const [clientsError, setClientsError] = useState<string | null>(null);
-
+export default function ReleveForm({
+  intervenantNom,
+  clients,
+}: {
+  intervenantNom: string;
+  clients: Client[];
+}) {
   const [clientId, setClientId] = useState("");
   const [date, setDate] = useState(todayIso());
   const [heureArrivee, setHeureArrivee] = useState("");
   const [heureDepart, setHeureDepart] = useState("");
   const [commentaire, setCommentaire] = useState("");
+  const [certifie, setCertifie] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("/api/clients")
-      .then((res) => {
-        if (!res.ok) throw new Error();
-        return res.json();
-      })
-      .then((data) => setClients(data.clients))
-      .catch(() => setClientsError("Impossible de charger la liste des clients."))
-      .finally(() => setClientsLoading(false));
-  }, []);
 
   const heuresRealisees = useMemo(
     () => calculerHeures(heureArrivee, heureDepart),
@@ -73,6 +65,10 @@ export default function ReleveForm({ intervenantNom }: { intervenantNom: string 
       setError("Merci de renseigner une heure d'arrivée et de départ valides.");
       return;
     }
+    if (!certifie) {
+      setError("Merci de certifier l'exactitude des informations avant de valider.");
+      return;
+    }
 
     setSubmitting(true);
     try {
@@ -85,6 +81,7 @@ export default function ReleveForm({ intervenantNom }: { intervenantNom: string 
           heureArrivee,
           heureDepart,
           commentaire,
+          certifie,
         }),
       });
 
@@ -101,6 +98,7 @@ export default function ReleveForm({ intervenantNom }: { intervenantNom: string 
       setHeureArrivee("");
       setHeureDepart("");
       setCommentaire("");
+      setCertifie(false);
     } catch {
       setError("Impossible de contacter le serveur.");
     } finally {
@@ -128,11 +126,10 @@ export default function ReleveForm({ intervenantNom }: { intervenantNom: string 
             required
             value={clientId}
             onChange={(e) => setClientId(e.target.value)}
-            disabled={clientsLoading}
             className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal disabled:bg-soft"
           >
             <option value="" disabled>
-              {clientsLoading ? "Chargement..." : "Sélectionner un client"}
+              Sélectionner un client
             </option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
@@ -140,9 +137,6 @@ export default function ReleveForm({ intervenantNom }: { intervenantNom: string 
               </option>
             ))}
           </select>
-          {clientsError && (
-            <p className="text-sm text-red-600 mt-1">{clientsError}</p>
-          )}
         </div>
 
         <div>
@@ -222,6 +216,20 @@ export default function ReleveForm({ intervenantNom }: { intervenantNom: string 
             className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal resize-none"
           />
         </div>
+
+        <label className="flex items-start gap-2.5 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={certifie}
+            onChange={(e) => setCertifie(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-line text-navylogo focus:ring-teal"
+          />
+          <span className="text-xs text-muted leading-relaxed">
+            Je certifie sur l&apos;honneur l&apos;exactitude des informations
+            et horaires renseignés ci-dessus, et je m&apos;engage à leur
+            véracité.
+          </span>
+        </label>
 
         {error && (
           <p className="text-sm text-red-600" role="alert">

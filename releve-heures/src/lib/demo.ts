@@ -1,6 +1,12 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
-import type { Client, Intervenant, NouveauReleve, Releve } from "@/lib/airtable";
+import type {
+  Client,
+  FicheDePaie,
+  Intervenant,
+  NouveauReleve,
+  Releve,
+} from "@/lib/airtable";
 
 export function isDemoMode() {
   return process.env.DEMO_MODE === "true";
@@ -15,10 +21,48 @@ export const DEMO_INTERVENANT: Intervenant = {
 };
 
 export const DEMO_CLIENTS: Client[] = [
-  { id: "demo-client-1", nom: "M. Lefèvre" },
-  { id: "demo-client-2", nom: "Mme Girard" },
-  { id: "demo-client-3", nom: "M. et Mme Bonnet" },
+  {
+    id: "demo-client-1",
+    nom: "M. Lefèvre",
+    adresse: "12 rue des Lilas, 92200 Neuilly-sur-Seine",
+    numeroClient: "CL-0142",
+  },
+  {
+    id: "demo-client-2",
+    nom: "Mme Girard",
+    adresse: "5 avenue Foch, 92200 Neuilly-sur-Seine",
+    numeroClient: "CL-0198",
+  },
+  {
+    id: "demo-client-3",
+    nom: "M. et Mme Bonnet",
+    adresse: "8 rue du Château, 92200 Neuilly-sur-Seine",
+    numeroClient: "CL-0207",
+  },
 ];
+
+export function getDemoClientsForIntervenant(): Client[] {
+  return DEMO_CLIENTS;
+}
+
+export const DEMO_FICHES_PAIE: FicheDePaie[] = [
+  {
+    id: "demo-fiche-1",
+    mois: "2026-08-01",
+    fichierUrl: "",
+    fichierNom: "Fiche_de_paie_Aout_2026.pdf",
+  },
+  {
+    id: "demo-fiche-2",
+    mois: "2026-07-01",
+    fichierUrl: "",
+    fichierNom: "Fiche_de_paie_Juillet_2026.pdf",
+  },
+];
+
+export function getDemoFichesDePaie(): FicheDePaie[] {
+  return DEMO_FICHES_PAIE;
+}
 
 // Stockage sur disque pour la démo uniquement (un fichier JSON, pas Airtable).
 // Nécessaire car en dev, Next.js peut charger ce module dans des instances
