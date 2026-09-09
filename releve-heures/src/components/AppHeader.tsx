@@ -12,7 +12,7 @@ const LIENS: { href: string; label: string; key: Onglet }[] = [
 
 export default function AppHeader({ active }: { active: Onglet }) {
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-8 py-4 gap-3">
+    <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-8 py-3 sm:py-4 gap-2 sm:gap-3 border-b border-line bg-soft">
       <div className="flex items-center justify-between">
         <Link href="/" className="shrink-0">
           <Image

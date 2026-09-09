@@ -156,7 +156,7 @@ export default function ReleveForm({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label
               htmlFor="arrivee"
@@ -170,7 +170,7 @@ export default function ReleveForm({
               required
               value={heureArrivee}
               onChange={(e) => setHeureArrivee(e.target.value)}
-              className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
+              className="w-full min-w-0 rounded-lg border border-line px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
             />
           </div>
           <div>
@@ -186,7 +186,7 @@ export default function ReleveForm({
               required
               value={heureDepart}
               onChange={(e) => setHeureDepart(e.target.value)}
-              className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
+              className="w-full min-w-0 rounded-lg border border-line px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
             />
           </div>
         </div>
