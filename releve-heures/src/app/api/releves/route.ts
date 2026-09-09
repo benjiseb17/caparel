@@ -28,7 +28,7 @@ export async function GET() {
 
   try {
     const releves = isDemoMode()
-      ? getDemoReleves()
+      ? await getDemoReleves()
       : await getRelevesByIntervenant(session.user.id);
 
     return NextResponse.json({ releves });
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
 
   try {
     const id = isDemoMode()
-      ? addDemoReleve(nouveauReleve)
+      ? await addDemoReleve(nouveauReleve)
       : await creerReleve(nouveauReleve);
 
     return NextResponse.json({ id, heuresRealisees }, { status: 201 });

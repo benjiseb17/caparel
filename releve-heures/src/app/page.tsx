@@ -41,9 +41,13 @@ export default async function AccueilPage() {
 
   let clients, statsMois, statsAnnee;
   if (isDemoMode()) {
+    const [statsMoisRes, statsAnneeRes] = await Promise.all([
+      getDemoStatsMensuelles(tauxHoraire),
+      getDemoStatsAnnuelles(tauxHoraire),
+    ]);
     clients = getDemoClientsForIntervenant();
-    statsMois = getDemoStatsMensuelles(tauxHoraire);
-    statsAnnee = getDemoStatsAnnuelles(tauxHoraire);
+    statsMois = statsMoisRes;
+    statsAnnee = statsAnneeRes;
   } else {
     const [clientsRes, releveHeures] = await Promise.all([
       getClientsForIntervenant(session.user.id),

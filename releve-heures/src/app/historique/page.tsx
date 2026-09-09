@@ -17,7 +17,7 @@ export default async function HistoriquePage() {
   }
 
   const [releves, fiches] = isDemoMode()
-    ? [getDemoReleves(), getDemoFichesDePaie()]
+    ? await Promise.all([getDemoReleves(), Promise.resolve(getDemoFichesDePaie())])
     : await Promise.all([
         getRelevesByIntervenant(session.user.id),
         getFichesDePaieByIntervenant(session.user.id),

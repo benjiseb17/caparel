@@ -1,6 +1,4 @@
-import { readFileSync, writeFileSync, existsSync } from "fs";
-import { join } from "path";
-import { tmpdir } from "os";
+import { cookies } from "next/headers";
 import type {
   Client,
   FicheDePaie,
@@ -71,29 +69,38 @@ export function getDemoFichesDePaie(): FicheDePaie[] {
   return DEMO_FICHES_PAIE;
 }
 
-// Stockage sur disque pour la démo uniquement (un fichier JSON, pas Airtable).
-// Nécessaire car en dev, Next.js peut charger ce module dans des instances
-// séparées selon la route : un simple tableau en mémoire ne serait pas partagé
-// de façon fiable entre la route API et la page historique.
-// On utilise le dossier temporaire du système (pas le dossier du projet) car
-// sur Vercel, seul /tmp est accessible en écriture.
-const DEMO_STORE_PATH = join(tmpdir(), "releve-heures-demo.json");
+// Stockage dans un cookie pour la démo uniquement (pas Airtable).
+// Sur Vercel, chaque requête peut être traitée par une instance serveur
+// différente : ni un tableau en mémoire ni un fichier écrit sur disque ne
+// seraient partagés de façon fiable entre la route API et la page
+// historique. Le cookie, lui, voyage avec chaque requête du navigateur.
+const COOKIE_NAME = "demo_releves";
+const MAX_ENTREES = 10;
 
-function readDemoStore(): Releve[] {
-  if (!existsSync(DEMO_STORE_PATH)) return [];
+async function readDemoStore(): Promise<Releve[]> {
+  const store = await cookies();
+  const raw = store.get(COOKIE_NAME)?.value;
+  if (!raw) return [];
   try {
-    return JSON.parse(readFileSync(DEMO_STORE_PATH, "utf-8"));
+    return JSON.parse(decodeURIComponent(raw));
   } catch {
     return [];
   }
 }
 
-function writeDemoStore(releves: Releve[]) {
-  writeFileSync(DEMO_STORE_PATH, JSON.stringify(releves, null, 2));
+async function writeDemoStore(releves: Releve[]) {
+  const store = await cookies();
+  const trimmed = releves.slice(0, MAX_ENTREES);
+  store.set(COOKIE_NAME, encodeURIComponent(JSON.stringify(trimmed)), {
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24, // 24h : la démo n'a pas besoin de durer plus longtemps
+    path: "/",
+  });
 }
 
-export function addDemoReleve(releve: NouveauReleve): string {
-  const releves = readDemoStore();
+export async function addDemoReleve(releve: NouveauReleve): Promise<string> {
+  const releves = await readDemoStore();
   const id = `demo-releve-${Date.now()}`;
   const clientNom =
     DEMO_CLIENTS.find((c) => c.id === releve.clientId)?.nom || "Client inconnu";
@@ -108,19 +115,20 @@ export function addDemoReleve(releve: NouveauReleve): string {
     commentaire: releve.commentaire,
   });
 
-  writeDemoStore(releves);
+  await writeDemoStore(releves);
   return id;
 }
 
-export function getDemoReleves(limit = 20): Releve[] {
-  return readDemoStore().slice(0, limit);
+export async function getDemoReleves(limit = 20): Promise<Releve[]> {
+  const releves = await readDemoStore();
+  return releves.slice(0, limit);
 }
 
-function getDemoReleveHeures(): { date: string; heures: number }[] {
+async function getDemoReleveHeures(): Promise<{ date: string; heures: number }[]> {
   const now = new Date();
   const todayIso = now.toISOString().slice(0, 10);
 
-  const releves = readDemoStore().map((r) => ({
+  const releves = (await readDemoStore()).map((r) => ({
     date: r.date,
     heures: r.heuresRealisees,
   }));
@@ -135,10 +143,14 @@ function getDemoReleveHeures(): { date: string; heures: number }[] {
   return releves;
 }
 
-export function getDemoStatsMensuelles(tauxHoraire: number): StatsMensuelles {
-  return calculerStatsMensuelles(getDemoReleveHeures(), tauxHoraire);
+export async function getDemoStatsMensuelles(
+  tauxHoraire: number
+): Promise<StatsMensuelles> {
+  return calculerStatsMensuelles(await getDemoReleveHeures(), tauxHoraire);
 }
 
-export function getDemoStatsAnnuelles(tauxHoraire: number): StatsAnnuelles {
-  return calculerStatsAnnuelles(getDemoReleveHeures(), tauxHoraire);
+export async function getDemoStatsAnnuelles(
+  tauxHoraire: number
+): Promise<StatsAnnuelles> {
+  return calculerStatsAnnuelles(await getDemoReleveHeures(), tauxHoraire);
 }
