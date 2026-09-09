@@ -32,7 +32,14 @@ function EditForm({
   onCancel: () => void;
   onSaved: (updated: Releve) => void;
 }) {
-  const [clientId, setClientId] = useState(releve.clientId);
+  // Repli pour les relevés créés avant l'enregistrement du clientId : on
+  // retrouve le client par son nom pour que le menu ne s'affiche pas vide.
+  const clientIdInitial =
+    releve.clientId ||
+    clients.find((c) => c.nom === releve.clientNom)?.id ||
+    "";
+
+  const [clientId, setClientId] = useState(clientIdInitial);
   const [date, setDate] = useState(releve.date);
   const [heureArrivee, setHeureArrivee] = useState(releve.heureArrivee);
   const [heureDepart, setHeureDepart] = useState(releve.heureDepart);
