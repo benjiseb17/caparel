@@ -14,14 +14,16 @@ export default function AppHeader({ active }: { active: Onglet }) {
   return (
     <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-8 py-4 gap-3">
       <div className="flex items-center justify-between">
-        <Image
-          src="/caparel-logo.png"
-          alt="Caparel"
-          width={1872}
-          height={562}
-          className="w-24 sm:w-28 h-auto"
-          priority
-        />
+        <Link href="/" className="shrink-0">
+          <Image
+            src="/caparel-logo.png"
+            alt="Caparel"
+            width={1872}
+            height={562}
+            className="w-24 sm:w-28 h-auto"
+            priority
+          />
+        </Link>
         <div className="sm:hidden">
           <LogoutButton />
         </div>

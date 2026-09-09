@@ -67,27 +67,34 @@ export default async function AccueilPage() {
       <AppHeader active="accueil" />
       <main className="flex-1 flex flex-col items-center px-4 pb-12 pt-2 sm:pt-8">
         <div className="w-full max-w-md lg:max-w-4xl space-y-4">
-          <div className="bg-white rounded-2xl border border-line p-6 flex items-center gap-4">
-            {profil?.photoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={profil.photoUrl}
-                alt={`${prenom} ${nom}`}
-                className="w-16 h-16 rounded-full object-cover shrink-0"
-              />
-            ) : (
-              <div className="w-16 h-16 rounded-full bg-navylogo text-white flex items-center justify-center font-heading font-bold text-lg shrink-0">
-                {initiales}
+          <div className="relative rounded-2xl border border-line bg-white p-6 overflow-hidden">
+            <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-navylogo via-teal to-teal-dark" />
+            <div className="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-teal/10" />
+            <div className="relative flex items-center gap-4">
+              {profil?.photoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={profil.photoUrl}
+                  alt={`${prenom} ${nom}`}
+                  className="w-16 h-16 rounded-full object-cover shrink-0"
+                />
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-navylogo text-white flex items-center justify-center font-heading font-bold text-lg shrink-0">
+                  {initiales}
+                </div>
+              )}
+              <div>
+                <p className="text-sm text-muted">Bonjour</p>
+                <h1 className="font-heading text-xl font-bold text-navy">
+                  {prenom}
+                </h1>
+                <p className="text-sm text-muted">
+                  {prenom} {nom}
+                </p>
+                <p className="text-xs text-teal-dark font-medium mt-1">
+                  Caparel · Aide à domicile aux personnes âgées
+                </p>
               </div>
-            )}
-            <div>
-              <p className="text-sm text-muted">Bonjour</p>
-              <h1 className="font-heading text-xl font-bold text-navy">
-                {prenom}
-              </h1>
-              <p className="text-sm text-muted">
-                {prenom} {nom}
-              </p>
             </div>
           </div>
 
