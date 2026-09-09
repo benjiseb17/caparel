@@ -2,6 +2,7 @@
 
 import { useMemo, useState, FormEvent } from "react";
 import { formatHeures } from "@/lib/format";
+import { calculerHeures } from "@/lib/heures";
 import TimeSelect from "@/components/TimeSelect";
 
 type Client = {
@@ -14,20 +15,6 @@ function todayIso() {
   const offset = now.getTimezoneOffset();
   const local = new Date(now.getTime() - offset * 60 * 1000);
   return local.toISOString().slice(0, 10);
-}
-
-function calculerHeures(heureArrivee: string, heureDepart: string): number | null {
-  if (!heureArrivee || !heureDepart) return null;
-  const [ha, ma] = heureArrivee.split(":").map(Number);
-  const [hd, md] = heureDepart.split(":").map(Number);
-  if ([ha, ma, hd, md].some((n) => Number.isNaN(n))) return null;
-
-  const minutesArrivee = ha * 60 + ma;
-  let minutesDepart = hd * 60 + md;
-  if (minutesDepart < minutesArrivee) minutesDepart += 24 * 60;
-
-  const minutes = minutesDepart - minutesArrivee;
-  return Math.round((minutes / 60) * 100) / 100;
 }
 
 export default function ReleveForm({

@@ -1,35 +1,23 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { creerReleve, getRelevesByIntervenant } from "@/lib/airtable";
-import { isDemoMode, addDemoReleve, getDemoReleves } from "@/lib/demo";
+import { getProprietaireReleve, modifierReleve } from "@/lib/airtable";
+import {
+  isDemoMode,
+  demoReleveExiste,
+  modifierDemoReleve,
+} from "@/lib/demo";
 import { calculerHeures } from "@/lib/heures";
 
-export async function GET() {
+export async function PATCH(
+  request: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
   }
 
-  try {
-    const releves = isDemoMode()
-      ? await getDemoReleves()
-      : await getRelevesByIntervenant(session.user.id);
-
-    return NextResponse.json({ releves });
-  } catch (error) {
-    console.error("Erreur lors de la recuperation des releves:", error);
-    return NextResponse.json(
-      { error: "Impossible de recuperer l'historique" },
-      { status: 500 }
-    );
-  }
-}
-
-export async function POST(request: Request) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
-  }
+  const { id } = await context.params;
 
   const body = await request.json();
   const { clientId, date, heureArrivee, heureDepart, commentaire, certifie } =
@@ -64,8 +52,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const nouveauReleve = {
-    intervenantId: session.user.id,
+  const modification = {
     clientId,
     date,
     heureArrivee,
@@ -76,15 +63,28 @@ export async function POST(request: Request) {
   };
 
   try {
-    const id = isDemoMode()
-      ? await addDemoReleve(nouveauReleve)
-      : await creerReleve(nouveauReleve);
+    if (isDemoMode()) {
+      const existe = await demoReleveExiste(id);
+      if (!existe) {
+        return NextResponse.json({ error: "Relevé introuvable" }, { status: 404 });
+      }
+      await modifierDemoReleve(id, modification);
+    } else {
+      const proprietaireId = await getProprietaireReleve(id);
+      if (!proprietaireId) {
+        return NextResponse.json({ error: "Relevé introuvable" }, { status: 404 });
+      }
+      if (proprietaireId !== session.user.id) {
+        return NextResponse.json({ error: "Non autorise" }, { status: 403 });
+      }
+      await modifierReleve(id, modification);
+    }
 
-    return NextResponse.json({ id, heuresRealisees }, { status: 201 });
+    return NextResponse.json({ id, heuresRealisees });
   } catch (error) {
-    console.error("Erreur lors de la creation du releve:", error);
+    console.error("Erreur lors de la modification du releve:", error);
     return NextResponse.json(
-      { error: "Impossible d'enregistrer le releve" },
+      { error: "Impossible de modifier le releve" },
       { status: 500 }
     );
   }

@@ -3,6 +3,7 @@ import type {
   Client,
   FicheDePaie,
   Intervenant,
+  ModificationReleve,
   NouveauReleve,
   Releve,
   StatsAnnuelles,
@@ -108,6 +109,7 @@ export async function addDemoReleve(releve: NouveauReleve): Promise<string> {
   releves.unshift({
     id,
     date: releve.date,
+    clientId: releve.clientId,
     clientNom,
     heureArrivee: releve.heureArrivee,
     heureDepart: releve.heureDepart,
@@ -122,6 +124,37 @@ export async function addDemoReleve(releve: NouveauReleve): Promise<string> {
 export async function getDemoReleves(limit = 20): Promise<Releve[]> {
   const releves = await readDemoStore();
   return releves.slice(0, limit);
+}
+
+export async function demoReleveExiste(releveId: string): Promise<boolean> {
+  const releves = await readDemoStore();
+  return releves.some((r) => r.id === releveId);
+}
+
+export async function modifierDemoReleve(
+  releveId: string,
+  releve: ModificationReleve
+): Promise<boolean> {
+  const releves = await readDemoStore();
+  const index = releves.findIndex((r) => r.id === releveId);
+  if (index === -1) return false;
+
+  const clientNom =
+    DEMO_CLIENTS.find((c) => c.id === releve.clientId)?.nom || "Client inconnu";
+
+  releves[index] = {
+    id: releveId,
+    date: releve.date,
+    clientId: releve.clientId,
+    clientNom,
+    heureArrivee: releve.heureArrivee,
+    heureDepart: releve.heureDepart,
+    heuresRealisees: releve.heuresRealisees,
+    commentaire: releve.commentaire,
+  };
+
+  await writeDemoStore(releves);
+  return true;
 }
 
 async function getDemoReleveHeures(): Promise<{ date: string; heures: number }[]> {

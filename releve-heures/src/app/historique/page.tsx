@@ -1,13 +1,19 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { getRelevesByIntervenant, getFichesDePaieByIntervenant } from "@/lib/airtable";
+import {
+  getRelevesByIntervenant,
+  getFichesDePaieByIntervenant,
+  getClientsForIntervenant,
+} from "@/lib/airtable";
 import {
   isDemoMode,
   getDemoReleves,
   getDemoFichesDePaie,
+  getDemoClientsForIntervenant,
 } from "@/lib/demo";
-import { formatHeures, formatDateFr, formatMoisFr } from "@/lib/format";
+import { formatMoisFr } from "@/lib/format";
 import AppHeader from "@/components/AppHeader";
+import HistoriqueReleves from "@/components/HistoriqueReleves";
 
 export default async function HistoriquePage() {
   const session = await auth();
@@ -16,11 +22,16 @@ export default async function HistoriquePage() {
     redirect("/login");
   }
 
-  const [releves, fiches] = isDemoMode()
-    ? await Promise.all([getDemoReleves(), Promise.resolve(getDemoFichesDePaie())])
+  const [releves, fiches, clients] = isDemoMode()
+    ? await Promise.all([
+        getDemoReleves(),
+        Promise.resolve(getDemoFichesDePaie()),
+        Promise.resolve(getDemoClientsForIntervenant()),
+      ])
     : await Promise.all([
         getRelevesByIntervenant(session.user.id),
         getFichesDePaieByIntervenant(session.user.id),
+        getClientsForIntervenant(session.user.id),
       ]);
 
   return (
@@ -32,41 +43,7 @@ export default async function HistoriquePage() {
             Historique
           </h1>
 
-          {releves.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-line p-8 text-center">
-              <p className="text-sm text-muted">
-                Aucun relevé enregistré pour le moment.
-              </p>
-            </div>
-          ) : (
-            <ul className="space-y-3">
-              {releves.map((r) => (
-                <li
-                  key={r.id}
-                  className="bg-white rounded-2xl border border-line p-4"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="font-heading font-semibold text-ink">
-                        {r.clientNom}
-                      </p>
-                      <p className="text-sm text-muted">
-                        {formatDateFr(r.date)} · {r.heureArrivee} - {r.heureDepart}
-                      </p>
-                    </div>
-                    <span className="font-heading text-sm font-bold text-teal-dark shrink-0">
-                      {formatHeures(r.heuresRealisees)}
-                    </span>
-                  </div>
-                  {r.commentaire && (
-                    <p className="text-sm text-ink mt-2 pt-2 border-t border-line">
-                      {r.commentaire}
-                    </p>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
+          <HistoriqueReleves releves={releves} clients={clients} />
 
           <h2 className="font-heading text-lg font-bold text-navy mt-10 mb-4">
             Mes fiches de paie
