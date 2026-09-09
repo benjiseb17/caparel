@@ -1,33 +1,40 @@
 import type { Client } from "@/lib/airtable";
 
 export default function ClientsAssignes({ clients }: { clients: Client[] }) {
-  if (clients.length === 0) return null;
+  if (clients.length === 0) {
+    return (
+      <div className="bg-white rounded-2xl border border-line p-8 text-center">
+        <p className="text-sm text-muted">
+          Aucun client ne vous est assigné pour le moment.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full max-w-md mb-4">
-      <h2 className="text-sm font-medium text-muted mb-2">
-        {clients.length > 1 ? "Vos clients" : "Votre client"}
-      </h2>
-      <div className="space-y-2">
-        {clients.map((client) => (
-          <div
-            key={client.id}
-            className="bg-white rounded-2xl border border-line p-4"
-          >
-            <p className="font-heading font-semibold text-navy">
+    <div className="bg-white rounded-2xl border border-line divide-y divide-line overflow-hidden">
+      {clients.map((client) => (
+        <div
+          key={client.id}
+          className="p-4 flex items-center justify-between gap-3"
+        >
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-ink truncate">
               {client.nom}
             </p>
             {client.adresse && (
-              <p className="text-sm text-muted mt-0.5">{client.adresse}</p>
-            )}
-            {client.numeroClient && (
-              <p className="text-xs text-muted mt-1">
-                N° client : {client.numeroClient}
+              <p className="text-xs text-muted mt-0.5 truncate">
+                {client.adresse}
               </p>
             )}
           </div>
-        ))}
-      </div>
+          {client.numeroClient && (
+            <span className="text-[11px] text-muted font-mono shrink-0">
+              {client.numeroClient}
+            </span>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

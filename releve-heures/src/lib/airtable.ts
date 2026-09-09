@@ -29,20 +29,35 @@ export const TABLES = {
   fichesDePaie: process.env.AIRTABLE_TABLE_FICHES_PAIE || "FichesDePaie",
 };
 
+type AirtableAttachment = {
+  url: string;
+  filename: string;
+};
+
 export type Intervenant = {
   id: string;
+  prenom: string;
   nom: string;
   email: string;
   motDePasseHash: string;
   actif: boolean;
+  photoUrl: string;
+  tauxHoraire: number;
 };
 
-export type Client = {
-  id: string;
-  nom: string;
-  adresse: string;
-  numeroClient: string;
-};
+function mapIntervenant(record: Airtable.Record<Airtable.FieldSet>): Intervenant {
+  const photos = (record.get("Photo") as AirtableAttachment[] | undefined) || [];
+  return {
+    id: record.id,
+    prenom: (record.get("Prenom") as string) || "",
+    nom: (record.get("Nom") as string) || "",
+    email: (record.get("Email") as string) || "",
+    motDePasseHash: (record.get("MotDePasseHash") as string) || "",
+    actif: Boolean(record.get("Actif")),
+    photoUrl: photos[0]?.url || "",
+    tauxHoraire: (record.get("TauxHoraire") as number) || 0,
+  };
+}
 
 export async function getIntervenantByEmail(
   email: string
@@ -55,16 +70,26 @@ export async function getIntervenantByEmail(
     .firstPage();
 
   if (records.length === 0) return null;
-
-  const record = records[0];
-  return {
-    id: record.id,
-    nom: (record.get("Nom") as string) || "",
-    email: (record.get("Email") as string) || "",
-    motDePasseHash: (record.get("MotDePasseHash") as string) || "",
-    actif: Boolean(record.get("Actif")),
-  };
+  return mapIntervenant(records[0]);
 }
+
+export async function getIntervenantById(
+  id: string
+): Promise<Intervenant | null> {
+  try {
+    const record = await base(TABLES.intervenants).find(id);
+    return mapIntervenant(record);
+  } catch {
+    return null;
+  }
+}
+
+export type Client = {
+  id: string;
+  nom: string;
+  adresse: string;
+  numeroClient: string;
+};
 
 export async function getClientsForIntervenant(
   intervenantId: string
@@ -161,16 +186,145 @@ export async function getRelevesByIntervenant(
     });
 }
 
+export type StatSemaine = {
+  label: string;
+  heures: number;
+  ca: number;
+};
+
+export type StatsMensuelles = {
+  totalHeures: number;
+  totalCA: number;
+  parSemaine: StatSemaine[];
+};
+
+function calculerStatsMensuelles(
+  releves: { date: string; heures: number }[],
+  tauxHoraire: number
+): StatsMensuelles {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const parSemaine: StatSemaine[] = [1, 2, 3, 4, 5].map((n) => ({
+    label: `Sem. ${n}`,
+    heures: 0,
+    ca: 0,
+  }));
+
+  let totalHeures = 0;
+
+  for (const r of releves) {
+    const d = new Date(r.date);
+    if (Number.isNaN(d.getTime())) continue;
+    if (d.getFullYear() !== year || d.getMonth() !== month) continue;
+
+    const semaineIndex = Math.min(Math.floor((d.getDate() - 1) / 7), 4);
+    parSemaine[semaineIndex].heures += r.heures;
+    parSemaine[semaineIndex].ca += r.heures * tauxHoraire;
+    totalHeures += r.heures;
+  }
+
+  return {
+    totalHeures: Math.round(totalHeures * 100) / 100,
+    totalCA: Math.round(totalHeures * tauxHoraire * 100) / 100,
+    parSemaine: parSemaine.map((s) => ({
+      ...s,
+      heures: Math.round(s.heures * 100) / 100,
+      ca: Math.round(s.ca * 100) / 100,
+    })),
+  };
+}
+
+export type StatMois = {
+  label: string;
+  ca: number;
+};
+
+export type StatsAnnuelles = {
+  totalCA: number;
+  parMois: StatMois[];
+};
+
+const MOIS_COURTS = [
+  "Jan",
+  "Fév",
+  "Mar",
+  "Avr",
+  "Mai",
+  "Jun",
+  "Jul",
+  "Aoû",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Déc",
+];
+
+function calculerStatsAnnuelles(
+  releves: { date: string; heures: number }[],
+  tauxHoraire: number
+): StatsAnnuelles {
+  const year = new Date().getFullYear();
+
+  const parMois: StatMois[] = MOIS_COURTS.map((label) => ({ label, ca: 0 }));
+
+  let totalCA = 0;
+
+  for (const r of releves) {
+    const d = new Date(r.date);
+    if (Number.isNaN(d.getTime()) || d.getFullYear() !== year) continue;
+
+    const ca = r.heures * tauxHoraire;
+    parMois[d.getMonth()].ca += ca;
+    totalCA += ca;
+  }
+
+  return {
+    totalCA: Math.round(totalCA * 100) / 100,
+    parMois: parMois.map((m) => ({ ...m, ca: Math.round(m.ca * 100) / 100 })),
+  };
+}
+
+export async function getReleveHeuresIntervenant(
+  intervenantId: string
+): Promise<{ date: string; heures: number }[]> {
+  const records = await base(TABLES.releves).select().all();
+
+  return records
+    .filter((r) => {
+      const ids = (r.get("Intervenant") as string[] | undefined) || [];
+      return ids.includes(intervenantId);
+    })
+    .map((r) => ({
+      date: (r.get("Date") as string) || "",
+      heures: (r.get("Heures realisees") as number) || 0,
+    }));
+}
+
+export async function getStatsMensuelles(
+  intervenantId: string,
+  tauxHoraire: number
+): Promise<StatsMensuelles> {
+  const releves = await getReleveHeuresIntervenant(intervenantId);
+  return calculerStatsMensuelles(releves, tauxHoraire);
+}
+
+export async function getStatsAnnuelles(
+  intervenantId: string,
+  tauxHoraire: number
+): Promise<StatsAnnuelles> {
+  const releves = await getReleveHeuresIntervenant(intervenantId);
+  return calculerStatsAnnuelles(releves, tauxHoraire);
+}
+
+export { calculerStatsMensuelles, calculerStatsAnnuelles };
+
 export type FicheDePaie = {
   id: string;
   mois: string;
   fichierUrl: string;
   fichierNom: string;
-};
-
-type AirtableAttachment = {
-  url: string;
-  filename: string;
 };
 
 export async function getFichesDePaieByIntervenant(

@@ -6,7 +6,10 @@ import type {
   Intervenant,
   NouveauReleve,
   Releve,
+  StatsAnnuelles,
+  StatsMensuelles,
 } from "@/lib/airtable";
+import { calculerStatsAnnuelles, calculerStatsMensuelles } from "@/lib/airtable";
 
 export function isDemoMode() {
   return process.env.DEMO_MODE === "true";
@@ -14,10 +17,13 @@ export function isDemoMode() {
 
 export const DEMO_INTERVENANT: Intervenant = {
   id: "demo-intervenant-1",
-  nom: "Camille Dupont",
+  prenom: "Camille",
+  nom: "Dupont",
   email: "demo@test.fr",
   motDePasseHash: "$2b$10$5UO/soFoHjpiOvb0b2Og4OgiYezYQgP3GSX0F4tDWzo2eeZeW0kOe", // demo1234
   actif: true,
+  photoUrl: "",
+  tauxHoraire: 15.5,
 };
 
 export const DEMO_CLIENTS: Client[] = [
@@ -105,4 +111,31 @@ export function addDemoReleve(releve: NouveauReleve): string {
 
 export function getDemoReleves(limit = 20): Releve[] {
   return readDemoStore().slice(0, limit);
+}
+
+function getDemoReleveHeures(): { date: string; heures: number }[] {
+  const now = new Date();
+  const todayIso = now.toISOString().slice(0, 10);
+
+  const releves = readDemoStore().map((r) => ({
+    date: r.date,
+    heures: r.heuresRealisees,
+  }));
+
+  // En démo, si aucun relevé n'a encore été saisi ce mois-ci, on ajoute un
+  // exemple pour que le récap et les graphiques ne soient pas vides.
+  const auMoinsUnCeMois = releves.some((r) => r.date.slice(0, 7) === todayIso.slice(0, 7));
+  if (!auMoinsUnCeMois) {
+    releves.push({ date: todayIso, heures: 3.5 });
+  }
+
+  return releves;
+}
+
+export function getDemoStatsMensuelles(tauxHoraire: number): StatsMensuelles {
+  return calculerStatsMensuelles(getDemoReleveHeures(), tauxHoraire);
+}
+
+export function getDemoStatsAnnuelles(tauxHoraire: number): StatsAnnuelles {
+  return calculerStatsAnnuelles(getDemoReleveHeures(), tauxHoraire);
 }

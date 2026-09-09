@@ -10,10 +10,13 @@ Crée une base Airtable avec **4 tables** :
 
 | Champ            | Type                         |
 | ---------------- | ---------------------------- |
+| `Prenom`          | Texte sur une ligne          |
 | `Nom`             | Texte sur une ligne          |
 | `Email`           | Texte sur une ligne          |
 | `MotDePasseHash`  | Texte sur une ligne          |
 | `Actif`           | Case à cocher                |
+| `Photo`           | Pièce jointe (optionnel — sans photo, des initiales sont affichées) |
+| `TauxHoraire`     | Nombre (décimal, en €/h — sert à calculer le chiffre d'affaires) |
 
 ### Table `Clients`
 
@@ -93,7 +96,8 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 ## Fonctionnement
 
 - **Connexion** (`/login`) : email + mot de passe, vérifiés contre la table `Intervenants`.
-- **Saisie** (`/`) : dès la connexion, l'intervenant voit les informations (nom, adresse, numéro client) des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`). Il choisit ensuite un client (parmi les siens), une date (aujourd'hui par défaut), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.
+- **Accueil** (`/`) : profil de l'intervenant (photo ou initiales, prénom, nom), la liste des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`), et un récapitulatif chiffré — heures et chiffre d'affaires du mois (avec graphiques par semaine) et chiffre d'affaires de l'année en cours (graphique par mois). Le chiffre d'affaires est calculé comme `heures réalisées × TauxHoraire` de l'intervenant. Sur grand écran, clients et récapitulatif s'affichent côte à côte ; en mobile, tout est empilé.
+- **Relevé d'heure** (`/saisie`) : l'intervenant choisit un client (parmi les siens), une date (aujourd'hui par défaut), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.
 - **Validation** : le bouton "Valider" envoie les données à `/api/releves`, qui recalcule les heures côté serveur (pour éviter toute manipulation côté client), vérifie que la certification a bien été cochée, et crée un enregistrement dans la table `Releves`, lié à l'intervenant connecté et au client choisi.
 - **Historique** (`/historique`) : liste des relevés déjà saisis par l'intervenant, ainsi qu'une section "Mes fiches de paie" listant ses bulletins (table `FichesDePaie`) avec un lien de téléchargement direct.
 
