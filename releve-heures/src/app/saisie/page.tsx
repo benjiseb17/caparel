@@ -17,9 +17,9 @@ export default async function SaisiePage() {
     : await getClientsForIntervenant(session.user.id);
 
   return (
-    <div className="min-h-screen bg-soft flex flex-col">
+    <div className="min-h-screen bg-soft flex flex-col overflow-x-hidden">
       <AppHeader active="saisie" />
-      <main className="flex-1 flex items-start sm:items-center justify-center px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] pt-2 sm:pt-4">
+      <main className="flex-1 flex items-start sm:items-center justify-center px-5 sm:px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] pt-2 sm:pt-4">
         <ReleveForm
           intervenantNom={session.user.name || session.user.email || ""}
           clients={clients}

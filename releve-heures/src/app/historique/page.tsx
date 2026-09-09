@@ -24,9 +24,9 @@ export default async function HistoriquePage() {
       ]);
 
   return (
-    <div className="min-h-screen bg-soft flex flex-col">
+    <div className="min-h-screen bg-soft flex flex-col overflow-x-hidden">
       <AppHeader active="historique" />
-      <main className="flex-1 px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] flex justify-center">
+      <main className="flex-1 px-5 sm:px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] flex justify-center">
         <div className="w-full max-w-md">
           <h1 className="font-heading text-xl font-bold text-navy mb-6">
             Historique

@@ -20,7 +20,7 @@ export default function AppHeader({ active }: { active: Onglet }) {
             alt="Caparel"
             width={1872}
             height={562}
-            className="w-24 sm:w-28 h-auto"
+            className="w-32 sm:w-40 h-auto"
             priority
           />
         </Link>
