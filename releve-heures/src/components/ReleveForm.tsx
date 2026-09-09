@@ -2,6 +2,7 @@
 
 import { useMemo, useState, FormEvent } from "react";
 import { formatHeures } from "@/lib/format";
+import TimeSelect from "@/components/TimeSelect";
 
 type Client = {
   id: string;
@@ -157,38 +158,18 @@ export default function ReleveForm({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label
-              htmlFor="arrivee"
-              className="block text-sm font-medium text-ink mb-1"
-            >
-              Heure d&apos;arrivée
-            </label>
-            <input
-              id="arrivee"
-              type="time"
-              required
-              value={heureArrivee}
-              onChange={(e) => setHeureArrivee(e.target.value)}
-              className="w-full min-w-0 rounded-lg border border-line px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="depart"
-              className="block text-sm font-medium text-ink mb-1"
-            >
-              Heure de départ
-            </label>
-            <input
-              id="depart"
-              type="time"
-              required
-              value={heureDepart}
-              onChange={(e) => setHeureDepart(e.target.value)}
-              className="w-full min-w-0 rounded-lg border border-line px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-            />
-          </div>
+          <TimeSelect
+            id="arrivee"
+            label="Heure d'arrivée"
+            value={heureArrivee}
+            onChange={setHeureArrivee}
+          />
+          <TimeSelect
+            id="depart"
+            label="Heure de départ"
+            value={heureDepart}
+            onChange={setHeureDepart}
+          />
         </div>
 
         <div className="rounded-lg bg-soft-2 border border-line px-3 py-2.5 flex items-center justify-between">
