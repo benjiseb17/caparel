@@ -151,6 +151,7 @@
 
   /* ABOUT */
   .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:center;}
+  .about-grid.reverse{grid-template-columns:1.15fr .85fr;}
   .about-visual{
     border-radius:var(--r-md);min-height:340px;
     display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
@@ -292,8 +293,8 @@
     </a>
     <nav class="nav-links">
       <a href="index.html" class="active">Accueil</a>
-      <a href="services.html">Services</a>
-      <a href="tarifs.html">Tarifs</a>
+      <a href="services.html">Nos services</a>
+      <a href="tarifs.html">Nos tarifs</a>
     </nav>
     <div class="nav-cta">
       <a href="tel:0664269303" class="nav-phone"><svg class="icon" style="width:16px;height:16px"><use href="#ic-phone"/></svg>06 64 26 93 03</a>
@@ -320,7 +321,7 @@
         </div>
       </div>
       <div class="hero-visual">
-        <img src="images/hero.jpg" alt="Aide à domicile Caparel" class="hero-photo" width="1456" height="1114" fetchpriority="high" decoding="async">
+        <img src="images/hero.jpg" alt="Aide à domicile Caparel" class="hero-photo" width="1385" height="1136" fetchpriority="high" decoding="async">
       </div>
     </div>
   </div>
@@ -354,6 +355,27 @@
         <div class="about-point"><svg class="icon"><use href="#ic-repeat"/></svg>Intervenant stable et dédié</div>
         <div class="about-point"><svg class="icon"><use href="#ic-clock"/></svg>Suivi continu assuré</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="intervenants">
+  <div class="container about-grid reverse">
+    <div class="about">
+      <span class="eyebrow">Nos intervenantes</span>
+      <h2>Des auxiliaires de vie recrutées avec exigence</h2>
+      <p>Pour intervenir chez nos clients, nos aides à domicile doivent justifier d'un diplôme du secteur médico-social ou d'au moins 3 ans d'expérience auprès de personnes âgées.</p>
+      <p>Chaque candidate passe par un entretien approfondi : compétences, parcours, références vérifiées auprès des précédents employeurs, et expérience selon les situations (troubles cognitifs, aide à la mobilité, fin de vie).</p>
+      <p>Nous prenons ensuite le temps de croiser les besoins de votre proche avec le profil de l'intervenante — c'est cette étape de mise en correspondance qui fonde la confiance.</p>
+      <div class="about-points">
+        <div class="about-point"><svg class="icon"><use href="#ic-shield"/></svg>Diplômées ou expérimentées</div>
+        <div class="about-point"><svg class="icon"><use href="#ic-check"/></svg>Références vérifiées</div>
+        <div class="about-point"><svg class="icon"><use href="#ic-users"/></svg>Intervenante dédiée</div>
+        <div class="about-point"><svg class="icon"><use href="#ic-repeat"/></svg>Mise en correspondance avec vos besoins</div>
+      </div>
+    </div>
+    <div class="about-visual">
+      <img src="images/intervenants.jpg" alt="Auxiliaires de vie Caparel" class="about-photo" width="1385" height="1136" loading="lazy" decoding="async">
     </div>
   </div>
 </section>
@@ -454,8 +476,8 @@
         <h4>Navigation</h4>
         <ul>
           <li><a href="index.html">Accueil</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="tarifs.html">Tarifs</a></li>
+          <li><a href="services.html">Nos services</a></li>
+          <li><a href="tarifs.html">Nos tarifs</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
