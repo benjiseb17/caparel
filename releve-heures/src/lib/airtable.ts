@@ -244,11 +244,11 @@ export type StatsMensuelles = {
 
 function calculerStatsMensuelles(
   releves: { date: string; heures: number }[],
-  tauxHoraire: number
+  tauxHoraire: number,
+  refDate: Date = new Date()
 ): StatsMensuelles {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
+  const year = refDate.getFullYear();
+  const month = refDate.getMonth();
 
   const parSemaine: StatSemaine[] = [1, 2, 3, 4, 5].map((n) => ({
     label: `Sem. ${n}`,
@@ -348,10 +348,11 @@ export async function getReleveHeuresIntervenant(
 
 export async function getStatsMensuelles(
   intervenantId: string,
-  tauxHoraire: number
+  tauxHoraire: number,
+  refDate?: Date
 ): Promise<StatsMensuelles> {
   const releves = await getReleveHeuresIntervenant(intervenantId);
-  return calculerStatsMensuelles(releves, tauxHoraire);
+  return calculerStatsMensuelles(releves, tauxHoraire, refDate);
 }
 
 export async function getStatsAnnuelles(

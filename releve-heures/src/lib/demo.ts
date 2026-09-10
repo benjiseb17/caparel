@@ -177,9 +177,10 @@ async function getDemoReleveHeures(): Promise<{ date: string; heures: number }[]
 }
 
 export async function getDemoStatsMensuelles(
-  tauxHoraire: number
+  tauxHoraire: number,
+  refDate?: Date
 ): Promise<StatsMensuelles> {
-  return calculerStatsMensuelles(await getDemoReleveHeures(), tauxHoraire);
+  return calculerStatsMensuelles(await getDemoReleveHeures(), tauxHoraire, refDate);
 }
 
 export async function getDemoStatsAnnuelles(

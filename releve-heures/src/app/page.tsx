@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { auth } from "@/auth";
 import AppHeader from "@/components/AppHeader";
 import BarChart from "@/components/BarChart";
@@ -20,19 +21,59 @@ import {
 } from "@/lib/demo";
 import { formatHeures } from "@/lib/format";
 
-const MOIS_LABEL = new Intl.DateTimeFormat("fr-FR", {
-  month: "long",
-  year: "numeric",
-}).format(new Date());
-
 const ANNEE = new Date().getFullYear();
 
-export default async function AccueilPage() {
+function resoudreMois(param?: string) {
+  const now = new Date();
+  const nowYear = now.getFullYear();
+  const nowMonth = now.getMonth();
+
+  let year = nowYear;
+  let month = nowMonth;
+
+  if (param && /^\d{4}-\d{2}$/.test(param)) {
+    const [y, m] = param.split("-").map(Number);
+    if (y >= 2000 && y <= 2100 && m >= 1 && m <= 12) {
+      year = y;
+      month = m - 1;
+    }
+  }
+
+  // Impossible de naviguer dans le futur.
+  if (year > nowYear || (year === nowYear && month > nowMonth)) {
+    year = nowYear;
+    month = nowMonth;
+  }
+
+  const toParam = (y: number, m: number) =>
+    `${y}-${String(m + 1).padStart(2, "0")}`;
+
+  return {
+    refDate: new Date(year, month, 1),
+    label: new Intl.DateTimeFormat("fr-FR", {
+      month: "long",
+      year: "numeric",
+    }).format(new Date(year, month, 1)),
+    estMoisCourant: year === nowYear && month === nowMonth,
+    moisPrecedent: toParam(year, month - 1),
+    moisSuivant: toParam(year, month + 1),
+  };
+}
+
+export default async function AccueilPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ mois?: string }>;
+}) {
   const session = await auth();
 
   if (!session?.user?.id) {
     redirect("/login");
   }
+
+  const { mois } = await searchParams;
+  const { refDate, label, estMoisCourant, moisPrecedent, moisSuivant } =
+    resoudreMois(mois);
 
   const profil = isDemoMode()
     ? DEMO_INTERVENANT
@@ -43,7 +84,7 @@ export default async function AccueilPage() {
   let clients, statsMois, statsAnnee;
   if (isDemoMode()) {
     const [statsMoisRes, statsAnneeRes] = await Promise.all([
-      getDemoStatsMensuelles(tauxHoraire),
+      getDemoStatsMensuelles(tauxHoraire, refDate),
       getDemoStatsAnnuelles(tauxHoraire),
     ]);
     clients = getDemoClientsForIntervenant();
@@ -55,7 +96,7 @@ export default async function AccueilPage() {
       getReleveHeuresIntervenant(session.user.id),
     ]);
     clients = clientsRes;
-    statsMois = calculerStatsMensuelles(releveHeures, tauxHoraire);
+    statsMois = calculerStatsMensuelles(releveHeures, tauxHoraire, refDate);
     statsAnnee = calculerStatsAnnuelles(releveHeures, tauxHoraire);
   }
 
@@ -117,9 +158,67 @@ export default async function AccueilPage() {
             </div>
 
             <div className="bg-white rounded-2xl border border-line p-6">
-              <p className="text-sm text-muted mb-4 capitalize">
-                Récap — {MOIS_LABEL}
-              </p>
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Link
+                  href={`/?mois=${moisPrecedent}`}
+                  aria-label="Mois précédent"
+                  className="p-1 rounded-md text-muted hover:text-navy hover:bg-soft transition-colors"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M15 18l-6-6 6-6" />
+                  </svg>
+                </Link>
+                <p className="text-sm text-muted capitalize text-center whitespace-nowrap">
+                  Récap — {label}
+                </p>
+                {estMoisCourant ? (
+                  <span
+                    className="p-1 text-line/60"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </span>
+                ) : (
+                  <Link
+                    href={`/?mois=${moisSuivant}`}
+                    aria-label="Mois suivant"
+                    className="p-1 rounded-md text-muted hover:text-navy hover:bg-soft transition-colors"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </Link>
+                )}
+              </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
