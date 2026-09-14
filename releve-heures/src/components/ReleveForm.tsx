@@ -140,7 +140,7 @@ export default function ReleveForm({
             required
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full rounded-lg border border-line px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
+            className="w-full rounded-lg border border-line px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
           />
         </div>
 

@@ -5,7 +5,6 @@ import { auth } from "@/auth";
 import AppHeader from "@/components/AppHeader";
 import BarChart from "@/components/BarChart";
 import ClientsAssignes from "@/components/ClientsAssignes";
-import EditableAvatar from "@/components/EditableAvatar";
 import {
   getIntervenantById,
   getClientsForIntervenant,
@@ -123,18 +122,23 @@ export default async function AccueilPage({
               />
             </div>
             <div className="relative flex items-center gap-4">
-              <EditableAvatar
-                photoUrl={profil?.photoUrl || ""}
-                initiales={initiales}
-                nomComplet={`${prenom} ${nom}`}
-                editable={!isDemoMode()}
-              />
+              {profil?.photoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={profil.photoUrl}
+                  alt={`${prenom} ${nom}`}
+                  className="w-16 h-16 rounded-full object-cover shrink-0"
+                />
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-navylogo text-white flex items-center justify-center font-heading font-bold text-lg shrink-0">
+                  {initiales}
+                </div>
+              )}
               <div>
                 <p className="text-sm text-muted">Bonjour</p>
-                <h1 className="font-heading text-xl text-navy">{prenom}</h1>
-                <p className="text-sm font-bold text-ink">
+                <h1 className="font-heading text-sm font-bold text-ink">
                   {prenom} {nom}
-                </p>
+                </h1>
                 <p className="text-xs text-teal-dark font-medium mt-1">
                   Caparel · Aide à domicile aux personnes âgées
                 </p>

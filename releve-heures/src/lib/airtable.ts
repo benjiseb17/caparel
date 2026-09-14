@@ -27,6 +27,8 @@ export const TABLES = {
   clients: process.env.AIRTABLE_TABLE_CLIENTS || "Clients",
   releves: process.env.AIRTABLE_TABLE_RELEVES || "Releves",
   fichesDePaie: process.env.AIRTABLE_TABLE_FICHES_PAIE || "FichesDePaie",
+  modificationsProfil:
+    process.env.AIRTABLE_TABLE_MODIFICATIONS_PROFIL || "ModificationsProfil",
 };
 
 type AirtableAttachment = {
@@ -39,6 +41,7 @@ export type Intervenant = {
   prenom: string;
   nom: string;
   email: string;
+  telephone: string;
   motDePasseHash: string;
   actif: boolean;
   photoUrl: string;
@@ -52,6 +55,7 @@ function mapIntervenant(record: Airtable.Record<Airtable.FieldSet>): Intervenant
     prenom: (record.get("Prenom") as string) || "",
     nom: (record.get("Nom") as string) || "",
     email: (record.get("Email") as string) || "",
+    telephone: (record.get("Telephone") as string) || "",
     motDePasseHash: (record.get("MotDePasseHash") as string) || "",
     actif: Boolean(record.get("Actif")),
     photoUrl: photos[0]?.url || "",
@@ -120,6 +124,63 @@ export async function uploaderPhotoIntervenant(
   const data = await res.json();
   const photos = (data?.fields?.Photo as AirtableAttachment[] | undefined) || [];
   return photos[0]?.url || "";
+}
+
+export type ModificationProfil = {
+  email?: string;
+  telephone?: string;
+  photo?: { base64: string; contentType: string; filename: string };
+};
+
+/**
+ * Met à jour les informations de contact d'un intervenant et enregistre la
+ * demande dans ModificationsProfil pour que la direction en soit informée
+ * (via une automation Airtable déclenchée à la création de l'enregistrement).
+ */
+export async function modifierProfilIntervenant(
+  intervenantId: string,
+  modification: ModificationProfil
+): Promise<void> {
+  const actuel = await getIntervenantById(intervenantId);
+  if (!actuel) {
+    throw new Error("Intervenant introuvable");
+  }
+
+  const champsMisAJour: Record<string, string> = {};
+  if (modification.email !== undefined && modification.email !== actuel.email) {
+    champsMisAJour.Email = modification.email;
+  }
+  if (
+    modification.telephone !== undefined &&
+    modification.telephone !== actuel.telephone
+  ) {
+    champsMisAJour.Telephone = modification.telephone;
+  }
+
+  const emailModifie = champsMisAJour.Email !== undefined;
+  const telephoneModifie = champsMisAJour.Telephone !== undefined;
+  const photoModifiee = Boolean(modification.photo);
+
+  if (!emailModifie && !telephoneModifie && !photoModifiee) {
+    throw new Error("Aucune modification a enregistrer");
+  }
+
+  if (Object.keys(champsMisAJour).length > 0) {
+    await base(TABLES.intervenants).update(intervenantId, champsMisAJour);
+  }
+
+  if (modification.photo) {
+    await uploaderPhotoIntervenant(intervenantId, modification.photo);
+  }
+
+  await base(TABLES.modificationsProfil).create({
+    Intervenant: [intervenantId],
+    "Email avant": actuel.email,
+    "Email apres": modification.email ?? actuel.email,
+    "Telephone avant": actuel.telephone,
+    "Telephone apres": modification.telephone ?? actuel.telephone,
+    "Photo modifiee": photoModifiee,
+  });
 }
 
 export type Client = {
