@@ -111,7 +111,7 @@ export default async function AccueilPage({
         <div className="w-full max-w-md lg:max-w-4xl space-y-4">
           <div className="relative rounded-2xl border border-line bg-white p-6 overflow-hidden">
             <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-navylogo via-teal to-teal-dark" />
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 h-[155%] aspect-square rounded-full bg-teal/10 flex items-center justify-center">
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 h-full sm:h-[155%] aspect-square rounded-full bg-teal/10 flex items-center justify-center">
               <Image
                 src="/caparel-icon.png"
                 alt=""
