@@ -119,7 +119,7 @@ function EditForm({
           required
           value={clientId}
           onChange={(e) => setClientId(e.target.value)}
-          className="w-full h-10 rounded-lg border border-line px-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
+          className="w-full min-h-11 rounded-lg border border-line px-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
         >
           <option value="" disabled>
             Sélectionner un client
@@ -141,7 +141,7 @@ function EditForm({
           required
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="w-full h-10 rounded-lg border border-line px-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
+          className="w-full min-h-11 rounded-lg border border-line px-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
         />
       </div>
 

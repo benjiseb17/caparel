@@ -114,7 +114,7 @@ export default function ReleveForm({
             required
             value={clientId}
             onChange={(e) => setClientId(e.target.value)}
-            className="w-full h-10 rounded-lg border border-line px-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal disabled:bg-soft"
+            className="w-full min-h-11 rounded-lg border border-line px-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal disabled:bg-soft"
           >
             <option value="" disabled>
               Sélectionner un client
@@ -140,7 +140,7 @@ export default function ReleveForm({
             required
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full h-10 rounded-lg border border-line px-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
+            className="w-full min-h-11 rounded-lg border border-line px-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
           />
         </div>
 

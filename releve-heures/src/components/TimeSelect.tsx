@@ -19,7 +19,7 @@ export default function TimeSelect({
   }
 
   const selectClass =
-    "w-1/2 min-w-0 h-10 rounded-lg border border-line px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal";
+    "w-1/2 min-w-0 min-h-11 rounded-lg border border-line px-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal";
 
   return (
     <div>
