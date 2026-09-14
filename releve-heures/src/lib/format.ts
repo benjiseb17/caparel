@@ -4,6 +4,16 @@ export function formatHeures(h: number) {
   return `${heures}h${minutes.toString().padStart(2, "0")}`;
 }
 
+export function initialesDe(nomComplet: string) {
+  return nomComplet
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((mot) => mot[0])
+    .join("")
+    .toUpperCase();
+}
+
 export function formatDateFr(iso: string) {
   if (!iso) return "";
   const [year, month, day] = iso.split("-");

@@ -38,10 +38,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         return {
           id: intervenant.id,
-          name: `${intervenant.prenom} ${intervenant.nom}`.trim(),
+          name: intervenant.nomComplet,
           email: intervenant.email,
-          prenom: intervenant.prenom,
-          nom: intervenant.nom,
+          nomComplet: intervenant.nomComplet,
         };
       },
     }),
@@ -50,16 +49,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.intervenantId = user.id;
-        token.prenom = user.prenom;
-        token.nom = user.nom;
+        token.nomComplet = user.nomComplet;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.intervenantId as string;
-        session.user.prenom = token.prenom as string | undefined;
-        session.user.nom = token.nom as string | undefined;
+        session.user.nomComplet = token.nomComplet as string | undefined;
       }
       return session;
     },

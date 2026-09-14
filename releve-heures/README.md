@@ -10,8 +10,7 @@ Crée une base Airtable avec **5 tables** :
 
 | Champ            | Type                         |
 | ---------------- | ---------------------------- |
-| `Prenom`          | Texte sur une ligne          |
-| `Nom`             | Texte sur une ligne          |
+| `Nom et Prenom`   | Texte sur une ligne — nom complet, ex. `Benjamin Sebahoun` (champ principal) |
 | `Email`           | Texte sur une ligne          |
 | `Telephone`       | Texte sur une ligne (optionnel) |
 | `MotDePasseHash`  | Texte sur une ligne          |
@@ -52,9 +51,8 @@ Crée une base Airtable avec **5 tables** :
 | `Mois`               | Date (ex. premier jour du mois : `2026-08-01`)        |
 | `Fichier`            | Pièce jointe (le PDF de la fiche de paie)             |
 | `Publiee`            | Case à cocher — la fiche n'apparaît dans l'app **que si elle est cochée** |
-| `Nom intervenant`    | Lookup de `Nom` via `Intervenant`                     |
 | `Email intervenant`  | Lookup de `Email` via `Intervenant`                   |
-| `Fiche`              | Formule — libellé auto (`Sebahoun Benjamin — septembre 2026`) |
+| `Name`               | Formule — libellé auto (`Benjamin Sebahoun — Septembre 2026`) |
 
 > Chaque intervenant ne voit que ses propres fiches de paie, listées dans l'onglet Historique.
 

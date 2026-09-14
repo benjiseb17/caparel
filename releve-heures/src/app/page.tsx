@@ -19,7 +19,7 @@ import {
   getDemoStatsMensuelles,
   getDemoStatsAnnuelles,
 } from "@/lib/demo";
-import { formatHeures } from "@/lib/format";
+import { formatHeures, initialesDe } from "@/lib/format";
 
 const ANNEE = new Date().getFullYear();
 
@@ -100,9 +100,8 @@ export default async function AccueilPage({
     statsAnnee = calculerStatsAnnuelles(releveHeures, tauxHoraire);
   }
 
-  const prenom = profil?.prenom || session.user.prenom || "";
-  const nom = profil?.nom || session.user.nom || "";
-  const initiales = `${prenom[0] || ""}${nom[0] || ""}`.toUpperCase();
+  const nomComplet = profil?.nomComplet || session.user.nomComplet || "";
+  const initiales = initialesDe(nomComplet);
 
   return (
     <div className="min-h-screen bg-soft flex flex-col overflow-x-hidden">
@@ -126,7 +125,7 @@ export default async function AccueilPage({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={profil.photoUrl}
-                  alt={`${prenom} ${nom}`}
+                  alt={nomComplet}
                   className="w-16 h-16 rounded-full object-cover shrink-0"
                 />
               ) : (
@@ -137,7 +136,7 @@ export default async function AccueilPage({
               <div>
                 <p className="text-sm text-muted">Bonjour</p>
                 <h1 className="font-heading text-sm font-bold text-ink">
-                  {prenom} {nom}
+                  {nomComplet}
                 </h1>
               </div>
             </div>

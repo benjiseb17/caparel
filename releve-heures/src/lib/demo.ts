@@ -17,8 +17,7 @@ export function isDemoMode() {
 
 export const DEMO_INTERVENANT: Intervenant = {
   id: "demo-intervenant-1",
-  prenom: "Camille",
-  nom: "Dupont",
+  nomComplet: "Camille Dupont",
   email: "demo@test.fr",
   telephone: "06 12 34 56 78",
   motDePasseHash: "$2b$10$5UO/soFoHjpiOvb0b2Og4OgiYezYQgP3GSX0F4tDWzo2eeZeW0kOe", // demo1234

@@ -4,6 +4,7 @@ import AppHeader from "@/components/AppHeader";
 import ReglagesForm from "@/components/ReglagesForm";
 import { getIntervenantById } from "@/lib/airtable";
 import { isDemoMode, DEMO_INTERVENANT } from "@/lib/demo";
+import { initialesDe } from "@/lib/format";
 
 export default async function ReglagesPage() {
   const session = await auth();
@@ -16,9 +17,8 @@ export default async function ReglagesPage() {
     ? DEMO_INTERVENANT
     : await getIntervenantById(session.user.id);
 
-  const prenom = profil?.prenom || session.user.prenom || "";
-  const nom = profil?.nom || session.user.nom || "";
-  const initiales = `${prenom[0] || ""}${nom[0] || ""}`.toUpperCase();
+  const nomComplet = profil?.nomComplet || session.user.nomComplet || "";
+  const initiales = initialesDe(nomComplet);
 
   return (
     <div className="min-h-screen bg-soft flex flex-col overflow-x-hidden">
@@ -42,7 +42,7 @@ export default async function ReglagesPage() {
               telephoneInitial={profil?.telephone || ""}
               photoUrlInitiale={profil?.photoUrl || ""}
               initiales={initiales}
-              nomComplet={`${prenom} ${nom}`}
+              nomComplet={nomComplet}
             />
           )}
         </div>

@@ -38,8 +38,7 @@ type AirtableAttachment = {
 
 export type Intervenant = {
   id: string;
-  prenom: string;
-  nom: string;
+  nomComplet: string;
   email: string;
   telephone: string;
   motDePasseHash: string;
@@ -52,8 +51,7 @@ function mapIntervenant(record: Airtable.Record<Airtable.FieldSet>): Intervenant
   const photos = (record.get("Photo") as AirtableAttachment[] | undefined) || [];
   return {
     id: record.id,
-    prenom: (record.get("Prenom") as string) || "",
-    nom: (record.get("Nom") as string) || "",
+    nomComplet: (record.get("Nom et Prenom") as string) || "",
     email: (record.get("Email") as string) || "",
     telephone: (record.get("Telephone") as string) || "",
     motDePasseHash: (record.get("MotDePasseHash") as string) || "",
