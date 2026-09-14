@@ -39,10 +39,13 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-/* Safari iOS centre la valeur des <input type="date"> par défaut et peut la
-   faire déborder du cadre sur les écrans étroits. On aligne à gauche et on
-   réduit la taille du texte pour garder de la marge dans tous les cas. */
+/* Sur Safari iOS, <input type="date"> peut déborder de son conteneur sur
+   la droite (le contrôle natif ne respecte pas toujours box-sizing/width
+   à 100%). max-width garantit qu'il ne dépasse jamais la largeur du champ,
+   quel que soit le rendu interne du contrôle. */
 input[type="date"] {
+  box-sizing: border-box;
+  max-width: 100%;
   font-size: 13px;
 }
 
