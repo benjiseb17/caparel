@@ -84,6 +84,44 @@ export async function getIntervenantById(
   }
 }
 
+export async function uploaderPhotoIntervenant(
+  intervenantId: string,
+  fichier: { base64: string; contentType: string; filename: string }
+): Promise<string> {
+  const apiKey = process.env.AIRTABLE_API_KEY;
+  const baseId = process.env.AIRTABLE_BASE_ID;
+
+  if (!apiKey || !baseId) {
+    throw new Error(
+      "AIRTABLE_API_KEY ou AIRTABLE_BASE_ID manquant(s) dans les variables d'environnement."
+    );
+  }
+
+  const res = await fetch(
+    `https://content.airtable.com/v0/${baseId}/${intervenantId}/Photo/uploadAttachment`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contentType: fichier.contentType,
+        file: fichier.base64,
+        filename: fichier.filename,
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error(`Echec de l'envoi de la photo (${res.status})`);
+  }
+
+  const data = await res.json();
+  const photos = (data?.fields?.Photo as AirtableAttachment[] | undefined) || [];
+  return photos[0]?.url || "";
+}
+
 export type Client = {
   id: string;
   nom: string;

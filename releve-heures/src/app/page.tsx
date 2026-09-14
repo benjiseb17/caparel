@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import AppHeader from "@/components/AppHeader";
 import BarChart from "@/components/BarChart";
 import ClientsAssignes from "@/components/ClientsAssignes";
+import EditableAvatar from "@/components/EditableAvatar";
 import {
   getIntervenantById,
   getClientsForIntervenant,
@@ -111,7 +112,7 @@ export default async function AccueilPage({
         <div className="w-full max-w-md lg:max-w-4xl space-y-4">
           <div className="relative rounded-2xl border border-line bg-white p-6 overflow-hidden">
             <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-navylogo via-teal to-teal-dark" />
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 h-[155%] aspect-square rounded-full bg-teal/10 flex items-center justify-center">
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 h-[80%] sm:h-[155%] aspect-square rounded-full bg-teal/10 flex items-center justify-center">
               <Image
                 src="/caparel-icon.png"
                 alt=""
@@ -122,24 +123,16 @@ export default async function AccueilPage({
               />
             </div>
             <div className="relative flex items-center gap-4">
-              {profil?.photoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={profil.photoUrl}
-                  alt={`${prenom} ${nom}`}
-                  className="w-16 h-16 rounded-full object-cover shrink-0"
-                />
-              ) : (
-                <div className="w-16 h-16 rounded-full bg-navylogo text-white flex items-center justify-center font-heading font-bold text-lg shrink-0">
-                  {initiales}
-                </div>
-              )}
+              <EditableAvatar
+                photoUrl={profil?.photoUrl || ""}
+                initiales={initiales}
+                nomComplet={`${prenom} ${nom}`}
+                editable={!isDemoMode()}
+              />
               <div>
                 <p className="text-sm text-muted">Bonjour</p>
-                <h1 className="font-heading text-xl font-bold text-navy">
-                  {prenom}
-                </h1>
-                <p className="text-sm text-muted">
+                <h1 className="font-heading text-xl text-navy">{prenom}</h1>
+                <p className="text-sm font-bold text-ink">
                   {prenom} {nom}
                 </p>
                 <p className="text-xs text-teal-dark font-medium mt-1">

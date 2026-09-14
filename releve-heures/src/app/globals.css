@@ -39,8 +39,13 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-/* Safari iOS centre la valeur des <input type="date"> par défaut, ce qui
-   peut la faire déborder du cadre sur les écrans étroits. */
+/* Safari iOS centre la valeur des <input type="date"> par défaut et peut la
+   faire déborder du cadre sur les écrans étroits. On aligne à gauche et on
+   réduit la taille du texte pour garder de la marge dans tous les cas. */
+input[type="date"] {
+  font-size: 13px;
+}
+
 input[type="date"]::-webkit-date-and-time-value {
   text-align: left;
   width: 100%;
