@@ -134,14 +134,19 @@ export default function ReleveForm({
           >
             Date
           </label>
-          <input
-            id="date"
-            type="date"
-            required
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-          />
+          {/* Le cadre est porté par le conteneur, pas par l'input : le
+              contrôle date natif de Safari iOS ne respecte pas toujours
+              width:100% et débordait sur la droite. */}
+          <div className="w-full overflow-hidden rounded-lg border border-line px-3 py-2 focus-within:ring-2 focus-within:ring-teal">
+            <input
+              id="date"
+              type="date"
+              required
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="block h-[19px] w-full min-w-0 border-0 bg-transparent p-0 text-sm leading-[19px] focus:outline-none"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

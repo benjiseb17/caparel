@@ -39,17 +39,17 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-/* Sur Safari iOS, <input type="date"> peut déborder de son conteneur sur
-   la droite (le contrôle natif ne respecte pas toujours box-sizing/width
-   à 100%). max-width garantit qu'il ne dépasse jamais la largeur du champ,
-   quel que soit le rendu interne du contrôle. */
+/* Sur Safari iOS, le contrôle date natif a une largeur intrinsèque qui
+   l'emporte sur width:100% et le fait déborder à droite. min-width:0 le
+   laisse rétrécir ; le cadre visible est porté par le conteneur parent,
+   donc le champ occupe toujours exactement la largeur disponible. */
 input[type="date"] {
   box-sizing: border-box;
+  min-width: 0;
   max-width: 100%;
-  font-size: 13px;
 }
 
 input[type="date"]::-webkit-date-and-time-value {
   text-align: left;
-  width: 100%;
+  margin: 0;
 }
