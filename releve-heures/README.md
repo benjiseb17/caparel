@@ -46,13 +46,21 @@ Crée une base Airtable avec **5 tables** :
 
 ### Table `FichesDePaie`
 
-| Champ         | Type                                                |
-| -------------- | ---------------------------------------------------- |
-| `Intervenant`  | Lien vers un autre enregistrement → `Intervenants`    |
-| `Mois`         | Date (ex. premier jour du mois : `2026-08-01`)        |
-| `Fichier`      | Pièce jointe (le PDF de la fiche de paie)             |
+| Champ               | Type                                                |
+| -------------------- | ---------------------------------------------------- |
+| `Intervenant`        | Lien vers un autre enregistrement → `Intervenants`    |
+| `Mois`               | Date (ex. premier jour du mois : `2026-08-01`)        |
+| `Fichier`            | Pièce jointe (le PDF de la fiche de paie)             |
+| `Publiee`            | Case à cocher — la fiche n'apparaît dans l'app **que si elle est cochée** |
+| `Nom intervenant`    | Lookup de `Nom` via `Intervenant`                     |
+| `Email intervenant`  | Lookup de `Email` via `Intervenant`                   |
+| `Fiche`              | Formule — libellé auto (`Sebahoun Benjamin — septembre 2026`) |
 
 > Chaque intervenant ne voit que ses propres fiches de paie, listées dans l'onglet Historique.
+
+**Déposer une fiche de paie** : créer un enregistrement, lier l'`Intervenant`, choisir le `Mois`, joindre le PDF dans `Fichier`, puis cocher `Publiee` quand elle doit devenir visible. Le libellé de la ligne (`Fiche`) se remplit tout seul.
+
+> Le champ `Email intervenant` est là pour permettre une **Automation Airtable** (déclencheur : "Quand un enregistrement correspond à des critères" → `Publiee` est cochée → envoyer un email à `Email intervenant`), afin de prévenir l'intervenante que sa fiche est disponible. Cette partie se configure dans Airtable, sans code.
 
 ### Table `ModificationsProfil`
 

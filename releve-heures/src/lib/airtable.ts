@@ -474,8 +474,13 @@ export type FicheDePaie = {
 export async function getFichesDePaieByIntervenant(
   intervenantId: string
 ): Promise<FicheDePaie[]> {
+  // Seules les fiches marquées "Publiee" sont visibles : la direction peut
+  // déposer les PDF au fil de l'eau puis les publier quand tout est prêt.
   const records = await base(TABLES.fichesDePaie)
-    .select({ sort: [{ field: "Mois", direction: "desc" }] })
+    .select({
+      filterByFormula: `{Publiee} = 1`,
+      sort: [{ field: "Mois", direction: "desc" }],
+    })
     .all();
 
   return records
