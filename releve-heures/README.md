@@ -12,7 +12,7 @@ Crée une base Airtable avec **5 tables** :
 | ---------------- | ---------------------------- |
 | `Nom et Prenom`   | Texte sur une ligne — nom complet, ex. `Benjamin Sebahoun` (champ principal) |
 | `Email`           | Texte sur une ligne          |
-| `CodeActivation`  | Texte sur une ligne — code à usage unique pour la première connexion, effacé automatiquement après usage |
+| `Code activation` | Formule — `"CAPAREL-" & UPPER(RIGHT(RECORD_ID(), 6))`. Code de première connexion, généré automatiquement et unique par intervenant |
 | `Telephone`       | Texte sur une ligne (optionnel) |
 | `MotDePasseHash`  | Texte sur une ligne          |
 | `Actif`           | Case à cocher                |
@@ -105,16 +105,19 @@ de commande :
 
 1. Créer la ligne dans `Intervenants` avec `Nom et Prenom`, `Email` et `Actif` coché.
    Laisser `MotDePasseHash` vide.
-2. Renseigner un code dans `CodeActivation` (ex. `CAPAREL-7K3M`) et le transmettre
-   à l'intervenante.
+2. Lire le `Code activation` de la ligne (généré automatiquement, rien à saisir) et
+   le transmettre à l'intervenante.
 3. Elle se rend sur `/activation` (lien « Première connexion ? » depuis la page de
    connexion), saisit son email, le code, et choisit son mot de passe.
 
-L'app hashe le mot de passe côté serveur, l'écrit dans `MotDePasseHash`, **efface le
-code** pour qu'il ne serve qu'une fois, puis connecte l'intervenante.
+L'app hashe le mot de passe côté serveur et l'écrit dans `MotDePasseHash`.
 
-Le même mécanisme sert de **réinitialisation** : remettre un code dans
-`CodeActivation` permet à l'intervenante de redéfinir son mot de passe.
+**Usage unique** : le code étant une formule, l'app ne peut pas l'effacer. Il devient
+donc inerte dès qu'un mot de passe existe — la route refuse l'activation d'un compte
+déjà pourvu, même avec le bon code.
+
+**Réinitialiser un accès** : vider `MotDePasseHash` dans Airtable. Le code de
+l'intervenante redevient valable et elle peut redéfinir son mot de passe.
 
 ### Méthode manuelle (dépannage)
 
@@ -136,7 +139,7 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 ## Fonctionnement
 
 - **Connexion** (`/login`) : email + mot de passe, vérifiés contre la table `Intervenants`.
-- **Première connexion** (`/activation`) : email + code d'activation + nouveau mot de passe. La route `/api/activation` vérifie le code, hashe le mot de passe (bcrypt), l'enregistre et efface le code. Un mauvais code et un email inconnu renvoient le même message, pour ne pas révéler quels comptes existent.
+- **Première connexion** (`/activation`) : email + code d'activation + nouveau mot de passe. La route `/api/activation` vérifie le code (insensible à la casse), hashe le mot de passe (bcrypt) et l'enregistre. Elle refuse tout compte disposant déjà d'un mot de passe, ce qui rend le code inutilisable une fois consommé. Un mauvais code et un email inconnu renvoient le même message, pour ne pas révéler quels comptes existent.
 - **Accueil** (`/`) : profil de l'intervenant (photo ou initiales, prénom, nom), la liste des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`), et un récapitulatif chiffré — heures et chiffre d'affaires du mois (avec graphiques par semaine) et chiffre d'affaires de l'année en cours (graphique par mois). Le chiffre d'affaires est calculé comme `heures réalisées × TauxHoraire` de l'intervenant. Sur grand écran, clients et récapitulatif s'affichent côte à côte ; en mobile, tout est empilé.
 - **Relevé d'heure** (`/saisie`) : l'intervenant choisit un client (parmi les siens), une date (aujourd'hui par défaut), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.
 - **Validation** : le bouton "Valider" envoie les données à `/api/releves`, qui recalcule les heures côté serveur (pour éviter toute manipulation côté client), vérifie que la certification a bien été cochée, et crée un enregistrement dans la table `Releves`, lié à l'intervenant connecté et au client choisi.
