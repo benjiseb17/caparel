@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       prenom?: string;
       telephone?: string;
       email?: string;
-      besoins?: string;
+      besoins?: string[];
       message?: string;
       hp_check_7f2a?: string; // champ piège anti-bot, doit rester vide
     };

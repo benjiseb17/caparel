@@ -281,7 +281,7 @@ export type NouveauLead = {
   prenom: string;
   telephone: string;
   email: string;
-  besoins?: string;
+  besoins?: string[];
   message?: string;
 };
 
@@ -291,7 +291,7 @@ export async function creerLead(lead: NouveauLead) {
     Prénom: lead.prenom,
     Téléphone: lead.telephone,
     Email: lead.email,
-    Besoins: lead.besoins || "",
+    Besoins: lead.besoins || [],
     Message: lead.message || "",
   });
 
