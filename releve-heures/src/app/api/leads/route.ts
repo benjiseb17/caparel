@@ -20,16 +20,31 @@ export async function OPTIONS() {
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
-  const { nom, prenom, telephone, email, besoins, message, hp_check_7f2a } =
-    (body || {}) as {
-      nom?: string;
-      prenom?: string;
-      telephone?: string;
-      email?: string;
-      besoins?: string[];
-      message?: string;
-      hp_check_7f2a?: string; // champ piège anti-bot, doit rester vide
-    };
+  const {
+    nom,
+    prenom,
+    telephone,
+    email,
+    adresse,
+    ville,
+    codePostal,
+    besoins,
+    creneaux,
+    message,
+    hp_check_7f2a,
+  } = (body || {}) as {
+    nom?: string;
+    prenom?: string;
+    telephone?: string;
+    email?: string;
+    adresse?: string;
+    ville?: string;
+    codePostal?: string;
+    besoins?: string[];
+    creneaux?: string[];
+    message?: string;
+    hp_check_7f2a?: string; // champ piège anti-bot, doit rester vide
+  };
 
   // Honeypot : un humain ne remplit jamais ce champ (masqué côté site). Nom
   // volontairement neutre pour eviter l'auto-remplissage navigateur (un nom
@@ -48,7 +63,18 @@ export async function POST(request: Request) {
   }
 
   try {
-    await creerLead({ nom, prenom, telephone, email, besoins, message });
+    await creerLead({
+      nom,
+      prenom,
+      telephone,
+      email,
+      adresse,
+      ville,
+      codePostal,
+      besoins,
+      creneaux,
+      message,
+    });
     return NextResponse.json({ ok: true }, { headers: corsHeaders() });
   } catch (error) {
     console.error("Erreur lors de la creation du lead:", error);

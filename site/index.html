@@ -420,6 +420,13 @@
           <div><label for="email">Email</label><input id="email" name="email" type="email" placeholder="vous@email.fr" required></div>
         </div>
         <div class="form-row full">
+          <div><label for="adresse">Adresse</label><input id="adresse" name="adresse" type="text" placeholder="Numéro et nom de rue"></div>
+        </div>
+        <div class="form-row">
+          <div><label for="ville">Ville</label><input id="ville" name="ville" type="text" placeholder="Votre ville"></div>
+          <div><label for="codePostal">Code postal</label><input id="codePostal" name="codePostal" type="text" inputmode="numeric" placeholder="92200"></div>
+        </div>
+        <div class="form-row full">
           <label>Besoins d'aide à domicile</label>
           <div class="checkbox-grid">
             <label class="checkbox-item"><input type="checkbox" name="besoins" value="Lever, coucher, toilette et habillage">Lever, coucher, toilette et habillage</label>
@@ -431,6 +438,14 @@
             <label class="checkbox-item"><input type="checkbox" name="besoins" value="Accompagnement aux rendez-vous médicaux">Accompagnement aux rendez-vous médicaux</label>
             <label class="checkbox-item"><input type="checkbox" name="besoins" value="Sorties, promenades et activités">Sorties, promenades et activités</label>
             <label class="checkbox-item other-item"><input type="checkbox" name="besoins" value="Autre besoin">Autre besoin (précisez dans le message)</label>
+          </div>
+        </div>
+        <div class="form-row full">
+          <label>Créneaux sur lesquels vous souhaitez être rappelé(e) en priorité</label>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="creneaux" value="Matin (9h-12h)">Matin (9h-12h)</label>
+            <label class="checkbox-item"><input type="checkbox" name="creneaux" value="Après-midi (12h-17h)">Après-midi (12h-17h)</label>
+            <label class="checkbox-item"><input type="checkbox" name="creneaux" value="Soir (17h-19h)">Soir (17h-19h)</label>
           </div>
         </div>
         <div class="form-row full">
@@ -510,13 +525,18 @@
     e.preventDefault();
 
     var besoins = Array.prototype.slice.call(form.querySelectorAll('input[name="besoins"]:checked')).map(function(i){ return i.value; });
+    var creneaux = Array.prototype.slice.call(form.querySelectorAll('input[name="creneaux"]:checked')).map(function(i){ return i.value; });
 
     var payload = {
       nom: form.nom.value,
       prenom: form.prenom.value,
       telephone: form.tel.value,
       email: form.email.value,
+      adresse: form.adresse.value,
+      ville: form.ville.value,
+      codePostal: form.codePostal.value,
       besoins: besoins,
+      creneaux: creneaux,
       message: form.message.value,
       hp_check_7f2a: form.hp_check_7f2a.value
     };

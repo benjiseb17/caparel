@@ -281,7 +281,11 @@ export type NouveauLead = {
   prenom: string;
   telephone: string;
   email: string;
+  adresse?: string;
+  ville?: string;
+  codePostal?: string;
   besoins?: string[];
+  creneaux?: string[];
   message?: string;
 };
 
@@ -291,7 +295,11 @@ export async function creerLead(lead: NouveauLead) {
     Prénom: lead.prenom,
     Téléphone: lead.telephone,
     Email: lead.email,
+    Adresse: lead.adresse || "",
+    Ville: lead.ville || "",
+    "Code postal": lead.codePostal || "",
     Besoins: lead.besoins || [],
+    Créneaux: lead.creneaux || [],
     Message: lead.message || "",
   });
 
