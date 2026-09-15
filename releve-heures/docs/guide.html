@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Guide d'utilisation — Relevé d'heures Caparel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 17mm 16mm;
+  }
+
+  :root {
+    --navy: #12305c;
+    --teal: #2c968f;
+    --ink: #20293a;
+    --muted: #5d6880;
+    --line: #dfe5ee;
+    --ground: #f6f8fb;
+    --warn: #8a5a00;
+    --sans: "Inter", -apple-system, "Helvetica Neue", sans-serif;
+    --display: "Plus Jakarta Sans", -apple-system, "Helvetica Neue", sans-serif;
+    --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: var(--ink);
+    background: #fff;
+  }
+
+  /* ---------- couverture ---------- */
+
+  .cover {
+    border-top: 4pt solid var(--navy);
+    padding-top: 10mm;
+    margin-bottom: 12mm;
+  }
+
+  .cover .brand {
+    font-family: var(--mono);
+    font-size: 8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 0 0 4mm;
+  }
+
+  .cover h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 26pt;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--navy);
+    margin: 0 0 4mm;
+  }
+
+  .cover .lede {
+    font-size: 11pt;
+    color: var(--muted);
+    margin: 0 0 6mm;
+    max-width: 130mm;
+  }
+
+  .cover .meta {
+    font-family: var(--mono);
+    font-size: 8.5pt;
+    color: var(--muted);
+    border-top: 0.5pt solid var(--line);
+    padding-top: 3mm;
+  }
+
+  /* ---------- sommaire ---------- */
+
+  .toc {
+    background: var(--ground);
+    border: 0.5pt solid var(--line);
+    border-radius: 2mm;
+    padding: 6mm 7mm;
+    margin-bottom: 10mm;
+  }
+
+  .toc h2 {
+    font-family: var(--display);
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0 0 3mm;
+    border: 0;
+    padding: 0;
+  }
+
+  .toc ul { margin: 0; padding: 0; list-style: none; font-size: 10pt; }
+  .toc li { margin-bottom: 1.2mm; padding-left: 4mm; color: var(--muted); }
+  .toc .part {
+    font-family: var(--display);
+    font-weight: 700;
+    color: var(--navy);
+    padding-left: 0;
+    margin-top: 3.5mm;
+    margin-bottom: 1.8mm;
+  }
+  .toc .part:first-child { margin-top: 0; }
+
+  /* ---------- titres ---------- */
+
+  h1.part-title {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 19pt;
+    color: var(--navy);
+    margin: 0 0 2mm;
+    padding-bottom: 3mm;
+    border-bottom: 2pt solid var(--teal);
+    break-after: avoid;
+  }
+
+  .part-intro {
+    color: var(--muted);
+    margin: 0 0 8mm;
+    font-size: 10pt;
+  }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 13pt;
+    color: var(--navy);
+    margin: 9mm 0 3mm;
+    break-after: avoid;
+    break-inside: avoid;
+  }
+
+  h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 10.5pt;
+    color: var(--ink);
+    margin: 5mm 0 2mm;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 3mm; }
+
+  ol, ul { margin: 0 0 3mm; padding-left: 6mm; }
+  li { margin-bottom: 1.5mm; }
+
+  strong { font-weight: 600; color: var(--ink); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 9pt;
+    background: var(--ground);
+    border: 0.5pt solid var(--line);
+    border-radius: 1mm;
+    padding: 0.3mm 1.2mm;
+  }
+
+  /* ---------- tableaux ---------- */
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 4mm;
+    font-size: 9.5pt;
+    break-inside: avoid;
+  }
+
+  th {
+    text-align: left;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 9pt;
+    color: var(--navy);
+    border-bottom: 1pt solid var(--navy);
+    padding: 2mm 2mm 1.5mm 0;
+  }
+
+  td {
+    padding: 2mm 2mm 2mm 0;
+    border-bottom: 0.5pt solid var(--line);
+    vertical-align: top;
+    color: var(--muted);
+  }
+
+  td:first-child { color: var(--ink); font-weight: 500; width: 38mm; }
+
+  /* ---------- encarts ---------- */
+
+  .note {
+    border-left: 2pt solid var(--teal);
+    background: var(--ground);
+    padding: 3.5mm 5mm;
+    margin: 0 0 4mm;
+    font-size: 9.5pt;
+    color: var(--muted);
+    break-inside: avoid;
+  }
+
+  .note p:last-child { margin-bottom: 0; }
+
+  .warn {
+    border-left: 2pt solid var(--warn);
+    background: #fdf8ef;
+    padding: 3.5mm 5mm;
+    margin: 0 0 4mm;
+    font-size: 9.5pt;
+    break-inside: avoid;
+  }
+
+  .warn p:last-child { margin-bottom: 0; }
+  .warn strong { color: var(--warn); }
+
+  .key {
+    background: #eaf5f4;
+    border: 0.5pt solid #bcded9;
+    border-radius: 2mm;
+    padding: 4mm 5mm;
+    margin: 0 0 4mm;
+    font-size: 10pt;
+    break-inside: avoid;
+  }
+
+  .key p:last-child { margin-bottom: 0; }
+
+  .page-break { break-before: page; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <p class="brand">Caparel · Aide à domicile aux personnes âgées</p>
+  <h1>Guide d'utilisation<br>Relevé d'heures</h1>
+  <p class="lede">
+    Saisie des heures, consultation des fiches de paie et administration des
+    comptes. Document interne.
+  </p>
+  <p class="meta">Septembre 2026 — version 1</p>
+</div>
+
+<div class="toc">
+  <h2>Sommaire</h2>
+  <ul>
+    <li class="part">Partie 1 — Pour les intervenantes</li>
+    <li>Se connecter la première fois</li>
+    <li>Se connecter ensuite</li>
+    <li>Accueil</li>
+    <li>Saisir un relevé d'heures</li>
+    <li>Historique et corrections</li>
+    <li>Fiches de paie</li>
+    <li>Réglages</li>
+    <li class="part">Partie 2 — Pour la direction</li>
+    <li>Créer un compte intervenante</li>
+    <li>Réinitialiser un mot de passe</li>
+    <li>Assigner des clients</li>
+    <li>Publier une fiche de paie</li>
+    <li>Suivre les modifications de profil</li>
+    <li>Précautions</li>
+  </ul>
+</div>
+
+<!-- ============ PARTIE 1 ============ -->
+
+<h1 class="part-title">Partie 1 — Pour les intervenantes</h1>
+<p class="part-intro">
+  Tout ce qui se passe sur le téléphone ou l'ordinateur de l'intervenante.
+</p>
+
+<h2>Se connecter la première fois</h2>
+
+<p>
+  La direction vous transmet trois éléments : <strong>l'adresse du site</strong>,
+  <strong>votre adresse email</strong>, et un <strong>code d'activation</strong> de
+  la forme <code>CAPAREL-4TB9KD</code>.
+</p>
+
+<ol>
+  <li>Ouvrez l'adresse du site</li>
+  <li>Sous le formulaire, cliquez sur <strong>« Première connexion ? »</strong></li>
+  <li>Saisissez votre email et votre code d'activation</li>
+  <li>Choisissez <strong>votre</strong> mot de passe — 8 caractères minimum — et confirmez-le</li>
+  <li>Vous êtes connectée directement</li>
+</ol>
+
+<div class="key">
+  <p>
+    <strong>Votre mot de passe vous appartient.</strong> Caparel ne le choisit pas
+    et ne peut pas le consulter. Le code d'activation, lui, ne fonctionne qu'une
+    fois : une fois votre mot de passe défini, il ne sert plus à rien.
+  </p>
+</div>
+
+<p>
+  Le code n'est pas sensible à la casse : <code>caparel-4tb9kd</code> fonctionne
+  aussi bien.
+</p>
+
+<h2>Se connecter ensuite</h2>
+
+<p>Email et mot de passe, comme sur n'importe quel service.</p>
+
+<p>
+  <strong>Mot de passe oublié ?</strong> Contactez la direction. Elle réinitialise
+  votre accès et vous repassez par « Première connexion ? » avec votre code pour en
+  choisir un nouveau. Votre ancien mot de passe n'est récupérable par personne.
+</p>
+
+<h2>Accueil</h2>
+
+<p>L'écran d'accueil rassemble votre situation du mois.</p>
+
+<h3>Votre profil</h3>
+<p>Votre photo — ou vos initiales à défaut — et votre nom.</p>
+
+<h3>Vos clients</h3>
+<p>
+  Les personnes qui vous sont assignées, avec leur adresse et leur numéro de client.
+  Si cette liste est vide ou incomplète, signalez-le à la direction : c'est elle qui
+  gère les affectations.
+</p>
+
+<h3>Récapitulatif du mois</h3>
+<p>
+  Vos heures réalisées, le chiffre d'affaires correspondant, et deux graphiques par
+  semaine. Les flèches <strong>‹ ›</strong> de part et d'autre du mois permettent de
+  remonter dans les mois précédents. La flèche de droite est grisée sur le mois en
+  cours : on ne peut pas consulter un mois à venir.
+</p>
+
+<div class="note">
+  <p>
+    Le découpage en semaines suit les jours du mois, pas le calendrier :
+    Sem. 1 = du 1<sup>er</sup> au 7, Sem. 2 = du 8 au 14, et ainsi de suite.
+  </p>
+</div>
+
+<h3>Chiffre d'affaires de l'année</h3>
+<p>Le cumul mois par mois sur l'année en cours.</p>
+
+<h2>Saisir un relevé d'heures</h2>
+
+<p>Onglet <strong>Relevé d'heure</strong>.</p>
+
+<table>
+  <thead>
+    <tr><th>Champ</th><th>Détail</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Client</td><td>Uniquement vos clients assignés</td></tr>
+    <tr><td>Date</td><td>Le jour même par défaut, modifiable</td></tr>
+    <tr><td>Heure d'arrivée</td><td>Heure et minutes, séparément</td></tr>
+    <tr><td>Heure de départ</td><td>Idem</td></tr>
+    <tr><td>Heures réalisées</td><td>Calculé automatiquement, affiché en direct</td></tr>
+    <tr><td>Commentaire</td><td>Facultatif</td></tr>
+  </tbody>
+</table>
+
+<p>
+  <strong>Les minutes se choisissent par quart d'heure</strong> : <code>00</code>,
+  <code>15</code>, <code>30</code>, <code>45</code>. C'est volontaire — les heures se
+  comptent au quart d'heure près.
+</p>
+
+<p>
+  <strong>Une intervention qui passe minuit est gérée.</strong> Une arrivée à
+  <code>22:00</code> et un départ à <code>02:00</code> donnent bien 4h00, pas une
+  erreur.
+</p>
+
+<p>
+  Avant de valider, vous devez cocher la case de <strong>certification sur
+  l'honneur</strong>. Le bouton refusera l'enregistrement sans elle.
+</p>
+
+<div class="note">
+  <p>
+    Le calcul des heures est refait côté serveur à l'enregistrement : la valeur
+    affichée à l'écran ne peut pas être contournée.
+  </p>
+</div>
+
+<h2>Historique et corrections</h2>
+
+<p>
+  Onglet <strong>Historique</strong>. Vous y retrouvez vos <strong>20 derniers
+  relevés</strong>, du plus récent au plus ancien, avec le client, la date, les
+  horaires, le total et votre commentaire.
+</p>
+
+<h3>Corriger un relevé</h3>
+
+<ol>
+  <li>Cliquez sur le relevé concerné</li>
+  <li>Cliquez sur <strong>Modifier</strong></li>
+  <li>Ajustez ce qui doit l'être — client, date, horaires, commentaire</li>
+  <li><strong>Recochez la certification</strong> : elle est remise à zéro à chaque modification</li>
+  <li>Cliquez sur <strong>Revalider</strong></li>
+</ol>
+
+<p>
+  Vous ne pouvez modifier que vos propres relevés : la vérification est faite côté
+  serveur, pas seulement dans l'écran.
+</p>
+
+<div class="note">
+  <p>
+    Il n'est pas possible de supprimer un relevé depuis l'application. Pour une
+    suppression, passez par la direction.
+  </p>
+</div>
+
+<h2>Fiches de paie</h2>
+
+<p>
+  En bas de l'onglet <strong>Historique</strong>, la section <strong>Mes fiches de
+  paie</strong> liste vos bulletins par mois, du plus récent au plus ancien.
+  <strong>Télécharger</strong> ouvre le PDF.
+</p>
+
+<p>
+  Une fiche n'apparaît que lorsque la direction l'a publiée. Si un mois manque,
+  c'est qu'il n'est pas encore mis à disposition.
+</p>
+
+<h2>Réglages</h2>
+
+<p>Onglet <strong>Réglages</strong>. Vous pouvez y modifier :</p>
+
+<ul>
+  <li><strong>Votre photo de profil</strong> — « Changer la photo », 5 Mo maximum</li>
+  <li><strong>Votre email</strong> — attention, c'est votre identifiant de connexion</li>
+  <li><strong>Votre téléphone</strong></li>
+</ul>
+
+<p>
+  La case de certification est obligatoire, et <strong>la direction est informée de
+  chaque modification</strong>. Ces informations servent à vous contacter et à
+  établir votre paie : elles doivent rester exactes.
+</p>
+
+<h2>Se déconnecter</h2>
+
+<p>
+  Bouton <strong>Se déconnecter</strong>, en haut de chaque écran. Pensez-y sur un
+  appareil partagé.
+</p>
+
+<!-- ============ PARTIE 2 ============ -->
+
+<h1 class="part-title page-break">Partie 2 — Pour la direction</h1>
+<p class="part-intro">
+  Toute l'administration se fait dans Airtable. L'application ne lit et n'écrit que
+  dans cette base — il n'y a pas d'interface d'administration séparée.
+</p>
+
+<h2>Créer un compte intervenante</h2>
+
+<p>Dans la table <strong>Intervenants</strong> :</p>
+
+<ol>
+  <li>Créer la ligne : <code>Nom et Prenom</code>, <code>Email</code>, <code>Actif</code> coché, <code>TauxHoraire</code></li>
+  <li>Laisser <strong><code>MotDePasseHash</code> vide</strong> — il se remplira tout seul</li>
+  <li>Relever le <code>Code activation</code>, généré automatiquement</li>
+  <li>Transmettre à l'intervenante : l'adresse du site, son email, son code</li>
+</ol>
+
+<p>
+  Le <code>TauxHoraire</code> sert à calculer le chiffre d'affaires affiché sur son
+  accueil (heures réalisées × taux). Sans lui, ses montants resteront à zéro.
+</p>
+
+<p>
+  <strong>Décocher <code>Actif</code></strong> bloque la connexion immédiatement :
+  c'est la manière de suspendre un accès sans supprimer l'historique.
+</p>
+
+<h2>Réinitialiser un mot de passe</h2>
+
+<p>
+  Vider la colonne <code>MotDePasseHash</code> de la ligne concernée. Son code
+  d'activation redevient valable et elle peut redéfinir son mot de passe.
+</p>
+
+<h2>Assigner des clients</h2>
+
+<p>
+  Dans la table <strong>Clients</strong>, la colonne <code>Intervenants assignes</code>
+  détermine qui voit quel client. Une intervenante ne voit que les clients où elle
+  est listée, à la fois sur son accueil et dans le menu déroulant de saisie.
+</p>
+
+<p>Un client dont <code>Actif</code> n'est pas coché n'apparaît nulle part.</p>
+
+<h2>Publier une fiche de paie</h2>
+
+<p>Dans la table <strong>Fiches de Paie</strong> :</p>
+
+<ol>
+  <li>Créer la ligne, lier l'<code>Intervenant</code>, choisir le <code>Mois</code></li>
+  <li>Joindre le PDF dans <code>Fichier</code></li>
+  <li>Cocher <strong><code>Publiee</code></strong> quand elle doit devenir visible</li>
+</ol>
+
+<p>
+  Tant que <code>Publiee</code> n'est pas cochée, la fiche reste invisible côté
+  intervenante. Cela permet de préparer tous les bulletins tranquillement, puis de
+  les publier d'un coup. Le libellé de la ligne se remplit automatiquement.
+</p>
+
+<h2>Suivre les modifications de profil</h2>
+
+<p>
+  Chaque changement d'email, de téléphone ou de photo crée une ligne dans la table
+  <strong>ModificationsProfil</strong>, avec les valeurs avant et après. La colonne
+  <code>Traite</code> permet de marquer celles que vous avez vérifiées.
+</p>
+
+<h2>Précautions</h2>
+
+<div class="warn">
+  <p>
+    <strong>Ne renommez pas les colonnes.</strong> L'application les lit par leur nom
+    exact. Une colonne renommée fait disparaître la donnée correspondante côté
+    application — un nom vide, une fiche de paie sans PDF — sans message d'erreur.
+  </p>
+  <p>
+    Les <strong>tables</strong>, en revanche, peuvent être renommées librement :
+    l'application les identifie par un identifiant interne, pas par leur nom.
+  </p>
+</div>
+
+<div class="warn">
+  <p>
+    <strong>Ne remplissez pas <code>MotDePasseHash</code> à la main.</strong> Cette
+    colonne attend une empreinte chiffrée, pas un mot de passe. Y écrire du texte en
+    clair empêche la connexion, en plus d'exposer le mot de passe dans l'historique
+    des cellules d'Airtable.
+  </p>
+</div>
+
+</body>
+</html>

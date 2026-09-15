@@ -2,6 +2,10 @@
 
 Application Next.js pour la saisie des heures des intervenants à domicile. Le backend est une base Airtable.
 
+> Pour l'utilisation au quotidien — côté intervenante comme côté direction —
+> voir le [guide d'utilisation](GUIDE.md). Ce README couvre l'installation et la
+> configuration technique.
+
 ## 1. Créer la base Airtable
 
 Crée une base Airtable avec **5 tables** :
