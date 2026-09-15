@@ -75,7 +75,7 @@ Crée une base Airtable avec **5 tables** :
 
 > Un enregistrement est créé à chaque modification du profil depuis l'onglet Réglages (`/reglages`). Pour être notifiée automatiquement, la direction Caparel doit créer une **Automation Airtable** (déclencheur : "Quand un enregistrement est créé" sur `ModificationsProfil` → action d'envoi d'email) — cette partie se configure directement dans Airtable, aucun code supplémentaire n'est nécessaire.
 
-> Les noms de champs doivent correspondre exactement (accents non inclus, comme indiqué ci-dessus) à ceux utilisés dans `src/lib/airtable.ts`.
+> **Renommer une colonne casse l'app.** Les noms de champs doivent correspondre exactement (accents non inclus, comme indiqué ci-dessus) à ceux utilisés dans `src/lib/airtable.ts`. En revanche, les **tables** sont ciblées par leur identifiant Airtable (`tbl…`, voir la constante `TABLES`), donc les renommer est sans effet.
 
 ## 2. Récupérer les identifiants Airtable
 

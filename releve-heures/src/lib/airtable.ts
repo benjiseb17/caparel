@@ -22,13 +22,19 @@ function base(table: string) {
   return cachedBase(table);
 }
 
+// Les tables sont désignées par leur identifiant Airtable, pas par leur nom :
+// un identifiant ne change jamais, alors que renommer une table dans Airtable
+// casserait l'app en production (c'est déjà arrivé avec "Fiches de Paie").
+// Les noms correspondants sont indiqués en commentaire.
 export const TABLES = {
-  intervenants: process.env.AIRTABLE_TABLE_INTERVENANTS || "Intervenants",
-  clients: process.env.AIRTABLE_TABLE_CLIENTS || "Clients",
-  releves: process.env.AIRTABLE_TABLE_RELEVES || "Releves",
-  fichesDePaie: process.env.AIRTABLE_TABLE_FICHES_PAIE || "Fiches de Paie",
+  intervenants:
+    process.env.AIRTABLE_TABLE_INTERVENANTS || "tblqD8nNvzcQJODxj", // Intervenants
+  clients: process.env.AIRTABLE_TABLE_CLIENTS || "tblq2AHLMnFw2cmfQ", // Clients
+  releves: process.env.AIRTABLE_TABLE_RELEVES || "tblehEGJM3vZP9oOb", // Releves
+  fichesDePaie:
+    process.env.AIRTABLE_TABLE_FICHES_PAIE || "tbljqZpHw1hvgrQPI", // Fiches de Paie
   modificationsProfil:
-    process.env.AIRTABLE_TABLE_MODIFICATIONS_PROFIL || "ModificationsProfil",
+    process.env.AIRTABLE_TABLE_MODIFICATIONS_PROFIL || "tblER71fTx3oLIHwM", // ModificationsProfil
 };
 
 type AirtableAttachment = {
