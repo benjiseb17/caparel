@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -104,6 +105,15 @@ export default function LoginPage() {
             {loading ? "Connexion..." : "Se connecter"}
           </button>
         </form>
+
+        <p className="text-sm text-muted mt-6 text-center">
+          <Link
+            href="/activation"
+            className="font-medium text-teal-dark hover:text-teal underline underline-offset-2"
+          >
+            Première connexion ?
+          </Link>
+        </p>
       </div>
     </div>
   );

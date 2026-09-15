@@ -42,6 +42,7 @@ export type Intervenant = {
   email: string;
   telephone: string;
   motDePasseHash: string;
+  codeActivation: string;
   actif: boolean;
   photoUrl: string;
   tauxHoraire: number;
@@ -55,6 +56,7 @@ function mapIntervenant(record: Airtable.Record<Airtable.FieldSet>): Intervenant
     email: (record.get("Email") as string) || "",
     telephone: (record.get("Telephone") as string) || "",
     motDePasseHash: (record.get("MotDePasseHash") as string) || "",
+    codeActivation: (record.get("CodeActivation") as string) || "",
     actif: Boolean(record.get("Actif")),
     photoUrl: photos[0]?.url || "",
     tauxHoraire: (record.get("TauxHoraire") as number) || 0,
@@ -73,6 +75,31 @@ export async function getIntervenantByEmail(
 
   if (records.length === 0) return null;
   return mapIntervenant(records[0]);
+}
+
+/**
+ * Définit le mot de passe d'un intervenant à partir de son code d'activation,
+ * puis efface le code pour qu'il ne serve qu'une fois. Sert aussi bien à la
+ * première connexion qu'à une réinitialisation : il suffit à la direction de
+ * remettre un code dans Airtable.
+ */
+export async function activerCompteIntervenant(
+  email: string,
+  code: string,
+  motDePasseHash: string
+): Promise<boolean> {
+  const intervenant = await getIntervenantByEmail(email);
+
+  if (!intervenant || !intervenant.actif) return false;
+  if (!intervenant.codeActivation) return false;
+  if (intervenant.codeActivation !== code) return false;
+
+  await base(TABLES.intervenants).update(intervenant.id, {
+    MotDePasseHash: motDePasseHash,
+    CodeActivation: "",
+  });
+
+  return true;
 }
 
 export async function getIntervenantById(
