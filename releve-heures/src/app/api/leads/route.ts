@@ -20,7 +20,7 @@ export async function OPTIONS() {
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
-  const { nom, prenom, telephone, email, besoins, message, societe } =
+  const { nom, prenom, telephone, email, besoins, message, hp_check_7f2a } =
     (body || {}) as {
       nom?: string;
       prenom?: string;
@@ -28,12 +28,15 @@ export async function POST(request: Request) {
       email?: string;
       besoins?: string;
       message?: string;
-      societe?: string; // champ piège anti-bot, doit rester vide
+      hp_check_7f2a?: string; // champ piège anti-bot, doit rester vide
     };
 
-  // Honeypot : un humain ne remplit jamais ce champ (masqué en CSS côté site).
+  // Honeypot : un humain ne remplit jamais ce champ (masqué côté site). Nom
+  // volontairement neutre pour eviter l'auto-remplissage navigateur (un nom
+  // comme "societe" est reconnu par l'autocompletion Chrome/Safari, malgre
+  // autocomplete="off", et declenchait de faux positifs).
   // On répond succès sans rien enregistrer pour ne pas alerter le bot.
-  if (societe) {
+  if (hp_check_7f2a) {
     return NextResponse.json({ ok: true }, { headers: corsHeaders() });
   }
 

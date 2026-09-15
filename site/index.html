@@ -410,7 +410,7 @@
       <h3>Demande de renseignements</h3>
       <p class="hint">Réponse sous 24 à 48h ouvrées.</p>
       <form id="contactForm">
-        <div style="position:absolute;left:-9999px;" aria-hidden="true"><label>Société<input type="text" name="societe" tabindex="-1" autocomplete="off"></label></div>
+        <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true"><input type="text" name="hp_check_7f2a" id="hp_check_7f2a" tabindex="-1" autocomplete="off"></div>
         <div class="form-row">
           <div><label for="nom">Nom</label><input id="nom" name="nom" type="text" placeholder="Votre nom" required></div>
           <div><label for="prenom">Prénom</label><input id="prenom" name="prenom" type="text" placeholder="Votre prénom" required></div>
@@ -518,7 +518,7 @@
       email: form.email.value,
       besoins: besoins.join(', '),
       message: form.message.value,
-      societe: form.societe.value
+      hp_check_7f2a: form.hp_check_7f2a.value
     };
 
     submitBtn.disabled = true;
