@@ -410,6 +410,7 @@
       <h3>Demande de renseignements</h3>
       <p class="hint">Réponse sous 24 à 48h ouvrées.</p>
       <form id="contactForm">
+        <div style="position:absolute;left:-9999px;" aria-hidden="true"><label>Société<input type="text" name="societe" tabindex="-1" autocomplete="off"></label></div>
         <div class="form-row">
           <div><label for="nom">Nom</label><input id="nom" name="nom" type="text" placeholder="Votre nom" required></div>
           <div><label for="prenom">Prénom</label><input id="prenom" name="prenom" type="text" placeholder="Votre prénom" required></div>
@@ -499,10 +500,7 @@
 
 <script>
 (function(){
-  // À compléter : identifiants Airtable (Personal Access Token restreint à la table "Leads" uniquement)
-  var AIRTABLE_BASE_ID = "REMPLACER_PAR_VOTRE_BASE_ID";
-  var AIRTABLE_TABLE_NAME = "Leads";
-  var AIRTABLE_TOKEN = "REMPLACER_PAR_VOTRE_TOKEN";
+  var LEADS_ENDPOINT = "https://releve-heures-chi.vercel.app/api/leads";
 
   var form = document.getElementById('contactForm');
   var statusEl = document.getElementById('formStatus');
@@ -513,29 +511,29 @@
 
     var besoins = Array.prototype.slice.call(form.querySelectorAll('input[name="besoins"]:checked')).map(function(i){ return i.value; });
 
-    var fields = {
-      "Nom": form.nom.value,
-      "Prénom": form.prenom.value,
-      "Téléphone": form.tel.value,
-      "Email": form.email.value,
-      "Besoins": besoins.join(', '),
-      "Message": form.message.value
+    var payload = {
+      nom: form.nom.value,
+      prenom: form.prenom.value,
+      telephone: form.tel.value,
+      email: form.email.value,
+      besoins: besoins.join(', '),
+      message: form.message.value,
+      societe: form.societe.value
     };
 
     submitBtn.disabled = true;
     submitBtn.textContent = "Envoi en cours...";
     statusEl.className = 'form-status';
 
-    fetch('https://api.airtable.com/v0/' + AIRTABLE_BASE_ID + '/' + encodeURIComponent(AIRTABLE_TABLE_NAME), {
+    fetch(LEADS_ENDPOINT, {
       method: 'POST',
       headers: {
-        'Authorization': 'Bearer ' + AIRTABLE_TOKEN,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ fields: fields })
+      body: JSON.stringify(payload)
     })
     .then(function(res){
-      if(!res.ok) throw new Error('Airtable error ' + res.status);
+      if(!res.ok) throw new Error('Leads API error ' + res.status);
       return res.json();
     })
     .then(function(){

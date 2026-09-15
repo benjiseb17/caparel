@@ -35,6 +35,7 @@ export const TABLES = {
     process.env.AIRTABLE_TABLE_FICHES_PAIE || "tbljqZpHw1hvgrQPI", // Fiches de Paie
   modificationsProfil:
     process.env.AIRTABLE_TABLE_MODIFICATIONS_PROFIL || "tblER71fTx3oLIHwM", // ModificationsProfil
+  leads: process.env.AIRTABLE_TABLE_LEADS || "tblcVywextjxuUGYK", // Leads
 };
 
 type AirtableAttachment = {
@@ -270,6 +271,28 @@ export async function creerReleve(releve: NouveauReleve) {
     "Heures realisees": releve.heuresRealisees,
     Commentaire: releve.commentaire || "",
     Certification: releve.certifie,
+  });
+
+  return record.id;
+}
+
+export type NouveauLead = {
+  nom: string;
+  prenom: string;
+  telephone: string;
+  email: string;
+  besoins?: string;
+  message?: string;
+};
+
+export async function creerLead(lead: NouveauLead) {
+  const record = await base(TABLES.leads).create({
+    Nom: lead.nom,
+    Prénom: lead.prenom,
+    Téléphone: lead.telephone,
+    Email: lead.email,
+    Besoins: lead.besoins || "",
+    Message: lead.message || "",
   });
 
   return record.id;
