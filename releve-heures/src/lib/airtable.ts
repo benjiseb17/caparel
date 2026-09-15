@@ -26,7 +26,7 @@ export const TABLES = {
   intervenants: process.env.AIRTABLE_TABLE_INTERVENANTS || "Intervenants",
   clients: process.env.AIRTABLE_TABLE_CLIENTS || "Clients",
   releves: process.env.AIRTABLE_TABLE_RELEVES || "Releves",
-  fichesDePaie: process.env.AIRTABLE_TABLE_FICHES_PAIE || "FichesDePaie",
+  fichesDePaie: process.env.AIRTABLE_TABLE_FICHES_PAIE || "Fiches de Paie",
   modificationsProfil:
     process.env.AIRTABLE_TABLE_MODIFICATIONS_PROFIL || "ModificationsProfil",
 };
