@@ -46,21 +46,22 @@ export async function POST(request: Request) {
     hp_check_7f2a?: string; // champ piège anti-bot, doit rester vide
   };
 
-  // Honeypot : un humain ne remplit jamais ce champ (masqué côté site). Nom
-  // volontairement neutre pour eviter l'auto-remplissage navigateur (un nom
-  // comme "societe" est reconnu par l'autocompletion Chrome/Safari, malgre
-  // autocomplete="off", et declenchait de faux positifs).
-  // On répond succès sans rien enregistrer pour ne pas alerter le bot.
-  if (hp_check_7f2a) {
-    return NextResponse.json({ ok: true }, { headers: corsHeaders() });
-  }
-
   if (!nom || !prenom || !telephone || !email) {
     return NextResponse.json(
       { error: "Champs requis manquants" },
       { status: 400, headers: corsHeaders() }
     );
   }
+
+  // Honeypot : un humain ne remplit normalement jamais ce champ caché, mais
+  // l'autofill de certains navigateurs (Chrome notamment) peut le declencher
+  // par erreur. Pour ne jamais perdre un vrai lead a cause d'un faux positif,
+  // on enregistre quand meme la demande, juste marquee comme suspecte pour
+  // verification manuelle au lieu d'etre ignoree silencieusement.
+  const suspect = Boolean(hp_check_7f2a);
+  const messageAvecFlag = suspect
+    ? `[A VERIFIER - piege anti-bot declenche, probablement un faux positif d'autofill]\n${message || ""}`
+    : message;
 
   try {
     await creerLead({
@@ -73,7 +74,7 @@ export async function POST(request: Request) {
       codePostal,
       besoins,
       creneaux,
-      message,
+      message: messageAvecFlag,
     });
     return NextResponse.json({ ok: true }, { headers: corsHeaders() });
   } catch (error) {
