@@ -165,8 +165,8 @@ coup. Le libellé de la ligne se remplit automatiquement.
 
 ## Tableau de bord Direction
 
-Cocher la case `Admin` sur une ligne de la table **Intervenants** donne accès à
-l'onglet **Direction** (`/admin`), qui regroupe :
+Cocher la case `Admin` sur une ligne de la table **Intervenants** ajoute un bloc
+**Direction** en tête de l'accueil de cette personne, qui regroupe :
 
 - les **interventions du jour**, toutes intervenantes confondues, avec le client
   et les horaires ;
@@ -175,8 +175,10 @@ l'onglet **Direction** (`/admin`), qui regroupe :
   chaque intervenante ;
 - le **nombre d'intervenantes actives**.
 
-L'onglet n'apparaît qu'après une reconnexion, mais l'accès à l'adresse
-fonctionne immédiatement. Décocher `Admin` coupe l'accès sans délai.
+Le bloc apparaît dès le prochain affichage de l'accueil ; décocher `Admin` le
+retire tout aussi vite. Le reste de l'accueil (clients, récapitulatif du mois)
+reste visible, une même personne pouvant être à la fois dirigeante et
+intervenante.
 
 ## Consulter les relevés
 

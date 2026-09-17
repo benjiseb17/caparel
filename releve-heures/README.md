@@ -19,7 +19,7 @@ Crée une base Airtable avec **4 tables** :
 | `Code activation` | Formule — `"CAPAREL-" & UPPER(RIGHT(RECORD_ID(), 6))`. Code de première connexion, généré automatiquement et unique par intervenant |
 | `MotDePasseHash`  | Texte sur une ligne          |
 | `Actif`           | Case à cocher                |
-| `Admin`           | Case à cocher — donne accès au tableau de bord de direction (`/admin`) |
+| `Admin`           | Case à cocher — ajoute le bloc Direction sur l'accueil |
 | `Photo`           | Pièce jointe (optionnel — sans photo, des initiales sont affichées) |
 | `TauxHoraire`     | Nombre (décimal, en €/h — sert à calculer le chiffre d'affaires) |
 
@@ -130,11 +130,10 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 
 - **Connexion** (`/login`) : email + mot de passe, vérifiés contre la table `Intervenants`.
 - **Première connexion** (`/activation`) : email + code d'activation + nouveau mot de passe. La route `/api/activation` vérifie le code (insensible à la casse), hashe le mot de passe (bcrypt) et l'enregistre. Elle refuse tout compte disposant déjà d'un mot de passe, ce qui rend le code inutilisable une fois consommé. Un mauvais code et un email inconnu renvoient le même message, pour ne pas révéler quels comptes existent.
-- **Accueil** (`/`) : profil de l'intervenant (photo ou initiales, prénom, nom), la liste des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`), et un récapitulatif chiffré — heures et chiffre d'affaires du mois (avec graphiques par semaine) et chiffre d'affaires de l'année en cours (graphique par mois). Le chiffre d'affaires est calculé comme `heures réalisées × TauxHoraire` de l'intervenant. Sur grand écran, clients et récapitulatif s'affichent côte à côte ; en mobile, tout est empilé.
+- **Accueil** (`/`) : pour un compte dont la case `Admin` est cochée, un bloc **Direction** s'ajoute en tête — interventions du jour toutes intervenantes confondues, volume de la semaine, chiffre d'affaires du mois et nombre d'intervenantes actives. L'autorisation est relue depuis Airtable à chaque affichage, de sorte que décocher `Admin` retire le bloc immédiatement. Ensuite, pour tout le monde : profil de l'intervenant (photo ou initiales, prénom, nom), la liste des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`), et un récapitulatif chiffré — heures et chiffre d'affaires du mois (avec graphiques par semaine) et chiffre d'affaires de l'année en cours (graphique par mois). Le chiffre d'affaires est calculé comme `heures réalisées × TauxHoraire` de l'intervenant. Sur grand écran, clients et récapitulatif s'affichent côte à côte ; en mobile, tout est empilé.
 - **Relevé d'heure** (`/saisie`) : l'intervenant choisit un client (parmi les siens), une date (aujourd'hui par défaut), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.
 - **Validation** : le bouton "Valider" envoie les données à `/api/releves`, qui recalcule les heures côté serveur (pour éviter toute manipulation côté client), vérifie que la certification a bien été cochée, et crée un enregistrement dans la table `Releves`, lié à l'intervenant connecté et au client choisi.
 - **Historique** (`/historique`) : liste des relevés déjà saisis par l'intervenant.
-- **Direction** (`/admin`) : réservé aux intervenants dont la case `Admin` est cochée. Interventions du jour (toutes intervenantes confondues), volume de la semaine, chiffre d'affaires du mois et nombre d'intervenantes actives. L'autorisation est vérifiée contre Airtable à chaque affichage, de sorte que décocher `Admin` coupe l'accès immédiatement.
 - **Fiches de paie** (`/fiches-de-paie`) : ses bulletins (table `Fiches de Paie`), du plus récent au plus ancien, avec un lien de téléchargement direct. Seules les fiches cochées `Publiee` apparaissent.
 - **Modification d'un relevé** : cliquer sur un relevé dans l'historique révèle un bouton "Modifier", qui ouvre le même formulaire pré-rempli (client, date, heures, commentaire). La certification doit être recochée avant de "Revalider". Envoie une requête `PATCH /api/releves/[id]`, qui vérifie que l'intervenant connecté est bien le propriétaire du relevé avant de le modifier dans Airtable.
 

@@ -4,11 +4,13 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import AppHeader from "@/components/AppHeader";
 import ClientsAssignes from "@/components/ClientsAssignes";
+import BlocDirection from "@/components/BlocDirection";
 import {
   getIntervenantById,
   getClientsForIntervenant,
   getReleveHeuresIntervenant,
   calculerStatsMensuelles,
+  getStatsAdmin,
 } from "@/lib/airtable";
 import {
   isDemoMode,
@@ -89,6 +91,12 @@ export default async function AccueilPage({
     statsMois = calculerStatsMensuelles(releveHeures, tauxHoraire, refDate);
   }
 
+  // Les chiffres de direction ne sont chargés que pour les comptes autorisés,
+  // et l'autorisation vient d'Airtable : retirer la case Admin coupe l'accès
+  // sans attendre que la personne se reconnecte.
+  const maintenant = new Date();
+  const statsDirection = profil?.admin ? await getStatsAdmin(maintenant) : null;
+
   const nomComplet = profil?.nomComplet || session.user.nomComplet || "";
   const initiales = initialesDe(nomComplet);
 
@@ -130,6 +138,10 @@ export default async function AccueilPage({
               </div>
             </div>
           </div>
+
+          {statsDirection && (
+            <BlocDirection stats={statsDirection} jour={maintenant} />
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
             <div>
