@@ -1,24 +1,37 @@
 import { NextResponse } from "next/server";
 import { creerLead } from "@/lib/airtable";
 
-// Route publique (pas d'auth) appelée depuis le site vitrine statique
-// (benjiseb17.github.io/caparel), qui ne peut pas garder de secret côté
-// client. Le token Airtable reste ici, côté serveur.
-const ALLOWED_ORIGIN = "https://benjiseb17.github.io";
+// Route publique (pas d'auth) appelée depuis le site vitrine statique, qui
+// ne peut pas garder de secret côté client. Le token Airtable reste ici,
+// côté serveur. Plusieurs origines autorisées le temps de la transition vers
+// le domaine personnalisé caparel.fr (github.io redirige déjà dessus mais
+// garde l'entrée au cas où).
+const ALLOWED_ORIGINS = [
+  "https://caparel.fr",
+  "https://www.caparel.fr",
+  "https://benjiseb17.github.io",
+];
 
-function corsHeaders() {
+function corsHeaders(origin: string | null) {
+  const allowOrigin =
+    origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+    "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
+    Vary: "Origin",
   };
 }
 
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: corsHeaders() });
+export async function OPTIONS(request: Request) {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders(request.headers.get("origin")),
+  });
 }
 
 export async function POST(request: Request) {
+  const headers = corsHeaders(request.headers.get("origin"));
   const body = await request.json().catch(() => null);
   const {
     nom,
@@ -49,7 +62,7 @@ export async function POST(request: Request) {
   if (!nom || !prenom || !telephone || !email) {
     return NextResponse.json(
       { error: "Champs requis manquants" },
-      { status: 400, headers: corsHeaders() }
+      { status: 400, headers }
     );
   }
 
@@ -76,12 +89,12 @@ export async function POST(request: Request) {
       creneaux,
       message: messageAvecFlag,
     });
-    return NextResponse.json({ ok: true }, { headers: corsHeaders() });
+    return NextResponse.json({ ok: true }, { headers });
   } catch (error) {
     console.error("Erreur lors de la creation du lead:", error);
     return NextResponse.json(
       { error: "Impossible d'enregistrer la demande" },
-      { status: 500, headers: corsHeaders() }
+      { status: 500, headers }
     );
   }
 }
