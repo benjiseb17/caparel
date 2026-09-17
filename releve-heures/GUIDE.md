@@ -105,8 +105,8 @@ serveur, pas seulement dans l'écran.
 
 ## Fiches de paie
 
-En bas de l'onglet **Historique**, la section **Mes fiches de paie** liste vos
-bulletins par mois, du plus récent au plus ancien. **Télécharger** ouvre le PDF.
+Onglet **Fiches de paie**. Vos bulletins sont listés par mois, du plus récent au
+plus ancien. **Télécharger** ouvre le PDF.
 
 Une fiche n'apparaît que lorsque la direction l'a publiée — si un mois manque,
 c'est qu'elle n'est pas encore mise à disposition.

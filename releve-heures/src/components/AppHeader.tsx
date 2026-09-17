@@ -2,12 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import LogoutButton from "@/components/LogoutButton";
 
-type Onglet = "accueil" | "saisie" | "historique";
+type Onglet = "accueil" | "saisie" | "historique" | "fiches";
 
 const LIENS: { href: string; label: string; key: Onglet }[] = [
   { href: "/", label: "Accueil", key: "accueil" },
   { href: "/saisie", label: "Relevé d'heure", key: "saisie" },
   { href: "/historique", label: "Historique", key: "historique" },
+  { href: "/fiches-de-paie", label: "Fiches de paie", key: "fiches" },
 ];
 
 export default function AppHeader({ active }: { active: Onglet }) {
@@ -28,12 +29,14 @@ export default function AppHeader({ active }: { active: Onglet }) {
           <LogoutButton />
         </div>
       </div>
-      <nav className="flex items-center justify-center sm:justify-start gap-4 sm:gap-5 overflow-x-auto">
+      {/* Aligné à gauche en mobile : centrer rognerait les onglets des deux
+          côtés dès que la barre dépasse la largeur de l'écran. */}
+      <nav className="flex items-center gap-3.5 sm:gap-5 overflow-x-auto">
         {LIENS.map((lien) => (
           <Link
             key={lien.key}
             href={lien.href}
-            className={`text-sm font-medium whitespace-nowrap transition-colors ${
+            className={`text-[13px] sm:text-sm font-medium whitespace-nowrap transition-colors ${
               active === lien.key ? "text-navy" : "text-muted hover:text-navy"
             }`}
           >

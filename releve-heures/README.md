@@ -58,7 +58,7 @@ Crée une base Airtable avec **4 tables** :
 | `Email intervenant`  | Lookup de `Email` via `Intervenant`                   |
 | `Name`               | Formule — libellé auto (`Benjamin Sebahoun — Septembre 2026`) |
 
-> Chaque intervenant ne voit que ses propres fiches de paie, listées dans l'onglet Historique.
+> Chaque intervenant ne voit que ses propres fiches de paie, listées dans l'onglet Fiches de paie.
 
 **Déposer une fiche de paie** : créer un enregistrement, lier l'`Intervenant`, choisir le `Mois`, joindre le PDF dans `Fichier`, puis cocher `Publiee` quand elle doit devenir visible. Le libellé de la ligne (`Fiche`) se remplit tout seul.
 
@@ -132,7 +132,8 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 - **Accueil** (`/`) : profil de l'intervenant (photo ou initiales, prénom, nom), la liste des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`), et un récapitulatif chiffré — heures et chiffre d'affaires du mois (avec graphiques par semaine) et chiffre d'affaires de l'année en cours (graphique par mois). Le chiffre d'affaires est calculé comme `heures réalisées × TauxHoraire` de l'intervenant. Sur grand écran, clients et récapitulatif s'affichent côte à côte ; en mobile, tout est empilé.
 - **Relevé d'heure** (`/saisie`) : l'intervenant choisit un client (parmi les siens), une date (aujourd'hui par défaut), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.
 - **Validation** : le bouton "Valider" envoie les données à `/api/releves`, qui recalcule les heures côté serveur (pour éviter toute manipulation côté client), vérifie que la certification a bien été cochée, et crée un enregistrement dans la table `Releves`, lié à l'intervenant connecté et au client choisi.
-- **Historique** (`/historique`) : liste des relevés déjà saisis par l'intervenant, ainsi qu'une section "Mes fiches de paie" listant ses bulletins (table `FichesDePaie`) avec un lien de téléchargement direct.
+- **Historique** (`/historique`) : liste des relevés déjà saisis par l'intervenant.
+- **Fiches de paie** (`/fiches-de-paie`) : ses bulletins (table `Fiches de Paie`), du plus récent au plus ancien, avec un lien de téléchargement direct. Seules les fiches cochées `Publiee` apparaissent.
 - **Modification d'un relevé** : cliquer sur un relevé dans l'historique révèle un bouton "Modifier", qui ouvre le même formulaire pré-rempli (client, date, heures, commentaire). La certification doit être recochée avant de "Revalider". Envoie une requête `PATCH /api/releves/[id]`, qui vérifie que l'intervenant connecté est bien le propriétaire du relevé avant de le modifier dans Airtable.
 
 ## Déploiement

@@ -2,16 +2,13 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import {
   getRelevesByIntervenant,
-  getFichesDePaieByIntervenant,
   getClientsForIntervenant,
 } from "@/lib/airtable";
 import {
   isDemoMode,
   getDemoReleves,
-  getDemoFichesDePaie,
   getDemoClientsForIntervenant,
 } from "@/lib/demo";
-import { formatMoisFr } from "@/lib/format";
 import AppHeader from "@/components/AppHeader";
 import HistoriqueReleves from "@/components/HistoriqueReleves";
 
@@ -22,15 +19,10 @@ export default async function HistoriquePage() {
     redirect("/login");
   }
 
-  const [releves, fiches, clients] = isDemoMode()
-    ? await Promise.all([
-        getDemoReleves(),
-        Promise.resolve(getDemoFichesDePaie()),
-        Promise.resolve(getDemoClientsForIntervenant()),
-      ])
+  const [releves, clients] = isDemoMode()
+    ? [await getDemoReleves(), getDemoClientsForIntervenant()]
     : await Promise.all([
         getRelevesByIntervenant(session.user.id),
-        getFichesDePaieByIntervenant(session.user.id),
         getClientsForIntervenant(session.user.id),
       ]);
 
@@ -44,45 +36,6 @@ export default async function HistoriquePage() {
           </h1>
 
           <HistoriqueReleves releves={releves} clients={clients} />
-
-          <h2 className="font-heading text-lg font-bold text-navy mt-10 mb-4">
-            Mes fiches de paie
-          </h2>
-
-          {fiches.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-line p-6 text-center">
-              <p className="text-sm text-muted">
-                Aucune fiche de paie disponible pour le moment.
-              </p>
-            </div>
-          ) : (
-            <ul className="space-y-2">
-              {fiches.map((f) => (
-                <li
-                  key={f.id}
-                  className="bg-white rounded-2xl border border-line p-4 flex items-center justify-between"
-                >
-                  <span className="text-sm font-medium text-ink">
-                    {formatMoisFr(f.mois)}
-                  </span>
-                  {f.fichierUrl ? (
-                    <a
-                      href={f.fichierUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-medium text-teal-dark hover:text-teal underline underline-offset-2"
-                    >
-                      Télécharger
-                    </a>
-                  ) : (
-                    <span className="text-sm text-muted">
-                      Indisponible (démo)
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
       </main>
     </div>
