@@ -111,18 +111,6 @@ bulletins par mois, du plus récent au plus ancien. **Télécharger** ouvre le P
 Une fiche n'apparaît que lorsque la direction l'a publiée — si un mois manque,
 c'est qu'elle n'est pas encore mise à disposition.
 
-## Réglages
-
-Onglet **Réglages**. Vous pouvez y modifier :
-
-- **Votre photo de profil** — « Changer la photo », 5 Mo maximum
-- **Votre email** — attention, c'est votre identifiant de connexion
-- **Votre téléphone**
-
-La case de certification est obligatoire, et **la direction est informée de chaque
-modification**. Ces informations servent à vous contacter et à établir votre paie :
-elles doivent rester exactes.
-
 ## Se déconnecter
 
 Bouton **Se déconnecter**, en haut de chaque écran. Pensez-y sur un appareil
@@ -174,12 +162,6 @@ Dans la table **Fiches de Paie** :
 Tant que `Publiee` n'est pas cochée, la fiche reste invisible côté intervenante.
 Cela permet de préparer tous les bulletins tranquillement, puis de les publier d'un
 coup. Le libellé de la ligne se remplit automatiquement.
-
-## Suivre les modifications de profil
-
-Chaque changement d'email, de téléphone ou de photo crée une ligne dans la table
-**ModificationsProfil**, avec les valeurs avant et après. La colonne `Traite`
-permet de marquer celles que vous avez vérifiées.
 
 ## Consulter les relevés
 

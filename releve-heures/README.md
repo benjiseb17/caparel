@@ -8,7 +8,7 @@ Application Next.js pour la saisie des heures des intervenants à domicile. Le b
 
 ## 1. Créer la base Airtable
 
-Crée une base Airtable avec **5 tables** :
+Crée une base Airtable avec **4 tables** :
 
 ### Table `Intervenants`
 
@@ -17,7 +17,6 @@ Crée une base Airtable avec **5 tables** :
 | `Nom et Prenom`   | Texte sur une ligne — nom complet, ex. `Benjamin Sebahoun` (champ principal) |
 | `Email`           | Texte sur une ligne          |
 | `Code activation` | Formule — `"CAPAREL-" & UPPER(RIGHT(RECORD_ID(), 6))`. Code de première connexion, généré automatiquement et unique par intervenant |
-| `Telephone`       | Texte sur une ligne (optionnel) |
 | `MotDePasseHash`  | Texte sur une ligne          |
 | `Actif`           | Case à cocher                |
 | `Photo`           | Pièce jointe (optionnel — sans photo, des initiales sont affichées) |
@@ -48,7 +47,7 @@ Crée une base Airtable avec **5 tables** :
 | `Commentaire`          | Texte long (optionnel)                 |
 | `Certification`        | Case à cocher (l'intervenant certifie sur l'honneur l'exactitude des informations) |
 
-### Table `FichesDePaie`
+### Table `Fiches de Paie`
 
 | Champ               | Type                                                |
 | -------------------- | ---------------------------------------------------- |
@@ -64,20 +63,6 @@ Crée une base Airtable avec **5 tables** :
 **Déposer une fiche de paie** : créer un enregistrement, lier l'`Intervenant`, choisir le `Mois`, joindre le PDF dans `Fichier`, puis cocher `Publiee` quand elle doit devenir visible. Le libellé de la ligne (`Fiche`) se remplit tout seul.
 
 > Le champ `Email intervenant` est là pour permettre une **Automation Airtable** (déclencheur : "Quand un enregistrement correspond à des critères" → `Publiee` est cochée → envoyer un email à `Email intervenant`), afin de prévenir l'intervenante que sa fiche est disponible. Cette partie se configure dans Airtable, sans code.
-
-### Table `ModificationsProfil`
-
-| Champ              | Type                                                |
-| -------------------- | ---------------------------------------------------- |
-| `Intervenant`        | Lien vers un autre enregistrement → `Intervenants`    |
-| `Email avant`        | Texte sur une ligne                                   |
-| `Email apres`        | Texte sur une ligne                                   |
-| `Telephone avant`    | Texte sur une ligne                                   |
-| `Telephone apres`    | Texte sur une ligne                                   |
-| `Photo modifiee`     | Case à cocher                                         |
-| `Traite`             | Case à cocher (à cocher par la direction une fois la demande traitée) |
-
-> Un enregistrement est créé à chaque modification du profil depuis l'onglet Réglages (`/reglages`). Pour être notifiée automatiquement, la direction Caparel doit créer une **Automation Airtable** (déclencheur : "Quand un enregistrement est créé" sur `ModificationsProfil` → action d'envoi d'email) — cette partie se configure directement dans Airtable, aucun code supplémentaire n'est nécessaire.
 
 > **Renommer une colonne casse l'app.** Les noms de champs doivent correspondre exactement (accents non inclus, comme indiqué ci-dessus) à ceux utilisés dans `src/lib/airtable.ts`. En revanche, les **tables** sont ciblées par leur identifiant Airtable (`tbl…`, voir la constante `TABLES`), donc les renommer est sans effet.
 
@@ -149,7 +134,6 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 - **Validation** : le bouton "Valider" envoie les données à `/api/releves`, qui recalcule les heures côté serveur (pour éviter toute manipulation côté client), vérifie que la certification a bien été cochée, et crée un enregistrement dans la table `Releves`, lié à l'intervenant connecté et au client choisi.
 - **Historique** (`/historique`) : liste des relevés déjà saisis par l'intervenant, ainsi qu'une section "Mes fiches de paie" listant ses bulletins (table `FichesDePaie`) avec un lien de téléchargement direct.
 - **Modification d'un relevé** : cliquer sur un relevé dans l'historique révèle un bouton "Modifier", qui ouvre le même formulaire pré-rempli (client, date, heures, commentaire). La certification doit être recochée avant de "Revalider". Envoie une requête `PATCH /api/releves/[id]`, qui vérifie que l'intervenant connecté est bien le propriétaire du relevé avant de le modifier dans Airtable.
-- **Réglages** (`/reglages`) : l'intervenant peut modifier son email, son téléphone et sa photo de profil. Une case à cocher lui fait certifier l'exactitude des informations avant de valider. Chaque modification est enregistrée dans la table `ModificationsProfil` (valeurs avant/après) pour que la direction Caparel en soit informée.
 
 ## Déploiement
 

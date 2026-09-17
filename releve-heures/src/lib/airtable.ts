@@ -33,8 +33,6 @@ export const TABLES = {
   releves: process.env.AIRTABLE_TABLE_RELEVES || "tblehEGJM3vZP9oOb", // Releves
   fichesDePaie:
     process.env.AIRTABLE_TABLE_FICHES_PAIE || "tbljqZpHw1hvgrQPI", // Fiches de Paie
-  modificationsProfil:
-    process.env.AIRTABLE_TABLE_MODIFICATIONS_PROFIL || "tblER71fTx3oLIHwM", // ModificationsProfil
   leads: process.env.AIRTABLE_TABLE_LEADS || "tblcVywextjxuUGYK", // Leads
 };
 
@@ -47,7 +45,6 @@ export type Intervenant = {
   id: string;
   nomComplet: string;
   email: string;
-  telephone: string;
   motDePasseHash: string;
   codeActivation: string;
   actif: boolean;
@@ -61,7 +58,6 @@ function mapIntervenant(record: Airtable.Record<Airtable.FieldSet>): Intervenant
     id: record.id,
     nomComplet: (record.get("Nom et Prenom") as string) || "",
     email: (record.get("Email") as string) || "",
-    telephone: (record.get("Telephone") as string) || "",
     motDePasseHash: (record.get("MotDePasseHash") as string) || "",
     codeActivation: (record.get("Code activation") as string) || "",
     actif: Boolean(record.get("Actif")),
@@ -122,101 +118,6 @@ export async function getIntervenantById(
   } catch {
     return null;
   }
-}
-
-export async function uploaderPhotoIntervenant(
-  intervenantId: string,
-  fichier: { base64: string; contentType: string; filename: string }
-): Promise<string> {
-  const apiKey = process.env.AIRTABLE_API_KEY;
-  const baseId = process.env.AIRTABLE_BASE_ID;
-
-  if (!apiKey || !baseId) {
-    throw new Error(
-      "AIRTABLE_API_KEY ou AIRTABLE_BASE_ID manquant(s) dans les variables d'environnement."
-    );
-  }
-
-  const res = await fetch(
-    `https://content.airtable.com/v0/${baseId}/${intervenantId}/Photo/uploadAttachment`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contentType: fichier.contentType,
-        file: fichier.base64,
-        filename: fichier.filename,
-      }),
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error(`Echec de l'envoi de la photo (${res.status})`);
-  }
-
-  const data = await res.json();
-  const photos = (data?.fields?.Photo as AirtableAttachment[] | undefined) || [];
-  return photos[0]?.url || "";
-}
-
-export type ModificationProfil = {
-  email?: string;
-  telephone?: string;
-  photo?: { base64: string; contentType: string; filename: string };
-};
-
-/**
- * Met à jour les informations de contact d'un intervenant et enregistre la
- * demande dans ModificationsProfil pour que la direction en soit informée
- * (via une automation Airtable déclenchée à la création de l'enregistrement).
- */
-export async function modifierProfilIntervenant(
-  intervenantId: string,
-  modification: ModificationProfil
-): Promise<void> {
-  const actuel = await getIntervenantById(intervenantId);
-  if (!actuel) {
-    throw new Error("Intervenant introuvable");
-  }
-
-  const champsMisAJour: Record<string, string> = {};
-  if (modification.email !== undefined && modification.email !== actuel.email) {
-    champsMisAJour.Email = modification.email;
-  }
-  if (
-    modification.telephone !== undefined &&
-    modification.telephone !== actuel.telephone
-  ) {
-    champsMisAJour.Telephone = modification.telephone;
-  }
-
-  const emailModifie = champsMisAJour.Email !== undefined;
-  const telephoneModifie = champsMisAJour.Telephone !== undefined;
-  const photoModifiee = Boolean(modification.photo);
-
-  if (!emailModifie && !telephoneModifie && !photoModifiee) {
-    throw new Error("Aucune modification a enregistrer");
-  }
-
-  if (Object.keys(champsMisAJour).length > 0) {
-    await base(TABLES.intervenants).update(intervenantId, champsMisAJour);
-  }
-
-  if (modification.photo) {
-    await uploaderPhotoIntervenant(intervenantId, modification.photo);
-  }
-
-  await base(TABLES.modificationsProfil).create({
-    Intervenant: [intervenantId],
-    "Email avant": actuel.email,
-    "Email apres": modification.email ?? actuel.email,
-    "Telephone avant": actuel.telephone,
-    "Telephone apres": modification.telephone ?? actuel.telephone,
-    "Photo modifiee": photoModifiee,
-  });
 }
 
 export type Client = {

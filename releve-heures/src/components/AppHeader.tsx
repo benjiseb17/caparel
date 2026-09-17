@@ -2,13 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import LogoutButton from "@/components/LogoutButton";
 
-type Onglet = "accueil" | "saisie" | "historique" | "reglages";
+type Onglet = "accueil" | "saisie" | "historique";
 
 const LIENS: { href: string; label: string; key: Onglet }[] = [
   { href: "/", label: "Accueil", key: "accueil" },
   { href: "/saisie", label: "Relevé d'heure", key: "saisie" },
   { href: "/historique", label: "Historique", key: "historique" },
-  { href: "/reglages", label: "Réglages", key: "reglages" },
 ];
 
 export default function AppHeader({ active }: { active: Onglet }) {
