@@ -48,6 +48,7 @@ export type Intervenant = {
   motDePasseHash: string;
   codeActivation: string;
   actif: boolean;
+  admin: boolean;
   photoUrl: string;
   tauxHoraire: number;
 };
@@ -61,6 +62,7 @@ function mapIntervenant(record: Airtable.Record<Airtable.FieldSet>): Intervenant
     motDePasseHash: (record.get("MotDePasseHash") as string) || "",
     codeActivation: (record.get("Code activation") as string) || "",
     actif: Boolean(record.get("Actif")),
+    admin: Boolean(record.get("Admin")),
     photoUrl: photos[0]?.url || "",
     tauxHoraire: (record.get("TauxHoraire") as number) || 0,
   };
@@ -294,6 +296,121 @@ export async function modifierReleve(
     Commentaire: releve.commentaire || "",
     Certification: releve.certifie,
   });
+}
+
+export type InterventionAdmin = {
+  id: string;
+  date: string;
+  intervenante: string;
+  client: string;
+  heureArrivee: string;
+  heureDepart: string;
+  heures: number;
+};
+
+export type StatsAdmin = {
+  interventionsJour: InterventionAdmin[];
+  nombreSemaine: number;
+  heuresSemaine: number;
+  caMois: number;
+  intervenantesActives: number;
+};
+
+/** Début du lundi de la semaine contenant `date`, à minuit. */
+function debutDeSemaine(date: Date): Date {
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  // getDay() renvoie 0 pour dimanche : on le ramène en fin de semaine.
+  const decalage = (d.getDay() + 6) % 7;
+  d.setDate(d.getDate() - decalage);
+  return d;
+}
+
+function memeJour(a: Date, b: Date): boolean {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+/**
+ * Vue de direction : agrège les relevés de toutes les intervenantes.
+ * Le chiffre d'affaires dépend du TauxHoraire propre à chacune, d'où la
+ * table des taux construite en amont.
+ */
+export async function getStatsAdmin(maintenant = new Date()): Promise<StatsAdmin> {
+  const [releveRecords, intervenantRecords, clientRecords] = await Promise.all([
+    base(TABLES.releves)
+      .select({ sort: [{ field: "Date", direction: "desc" }] })
+      .all(),
+    base(TABLES.intervenants).select().all(),
+    base(TABLES.clients).select().all(),
+  ]);
+
+  const intervenantes = new Map(
+    intervenantRecords.map((i) => [
+      i.id,
+      {
+        nom: (i.get("Nom et Prenom") as string) || "Intervenante inconnue",
+        taux: (i.get("TauxHoraire") as number) || 0,
+      },
+    ])
+  );
+  const clients = new Map(
+    clientRecords.map((c) => [c.id, (c.get("Nom") as string) || ""])
+  );
+
+  const lundi = debutDeSemaine(maintenant);
+  const interventionsJour: InterventionAdmin[] = [];
+  let nombreSemaine = 0;
+  let heuresSemaine = 0;
+  let caMois = 0;
+
+  for (const r of releveRecords) {
+    const dateIso = (r.get("Date") as string) || "";
+    const date = new Date(dateIso);
+    if (Number.isNaN(date.getTime())) continue;
+
+    const heures = (r.get("Heures realisees") as number) || 0;
+    const intervenanteId = ((r.get("Intervenant") as string[]) || [])[0] || "";
+    const intervenante = intervenantes.get(intervenanteId);
+
+    if (
+      date.getFullYear() === maintenant.getFullYear() &&
+      date.getMonth() === maintenant.getMonth()
+    ) {
+      caMois += heures * (intervenante?.taux || 0);
+    }
+
+    if (date >= lundi) {
+      nombreSemaine += 1;
+      heuresSemaine += heures;
+    }
+
+    if (memeJour(date, maintenant)) {
+      interventionsJour.push({
+        id: r.id,
+        date: dateIso,
+        intervenante: intervenante?.nom || "Intervenante inconnue",
+        client: clients.get(((r.get("Client") as string[]) || [])[0]) || "Client inconnu",
+        heureArrivee: (r.get("Heure d'arrivee") as string) || "",
+        heureDepart: (r.get("Heure de depart") as string) || "",
+        heures,
+      });
+    }
+  }
+
+  return {
+    interventionsJour: interventionsJour.sort((a, b) =>
+      a.heureArrivee.localeCompare(b.heureArrivee)
+    ),
+    nombreSemaine,
+    heuresSemaine: Math.round(heuresSemaine * 100) / 100,
+    caMois: Math.round(caMois * 100) / 100,
+    intervenantesActives: intervenantRecords.filter((i) =>
+      Boolean(i.get("Actif"))
+    ).length,
+  };
 }
 
 export type StatSemaine = {

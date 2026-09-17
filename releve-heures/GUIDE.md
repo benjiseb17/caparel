@@ -163,6 +163,21 @@ Tant que `Publiee` n'est pas cochée, la fiche reste invisible côté intervenan
 Cela permet de préparer tous les bulletins tranquillement, puis de les publier d'un
 coup. Le libellé de la ligne se remplit automatiquement.
 
+## Tableau de bord Direction
+
+Cocher la case `Admin` sur une ligne de la table **Intervenants** donne accès à
+l'onglet **Direction** (`/admin`), qui regroupe :
+
+- les **interventions du jour**, toutes intervenantes confondues, avec le client
+  et les horaires ;
+- le **nombre d'interventions de la semaine** et le total d'heures ;
+- le **chiffre d'affaires du mois**, calculé avec le taux horaire propre à
+  chaque intervenante ;
+- le **nombre d'intervenantes actives**.
+
+L'onglet n'apparaît qu'après une reconnexion, mais l'accès à l'adresse
+fonctionne immédiatement. Décocher `Admin` coupe l'accès sans délai.
+
 ## Consulter les relevés
 
 La table **Releves** contient toutes les saisies, avec l'intervenante, le client,

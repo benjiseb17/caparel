@@ -5,11 +5,13 @@ declare module "next-auth" {
     user: {
       id: string;
       nomComplet?: string;
+      admin?: boolean;
     } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
     nomComplet?: string;
+    admin?: boolean;
   }
 }
 
@@ -17,5 +19,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     intervenantId?: string;
     nomComplet?: string;
+    admin?: boolean;
   }
 }
