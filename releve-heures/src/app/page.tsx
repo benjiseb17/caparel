@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/auth";
 import AppHeader from "@/components/AppHeader";
-import BarChart from "@/components/BarChart";
 import ClientsAssignes from "@/components/ClientsAssignes";
 import {
   getIntervenantById,
@@ -213,7 +212,7 @@ export default async function AccueilPage({
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="font-heading text-2xl font-bold text-navy">
                     {formatHeures(statsMois.totalHeures)}
@@ -227,51 +226,16 @@ export default async function AccueilPage({
                   <p className="text-xs text-muted">Chiffre d&apos;affaires</p>
                 </div>
               </div>
-
-              <p className="text-xs font-medium text-ink mb-2">
-                Heures par semaine
-              </p>
-              <BarChart
-                data={statsMois.parSemaine.map((s) => ({
-                  label: s.label,
-                  value: s.heures,
-                }))}
-                color="#12305c"
-                formatValue={formatHeures}
-              />
-
-              <p className="text-xs font-medium text-ink mt-6 mb-2">
-                Chiffre d&apos;affaires par semaine
-              </p>
-              <BarChart
-                data={statsMois.parSemaine.map((s) => ({
-                  label: s.label,
-                  value: s.ca,
-                }))}
-                color="#3fb6ae"
-                formatValue={(v) => `${Math.round(v)}€`}
-              />
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-line p-6">
-            <div className="flex items-baseline justify-between mb-4">
-              <p className="text-sm text-muted">
-                Chiffre d&apos;affaires — Année {ANNEE}
-              </p>
-              <p className="font-heading text-xl font-bold text-teal-dark">
-                {statsAnnee.totalCA.toLocaleString("fr-FR")} €
-              </p>
-            </div>
-
-            <BarChart
-              data={statsAnnee.parMois.map((m) => ({
-                label: m.label,
-                value: m.ca,
-              }))}
-              color="#3fb6ae"
-              formatValue={(v) => `${Math.round(v)}€`}
-            />
+          <div className="bg-white rounded-2xl border border-line p-6 flex items-baseline justify-between gap-3">
+            <p className="text-sm text-muted">
+              Chiffre d&apos;affaires — Année {ANNEE}
+            </p>
+            <p className="font-heading text-xl font-bold text-teal-dark whitespace-nowrap shrink-0">
+              {statsAnnee.totalCA.toLocaleString("fr-FR")} €
+            </p>
           </div>
         </div>
       </main>

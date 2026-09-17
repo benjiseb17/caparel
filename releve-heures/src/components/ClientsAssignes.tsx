@@ -14,24 +14,12 @@ export default function ClientsAssignes({ clients }: { clients: Client[] }) {
   return (
     <div className="bg-white rounded-2xl border border-line divide-y divide-line overflow-hidden">
       {clients.map((client) => (
-        <div
-          key={client.id}
-          className="p-4 flex items-center justify-between gap-3"
-        >
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-ink truncate">
-              {client.nom}
+        <div key={client.id} className="p-4">
+          <p className="text-sm font-medium text-ink truncate">{client.nom}</p>
+          {client.adresse && (
+            <p className="text-xs text-muted mt-0.5 truncate">
+              {client.adresse}
             </p>
-            {client.adresse && (
-              <p className="text-xs text-muted mt-0.5 truncate">
-                {client.adresse}
-              </p>
-            )}
-          </div>
-          {client.numeroClient && (
-            <span className="text-[11px] text-muted font-mono shrink-0">
-              {client.numeroClient}
-            </span>
           )}
         </div>
       ))}
