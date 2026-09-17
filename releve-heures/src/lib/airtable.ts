@@ -346,56 +346,6 @@ function calculerStatsMensuelles(
   };
 }
 
-export type StatMois = {
-  label: string;
-  ca: number;
-};
-
-export type StatsAnnuelles = {
-  totalCA: number;
-  parMois: StatMois[];
-};
-
-const MOIS_COURTS = [
-  "Jan",
-  "Fév",
-  "Mar",
-  "Avr",
-  "Mai",
-  "Jun",
-  "Jul",
-  "Aoû",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Déc",
-];
-
-function calculerStatsAnnuelles(
-  releves: { date: string; heures: number }[],
-  tauxHoraire: number
-): StatsAnnuelles {
-  const year = new Date().getFullYear();
-
-  const parMois: StatMois[] = MOIS_COURTS.map((label) => ({ label, ca: 0 }));
-
-  let totalCA = 0;
-
-  for (const r of releves) {
-    const d = new Date(r.date);
-    if (Number.isNaN(d.getTime()) || d.getFullYear() !== year) continue;
-
-    const ca = r.heures * tauxHoraire;
-    parMois[d.getMonth()].ca += ca;
-    totalCA += ca;
-  }
-
-  return {
-    totalCA: Math.round(totalCA * 100) / 100,
-    parMois: parMois.map((m) => ({ ...m, ca: Math.round(m.ca * 100) / 100 })),
-  };
-}
-
 export async function getReleveHeuresIntervenant(
   intervenantId: string
 ): Promise<{ date: string; heures: number }[]> {
@@ -412,24 +362,7 @@ export async function getReleveHeuresIntervenant(
     }));
 }
 
-export async function getStatsMensuelles(
-  intervenantId: string,
-  tauxHoraire: number,
-  refDate?: Date
-): Promise<StatsMensuelles> {
-  const releves = await getReleveHeuresIntervenant(intervenantId);
-  return calculerStatsMensuelles(releves, tauxHoraire, refDate);
-}
-
-export async function getStatsAnnuelles(
-  intervenantId: string,
-  tauxHoraire: number
-): Promise<StatsAnnuelles> {
-  const releves = await getReleveHeuresIntervenant(intervenantId);
-  return calculerStatsAnnuelles(releves, tauxHoraire);
-}
-
-export { calculerStatsMensuelles, calculerStatsAnnuelles };
+export { calculerStatsMensuelles };
 
 export type FicheDePaie = {
   id: string;

@@ -9,18 +9,14 @@ import {
   getClientsForIntervenant,
   getReleveHeuresIntervenant,
   calculerStatsMensuelles,
-  calculerStatsAnnuelles,
 } from "@/lib/airtable";
 import {
   isDemoMode,
   DEMO_INTERVENANT,
   getDemoClientsForIntervenant,
   getDemoStatsMensuelles,
-  getDemoStatsAnnuelles,
 } from "@/lib/demo";
 import { formatHeures, initialesDe } from "@/lib/format";
-
-const ANNEE = new Date().getFullYear();
 
 function resoudreMois(param?: string) {
   const now = new Date();
@@ -80,15 +76,10 @@ export default async function AccueilPage({
 
   const tauxHoraire = profil?.tauxHoraire || 0;
 
-  let clients, statsMois, statsAnnee;
+  let clients, statsMois;
   if (isDemoMode()) {
-    const [statsMoisRes, statsAnneeRes] = await Promise.all([
-      getDemoStatsMensuelles(tauxHoraire, refDate),
-      getDemoStatsAnnuelles(tauxHoraire),
-    ]);
     clients = getDemoClientsForIntervenant();
-    statsMois = statsMoisRes;
-    statsAnnee = statsAnneeRes;
+    statsMois = await getDemoStatsMensuelles(tauxHoraire, refDate);
   } else {
     const [clientsRes, releveHeures] = await Promise.all([
       getClientsForIntervenant(session.user.id),
@@ -96,7 +87,6 @@ export default async function AccueilPage({
     ]);
     clients = clientsRes;
     statsMois = calculerStatsMensuelles(releveHeures, tauxHoraire, refDate);
-    statsAnnee = calculerStatsAnnuelles(releveHeures, tauxHoraire);
   }
 
   const nomComplet = profil?.nomComplet || session.user.nomComplet || "";
@@ -229,14 +219,6 @@ export default async function AccueilPage({
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-line p-6 flex items-baseline justify-between gap-3">
-            <p className="text-sm text-muted">
-              Chiffre d&apos;affaires — Année {ANNEE}
-            </p>
-            <p className="font-heading text-xl font-bold text-teal-dark whitespace-nowrap shrink-0">
-              {statsAnnee.totalCA.toLocaleString("fr-FR")} €
-            </p>
-          </div>
         </div>
       </main>
     </div>

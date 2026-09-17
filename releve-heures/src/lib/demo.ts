@@ -6,10 +6,9 @@ import type {
   ModificationReleve,
   NouveauReleve,
   Releve,
-  StatsAnnuelles,
   StatsMensuelles,
 } from "@/lib/airtable";
-import { calculerStatsAnnuelles, calculerStatsMensuelles } from "@/lib/airtable";
+import { calculerStatsMensuelles } from "@/lib/airtable";
 
 export function isDemoMode() {
   return process.env.DEMO_MODE === "true";
@@ -181,10 +180,4 @@ export async function getDemoStatsMensuelles(
   refDate?: Date
 ): Promise<StatsMensuelles> {
   return calculerStatsMensuelles(await getDemoReleveHeures(), tauxHoraire, refDate);
-}
-
-export async function getDemoStatsAnnuelles(
-  tauxHoraire: number
-): Promise<StatsAnnuelles> {
-  return calculerStatsAnnuelles(await getDemoReleveHeures(), tauxHoraire);
 }
