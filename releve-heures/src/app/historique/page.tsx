@@ -1,14 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import {
-  getRelevesByIntervenant,
-  getClientsForIntervenant,
-} from "@/lib/airtable";
-import {
-  isDemoMode,
-  getDemoReleves,
-  getDemoClientsForIntervenant,
-} from "@/lib/demo";
+import { getRelevesByIntervenant } from "@/lib/airtable";
+import { isDemoMode, getDemoReleves } from "@/lib/demo";
 import AppHeader from "@/components/AppHeader";
 import HistoriqueReleves from "@/components/HistoriqueReleves";
 
@@ -19,23 +12,23 @@ export default async function HistoriquePage() {
     redirect("/login");
   }
 
-  const [releves, clients] = isDemoMode()
-    ? [await getDemoReleves(), getDemoClientsForIntervenant()]
-    : await Promise.all([
-        getRelevesByIntervenant(session.user.id),
-        getClientsForIntervenant(session.user.id),
-      ]);
+  const releves = isDemoMode()
+    ? await getDemoReleves()
+    : await getRelevesByIntervenant(session.user.id);
 
   return (
     <div className="min-h-screen bg-soft flex flex-col overflow-x-hidden">
       <AppHeader active="historique" />
       <main className="flex-1 px-5 sm:px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] flex justify-center">
         <div className="w-full max-w-md">
-          <h1 className="font-heading text-xl font-bold text-navy mb-6">
+          <h1 className="font-heading text-xl font-bold text-navy mb-2">
             Historique
           </h1>
+          <p className="text-sm text-muted mb-6">
+            Vos relevés validés. Pour corriger une erreur, contactez Caparel.
+          </p>
 
-          <HistoriqueReleves releves={releves} clients={clients} />
+          <HistoriqueReleves releves={releves} />
         </div>
       </main>
     </div>

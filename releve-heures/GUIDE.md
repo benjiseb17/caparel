@@ -84,24 +84,17 @@ bouton refusera l'enregistrement sans elle.
 Le calcul des heures est refait côté serveur à l'enregistrement : la valeur affichée
 à l'écran ne peut pas être contournée.
 
-## Historique et corrections
+## Historique
 
 Onglet **Historique**. Vous y retrouvez vos **20 derniers relevés**, du plus récent
 au plus ancien, avec le client, la date, les horaires, le total et votre commentaire.
 
-**Corriger un relevé :**
+**Un relevé validé ne peut plus être modifié.** C'est volontaire : vous certifiez
+sur l'honneur vos horaires au moment de la saisie, et ils sont ensuite figés pour
+servir de base à votre paie.
 
-1. Cliquez sur le relevé concerné
-2. Cliquez sur **Modifier**
-3. Ajustez ce qui doit l'être — client, date, horaires, commentaire
-4. **Recochez la certification** : elle est remise à zéro à chaque modification
-5. Cliquez sur **Revalider**
-
-Vous ne pouvez modifier que vos propres relevés : la vérification est faite côté
-serveur, pas seulement dans l'écran.
-
-> Il n'est pas possible de supprimer un relevé depuis l'application. Pour une
-> suppression, passez par la direction.
+> En cas d'erreur, contactez la direction : elle seule peut corriger un relevé.
+> Raison de plus pour vérifier vos horaires avant de valider.
 
 ## Fiches de paie
 
@@ -185,6 +178,10 @@ intervenante.
 La table **Releves** contient toutes les saisies, avec l'intervenante, le client,
 la date, les horaires, le total et la case `Certification` cochée au moment de la
 validation.
+
+**Les intervenantes ne peuvent pas modifier un relevé une fois validé.** Toute
+correction passe donc par vous, directement dans cette table. C'est ce qui garantit
+que les heures servant de base à la paie ne bougent plus après coup.
 
 ## À ne pas faire
 

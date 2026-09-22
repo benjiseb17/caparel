@@ -256,48 +256,6 @@ export async function getRelevesByIntervenant(
     });
 }
 
-export type ModificationReleve = {
-  clientId: string;
-  date: string;
-  heureArrivee: string;
-  heureDepart: string;
-  heuresRealisees: number;
-  commentaire?: string;
-  certifie: boolean;
-};
-
-/**
- * Renvoie l'id de l'intervenant propriétaire du relevé, ou null si le
- * relevé n'existe pas. Sert à vérifier qu'un intervenant ne modifie que
- * ses propres relevés avant d'appeler modifierReleve.
- */
-export async function getProprietaireReleve(
-  releveId: string
-): Promise<string | null> {
-  try {
-    const record = await base(TABLES.releves).find(releveId);
-    const ids = (record.get("Intervenant") as string[] | undefined) || [];
-    return ids[0] || null;
-  } catch {
-    return null;
-  }
-}
-
-export async function modifierReleve(
-  releveId: string,
-  releve: ModificationReleve
-) {
-  await base(TABLES.releves).update(releveId, {
-    Client: [releve.clientId],
-    Date: releve.date,
-    "Heure d'arrivee": releve.heureArrivee,
-    "Heure de depart": releve.heureDepart,
-    "Heures realisees": releve.heuresRealisees,
-    Commentaire: releve.commentaire || "",
-    Certification: releve.certifie,
-  });
-}
-
 export type InterventionAdmin = {
   id: string;
   date: string;
