@@ -170,6 +170,16 @@
     .section-head h2{font-size:1.6rem;}
     .nav{padding:12px 18px;grid-template-columns:1fr 1fr;grid-template-areas:"logo cta" "links links";row-gap:8px;}
     .nav-links{justify-content:center;gap:20px;overflow-x:visible;padding:0;}
+
+    /* Tableaux de tarifs -> cartes empilées, sinon les colonnes de droite
+       (dont le coût réel après crédit d'impôt) sont invisibles sur mobile. */
+    .tarif-block table,.tarif-block thead,.tarif-block tbody,.tarif-block th,.tarif-block td,.tarif-block tr{display:block;}
+    .tarif-block thead{display:none;}
+    .tarif-block tbody tr{padding:16px 20px;border-bottom:1px solid var(--line);}
+    .tarif-block tbody tr:last-child{border-bottom:none;}
+    .tarif-block td{padding:4px 0;border-bottom:none;display:flex;justify-content:space-between;align-items:baseline;gap:12px;text-align:right;}
+    .tarif-block td::before{content:attr(data-label);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);font-weight:600;text-align:left;}
+    .tarif-block td:first-child{display:block;font-size:1rem;padding:0 0 10px;text-align:left;}
   }
   @media (max-width: 420px){
     .nav-cta .btn-navy{padding:11px 14px;font-size:.82rem;}
@@ -218,9 +228,9 @@
           <tr><th>Heures</th><th>Tarif horaire TTC</th><th>Dont frais de mandat HT</th><th>Dont TVA</th><th>Coût réel après crédit d'impôt</th></tr>
         </thead>
         <tbody>
-          <tr><td>Tranche A — jusqu'à 25h/semaine</td><td>32,70 €</td><td>13,36 €</td><td>2,67 €</td><td>16,35 €</td></tr>
-          <tr><td>Tranche B — de 26h à 40h/semaine</td><td>31,70 €</td><td>12,53 €</td><td>2,51 €</td><td>15,85 €</td></tr>
-          <tr><td>Tranche C — plus de 40h/semaine</td><td>28,70 €</td><td>10,03 €</td><td>2,01 €</td><td>14,35 €</td></tr>
+          <tr><td>Tranche A — jusqu'à 25h/semaine</td><td data-label="Tarif horaire TTC">32,70 €</td><td data-label="Dont frais de mandat HT">13,36 €</td><td data-label="Dont TVA">2,67 €</td><td data-label="Coût réel après crédit d'impôt">16,35 €</td></tr>
+          <tr><td>Tranche B — de 26h à 40h/semaine</td><td data-label="Tarif horaire TTC">31,70 €</td><td data-label="Dont frais de mandat HT">12,53 €</td><td data-label="Dont TVA">2,51 €</td><td data-label="Coût réel après crédit d'impôt">15,85 €</td></tr>
+          <tr><td>Tranche C — plus de 40h/semaine</td><td data-label="Tarif horaire TTC">28,70 €</td><td data-label="Dont frais de mandat HT">10,03 €</td><td data-label="Dont TVA">2,01 €</td><td data-label="Coût réel après crédit d'impôt">14,35 €</td></tr>
         </tbody>
       </table>
     </div>
@@ -232,10 +242,10 @@
           <tr><th>Forfait</th><th>Tarif TTC</th><th>Dont frais de mandat HT</th><th>Dont TVA</th><th>Coût réel après crédit d'impôt</th></tr>
         </thead>
         <tbody>
-          <tr><td>Forfait nuit de 12h</td><td>180,00 €</td><td>58,42 €</td><td>11,69 €</td><td>90,00 €</td></tr>
-          <tr><td>Forfait journée de 12h</td><td>250,00 €</td><td>71,13 €</td><td>14,23 €</td><td>125,00 €</td></tr>
-          <tr><td>Forfait 24h/24</td><td>380,00 €</td><td>79,88 €</td><td>15,98 €</td><td>190,00 €</td></tr>
-          <tr><td>Garde malade de nuit de 12h</td><td>286,00 €</td><td>73,76 €</td><td>14,75 €</td><td>143,00 €</td></tr>
+          <tr><td>Forfait nuit de 12h</td><td data-label="Tarif TTC">180,00 €</td><td data-label="Dont frais de mandat HT">58,42 €</td><td data-label="Dont TVA">11,69 €</td><td data-label="Coût réel après crédit d'impôt">90,00 €</td></tr>
+          <tr><td>Forfait journée de 12h</td><td data-label="Tarif TTC">250,00 €</td><td data-label="Dont frais de mandat HT">71,13 €</td><td data-label="Dont TVA">14,23 €</td><td data-label="Coût réel après crédit d'impôt">125,00 €</td></tr>
+          <tr><td>Forfait 24h/24</td><td data-label="Tarif TTC">380,00 €</td><td data-label="Dont frais de mandat HT">79,88 €</td><td data-label="Dont TVA">15,98 €</td><td data-label="Coût réel après crédit d'impôt">190,00 €</td></tr>
+          <tr><td>Garde malade de nuit de 12h</td><td data-label="Tarif TTC">286,00 €</td><td data-label="Dont frais de mandat HT">73,76 €</td><td data-label="Dont TVA">14,75 €</td><td data-label="Coût réel après crédit d'impôt">143,00 €</td></tr>
         </tbody>
       </table>
     </div>
