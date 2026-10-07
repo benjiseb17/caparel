@@ -67,7 +67,10 @@ export async function POST(request: Request) {
   // erreur de saisie, ou une tentative de déclarer des heures non effectuées.
   if (!dateSaisissable(date)) {
     return NextResponse.json(
-      { error: "La date doit être celle du jour ou une date passée." },
+      {
+        error:
+          "Cette date n'est pas encore arrivée. Un relevé s'enregistre une fois l'intervention terminée.",
+      },
       { status: 400 }
     );
   }

@@ -39,6 +39,19 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
+/* Safari iOS agrandit toute la page dès qu'on tape dans un champ dont le texte
+   fait moins de 16px — et ne la remet jamais à l'échelle ensuite, d'où
+   l'impression d'une page « trop zoomée » qu'il faut pincer pour recadrer. On
+   passe donc les contrôles à 16px en mobile ; au-delà du point de rupture
+   `sm`, ils reprennent la taille prévue par la maquette. */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 /* Sur Safari iOS, le contrôle date natif a une largeur intrinsèque qui
    l'emporte sur width:100% et le fait déborder à droite. min-width:0 le
    laisse rétrécir ; le cadre visible est porté par le conteneur parent,

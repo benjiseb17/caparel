@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, FormEvent } from "react";
-import { formatHeures } from "@/lib/format";
+import { formatDateFr, formatHeures } from "@/lib/format";
 import { calculerHeures } from "@/lib/heures";
 import TimeSelect from "@/components/TimeSelect";
 
@@ -43,6 +43,11 @@ export default function ReleveForm({
     [heureArrivee, heureDepart]
   );
 
+  // Les deux chaînes sont au format AAAA-MM-JJ : les comparer revient à
+  // comparer les dates. Le champ est déjà borné par `max`, mais rien
+  // n'empêche de saisir la date au clavier.
+  const dateFuture = date > aujourdhui;
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
@@ -50,6 +55,11 @@ export default function ReleveForm({
 
     if (!clientId) {
       setError("Merci de sélectionner un client.");
+      return;
+    }
+    if (dateFuture) {
+      // Le message rouge sous le champ dit déjà tout : inutile d'en afficher
+      // un second en bas du formulaire.
       return;
     }
     if (heuresRealisees === null || heuresRealisees <= 0) {
@@ -140,7 +150,13 @@ export default function ReleveForm({
           {/* Le cadre est porté par le conteneur, pas par l'input : le
               contrôle date natif de Safari iOS ne respecte pas toujours
               width:100% et débordait sur la droite. */}
-          <div className="w-full overflow-hidden rounded-lg border border-line px-3 py-2 focus-within:ring-2 focus-within:ring-teal">
+          <div
+            className={`w-full overflow-hidden rounded-lg border px-3 py-2 ${
+              dateFuture
+                ? "border-red-500 focus-within:ring-2 focus-within:ring-red-400"
+                : "border-line focus-within:ring-2 focus-within:ring-teal"
+            }`}
+          >
             <input
               id="date"
               type="date"
@@ -148,9 +164,42 @@ export default function ReleveForm({
               max={aujourdhui}
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="block h-[19px] w-full min-w-0 border-0 bg-transparent p-0 text-sm leading-[19px] focus:outline-none"
+              aria-invalid={dateFuture}
+              aria-describedby={dateFuture ? "date-erreur" : undefined}
+              // h-5 en mobile : le texte y passe à 16px (voir globals.css) et
+              // ne tiendrait pas dans les 19px du design desktop.
+              className="block h-5 sm:h-[19px] w-full min-w-0 border-0 bg-transparent p-0 text-sm leading-5 sm:leading-[19px] focus:outline-none"
             />
           </div>
+          {dateFuture && (
+            <p
+              id="date-erreur"
+              role="alert"
+              className="mt-1.5 flex items-start gap-1.5 text-sm text-red-600"
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="mt-0.5 shrink-0"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v4" />
+                <path d="M12 16h.01" />
+              </svg>
+              <span>
+                Le {formatDateFr(date)} n&apos;est pas encore arrivé. Vous
+                pourrez enregistrer ce relevé une fois l&apos;intervention
+                terminée.
+              </span>
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
