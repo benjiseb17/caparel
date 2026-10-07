@@ -104,16 +104,16 @@ export default function LoginPage() {
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
-
-          <p className="text-center">
-            <Link
-              href="/mot-de-passe-oublie"
-              className="text-sm text-muted hover:text-navy underline underline-offset-2"
-            >
-              Mot de passe oublié ?
-            </Link>
-          </p>
         </form>
+
+        <p className="text-sm text-muted mt-6 text-center">
+          <Link
+            href="/mot-de-passe-oublie"
+            className="font-medium text-teal-dark hover:text-teal underline underline-offset-2"
+          >
+            Mot de passe oublié ?
+          </Link>
+        </p>
 
         <div className="mt-8 pt-6 border-t border-line">
           <p className="text-sm font-medium text-ink mb-1">
