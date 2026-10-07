@@ -1,9 +1,13 @@
 # Guide d'utilisation — Relevé d'heures Caparel
 
-Ce guide couvre les deux usages de l'application :
+Ce guide couvre les trois usages de l'application :
 
 - **[Partie 1 — Pour les intervenantes](#partie-1--pour-les-intervenantes)** : se connecter, saisir ses heures, consulter ses fiches de paie.
-- **[Partie 2 — Pour la direction](#partie-2--pour-la-direction)** : gérer les comptes, les clients, les fiches de paie depuis Airtable.
+- **[Partie 2 — Pour les référents](#partie-2--pour-les-référents)** : suivre les familles dont on a la charge.
+- **[Partie 3 — Pour la direction](#partie-3--pour-la-direction)** : gérer les comptes, les clients, les fiches de paie depuis Airtable.
+
+> Une version imprimable de ce guide est disponible en PDF :
+> [docs/guide-utilisation.pdf](docs/guide-utilisation.pdf).
 
 > La documentation technique (installation, variables d'environnement, structure
 > de la base Airtable) se trouve dans [README.md](README.md).
@@ -43,21 +47,16 @@ L'écran d'accueil rassemble votre situation du mois.
 
 **Votre profil** — photo (ou vos initiales à défaut) et votre nom.
 
-**Vos clients** — les personnes qui vous sont assignées, avec leur adresse et leur
-numéro de client. Si cette liste est vide ou incomplète, signalez-le à la
-direction : c'est elle qui gère les affectations.
+**Vos clients** — les personnes qui vous sont assignées, avec leur adresse. Si
+cette liste est vide ou incomplète, signalez-le à la direction : c'est elle qui
+gère les affectations.
 
-**Récapitulatif du mois** — vos heures réalisées, le chiffre d'affaires
-correspondant, et deux graphiques par semaine.
+**Récapitulatif du mois** — vos heures réalisées et le chiffre d'affaires
+correspondant.
 
 Les flèches **‹ ›** de part et d'autre du mois permettent de remonter dans les mois
 précédents. La flèche de droite est grisée sur le mois en cours : on ne peut pas
 consulter un mois à venir.
-
-> Le découpage en semaines suit les jours du mois, pas le calendrier :
-> Sem. 1 = du 1 au 7, Sem. 2 = du 8 au 14, et ainsi de suite.
-
-**Chiffre d'affaires de l'année** — le cumul mois par mois sur l'année en cours.
 
 ## Saisir un relevé d'heures
 
@@ -77,6 +76,10 @@ volontaire — les heures se comptent au quart d'heure près.
 
 **Une intervention qui passe minuit est gérée** : une arrivée à `22:00` et un départ
 à `02:00` donnent bien 4h00, pas une erreur.
+
+**Pas de date à venir.** Un relevé se saisit une fois l'intervention terminée. Si
+vous choisissez une date qui n'est pas encore arrivée, un message rouge apparaît
+sous le champ et l'enregistrement est refusé.
 
 Avant de valider, vous devez cocher la case de **certification sur l'honneur**. Le
 bouton refusera l'enregistrement sans elle.
@@ -111,10 +114,92 @@ partagé.
 
 ---
 
-# Partie 2 — Pour la direction
+# Partie 2 — Pour les référents
+
+Les référents encadrent des familles sans effectuer d'intervention. Leur
+application n'est pas la même que celle des intervenantes.
+
+## Ce qu'est un référent
+
+Un référent suit un portefeuille de familles : il sait qui intervient chez elles, à
+quel rythme et pour combien d'heures. Il ne saisit pas de relevé et ne reçoit pas de
+fiche de paie.
+
+Les deux rôles vivent dans des tables Airtable séparées, et l'application n'affiche
+pas les mêmes onglets à l'un et à l'autre :
+
+| Rôle | Onglets disponibles |
+|---|---|
+| **Intervenante** | Accueil, Relevé d'heure, Historique, Fiches de paie |
+| **Référent** | Accueil (avec le bloc Direction), Mes familles |
+
+> Les pages de saisie, d'historique et de fiches de paie sont inaccessibles à un
+> référent, y compris en tapant leur adresse directement : il est renvoyé sur
+> l'accueil.
+
+## Se connecter
+
+Exactement comme une intervenante : « Première connexion ? », email, code
+d'activation de la forme `CAPAREL-4TB9KD`, puis le mot de passe de votre choix. Les
+connexions suivantes se font avec email et mot de passe.
+
+## Le bloc Direction
+
+Il s'affiche en tête de l'accueil et donne la photographie de l'activité, toutes
+intervenantes et toutes familles confondues :
+
+| Indicateur | Ce qu'il compte |
+|---|---|
+| **Interventions aujourd'hui** | Les relevés saisis pour la date du jour |
+| **Cette semaine** | Le nombre d'interventions et le total d'heures depuis lundi |
+| **Chiffre d'affaires du mois** | Heures réalisées × taux horaire de chaque intervenante |
+| **Intervenantes actives** | Les comptes cochés `Actif` dans la table **Intervenants** |
+
+En dessous, la liste des **interventions du jour** : intervenante, famille, horaires
+et durée.
+
+> Ces chiffres ne portent que sur ce qui a **déjà été saisi**. L'application ne
+> contient aucun planning prévisionnel : une intervention n'apparaît qu'une fois son
+> relevé validé par l'intervenante.
+
+## L'onglet Mes familles
+
+Une fiche par famille dont vous êtes référent, avec :
+
+- le **nom** et l'**adresse** de la famille ;
+- le total d'**heures du mois en cours** ;
+- la ou les **intervenantes** qui y travaillent ;
+- les **cinq dernières interventions**, avec date, horaires et durée.
+
+Une famille peut avoir plusieurs référents, et un référent plusieurs familles. C'est
+la direction qui décide des affectations.
+
+## Le compte de direction
+
+Un référent peut recevoir un **accès complet** : son onglet s'intitule alors
+« Toutes les familles » et liste l'ensemble des clients de Caparel, qu'il en soit
+référent ou non. C'est le réglage du compte de direction.
+
+> Les droits sont relus à chaque affichage. Retirer un accès prend effet
+> immédiatement, sans attendre que la personne se reconnecte.
+
+---
+
+# Partie 3 — Pour la direction
 
 Toute l'administration se fait dans **Airtable**. L'application ne lit et n'écrit
 que dans cette base — il n'y a pas d'interface d'administration séparée.
+
+## Les deux tables de comptes
+
+| Table | Qui s'y trouve |
+|---|---|
+| **Intervenants** | Les personnes qui effectuent les interventions et saisissent leurs heures |
+| **Referents** | Les personnes qui encadrent des familles, direction comprise |
+
+> **Une personne ne figure que dans une seule table.** Si le même email apparaît
+> dans les deux, c'est la ligne de **Referents** qui l'emporte à la connexion, et
+> la personne perd l'accès à la saisie.
 
 ## Créer un compte intervenante
 
@@ -131,10 +216,20 @@ Le `TauxHoraire` sert à calculer le chiffre d'affaires affiché sur son accueil
 **Décocher `Actif`** bloque la connexion immédiatement — c'est la manière de
 suspendre un accès sans supprimer l'historique.
 
+## Créer un compte référent
+
+Même procédure, dans la table **Referents** : nom, email, `Actif` coché,
+`MotDePasseHash` vide, puis transmettre le `Code activation`. Ni taux horaire ni
+photo — un référent n'intervient pas.
+
+Cocher `Acces complet` sur sa ligne lui donne la vue sur l'ensemble des familles
+plutôt que sur son seul portefeuille.
+
 ## Réinitialiser un mot de passe
 
-Vider la colonne `MotDePasseHash` de la ligne concernée. Son code d'activation
-redevient valable et elle peut redéfinir son mot de passe.
+Vider la colonne `MotDePasseHash` de la ligne concernée, dans l'une ou l'autre
+table. Son code d'activation redevient valable et la personne peut redéfinir son
+mot de passe.
 
 ## Assigner des clients
 
@@ -143,6 +238,28 @@ quel client. Une intervenante ne voit que les clients où elle est listée, à l
 sur son accueil et dans le menu déroulant de saisie.
 
 Un client dont `Actif` n'est pas coché n'apparaît nulle part.
+
+## Désigner un référent de famille
+
+Toujours dans **Clients**, la colonne `Referent famille` désigne la ou les
+personnes de la table **Referents** responsables de cette famille. Elles la
+retrouvent aussitôt dans leur onglet **Mes familles**.
+
+## Corriger un relevé
+
+La table **Releves** contient toutes les saisies, avec l'intervenante, le client,
+la date, les horaires, le total et la case `Certification` cochée au moment de la
+validation.
+
+**Les intervenantes ne peuvent pas modifier un relevé une fois validé.** Toute
+correction passe donc par vous, directement dans cette table. C'est ce qui garantit
+que les heures servant de base à la paie ne bougent plus après coup.
+
+Chaque ligne porte un libellé lisible de la forme
+`Intervenante — Client — 07/10/2026`, écrit à la création du relevé.
+
+> Ce libellé ne se recalcule pas : si vous changez la date ou le client d'un
+> relevé, pensez à le corriger aussi.
 
 ## Publier une fiche de paie
 
@@ -155,69 +272,6 @@ Dans la table **Fiches de Paie** :
 Tant que `Publiee` n'est pas cochée, la fiche reste invisible côté intervenante.
 Cela permet de préparer tous les bulletins tranquillement, puis de les publier d'un
 coup. Le libellé de la ligne se remplit automatiquement.
-
-## Tableau de bord Direction
-
-Un compte de la table **Referents** voit, en tête de son accueil, un bloc
-**Direction** qui regroupe :
-
-- les **interventions du jour**, toutes intervenantes confondues, avec le client
-  et les horaires ;
-- le **nombre d'interventions de la semaine** et le total d'heures ;
-- le **chiffre d'affaires du mois**, calculé avec le taux horaire propre à
-  chaque intervenante ;
-- le **nombre d'intervenantes actives**.
-
-L'autorisation est relue à chaque affichage : retirer la ligne de la table
-**Referents** coupe l'accès sans attendre une reconnexion.
-
-## Intervenantes et référents : deux tables, deux parcours
-
-Les comptes vivent dans **deux tables distinctes**, et ce choix détermine ce que
-la personne voit en se connectant :
-
-| Table              | Rôle                                   | Onglets disponibles                                       |
-| ------------------ | -------------------------------------- | --------------------------------------------------------- |
-| **Intervenants**   | Effectue les interventions             | Accueil, Relevé d'heure, Historique, Fiches de paie        |
-| **Referents**      | Encadre des familles, n'intervient pas | Accueil (avec le bloc Direction), Mes familles             |
-
-Un référent n'a ni client assigné, ni relevé, ni fiche de paie : ces pages lui
-sont inaccessibles, et il n'est pas compté dans les « intervenantes actives ».
-
-> Une même personne ne doit figurer que dans **une seule** des deux tables. Si
-> son email apparaît dans les deux, c'est la ligne de **Referents** qui l'emporte
-> à la connexion.
-
-Un compte référent se crée exactement comme un compte intervenante (`Nom et
-Prenom`, `Email`, `Actif` coché, `MotDePasseHash` vide, puis transmettre le
-`Code activation`), à ceci près qu'il n'y a ni `TauxHoraire` ni photo.
-
-## Désigner un référent de famille
-
-Dans la table **Clients**, la colonne `Referent famille` désigne la ou les
-personnes de **Referents** responsables d'une famille. Chaque référent retrouve
-ses familles dans l'onglet **Mes familles** : heures du mois, intervenantes qui y
-travaillent, et cinq dernières interventions.
-
-Une famille peut avoir plusieurs référents, et un référent plusieurs familles.
-
-**Voir toutes les familles.** Cocher `Acces complet` sur une ligne de la table
-**Referents** donne à cette personne la vue sur l'ensemble des clients, qu'elle
-en soit référente ou non — c'est le réglage du compte de direction. L'onglet
-s'intitule alors « Toutes les familles ».
-
-> Cet onglet ne montre que ce qui a **déjà eu lieu**. L'application ne contient
-> aucun planning prévisionnel : les relevés sont saisis après l'intervention.
-
-## Consulter les relevés
-
-La table **Releves** contient toutes les saisies, avec l'intervenante, le client,
-la date, les horaires, le total et la case `Certification` cochée au moment de la
-validation.
-
-**Les intervenantes ne peuvent pas modifier un relevé une fois validé.** Toute
-correction passe donc par vous, directement dans cette table. C'est ce qui garantit
-que les heures servant de base à la paie ne bougent plus après coup.
 
 ## À ne pas faire
 
@@ -232,3 +286,7 @@ identifie par un identifiant interne, pas par leur nom.
 **Ne remplissez pas `MotDePasseHash` à la main.** Cette colonne attend une empreinte
 chiffrée, pas un mot de passe. Y écrire du texte en clair empêche la connexion, en
 plus d'exposer le mot de passe dans l'historique des cellules d'Airtable.
+
+**L'application contient les adresses des familles.** Elle est accessible
+publiquement sur internet : les mots de passe des comptes de direction méritent le
+même soin que ceux d'une messagerie professionnelle.

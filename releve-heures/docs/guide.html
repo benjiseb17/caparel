@@ -97,8 +97,21 @@
     padding: 0;
   }
 
-  .toc ul { margin: 0; padding: 0; list-style: none; font-size: 10pt; }
-  .toc li { margin-bottom: 1.2mm; padding-left: 4mm; color: var(--muted); }
+  .toc ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 10pt;
+    columns: 2;
+    column-gap: 9mm;
+  }
+  .toc li {
+    margin-bottom: 1.2mm;
+    padding-left: 4mm;
+    color: var(--muted);
+    break-inside: avoid;
+  }
+  .toc .part { break-after: avoid; }
   .toc .part {
     font-family: var(--display);
     font-weight: 700;
@@ -230,6 +243,9 @@
 
   .key p:last-child { margin-bottom: 0; }
 
+  /* Un titre ne reste jamais seul en bas de page, séparé de ce qu'il annonce. */
+  h2, h3 { break-after: avoid; }
+
   .page-break { break-before: page; }
 </style>
 </head>
@@ -239,10 +255,10 @@
   <p class="brand">Caparel · Aide à domicile aux personnes âgées</p>
   <h1>Guide d'utilisation<br>Relevé d'heures</h1>
   <p class="lede">
-    Saisie des heures, consultation des fiches de paie et administration des
-    comptes. Document interne.
+    Saisie des heures et fiches de paie côté intervenante, suivi des familles
+    côté référent, administration des comptes côté direction. Document interne.
   </p>
-  <p class="meta">Septembre 2026 — version 1</p>
+  <p class="meta">Octobre 2026 — version 2</p>
 </div>
 
 <div class="toc">
@@ -255,14 +271,22 @@
     <li>Saisir un relevé d'heures</li>
     <li>Historique</li>
     <li>Fiches de paie</li>
-    <li class="part">Partie 2 — Pour la direction</li>
+    <li>Se déconnecter</li>
+    <li class="part">Partie 2 — Pour les référents</li>
+    <li>Ce qu'est un référent</li>
+    <li>Se connecter</li>
+    <li>Le bloc Direction</li>
+    <li>L'onglet Mes familles</li>
+    <li>Le compte de direction</li>
+    <li class="part">Partie 3 — Pour la direction</li>
+    <li>Les deux tables de comptes</li>
     <li>Créer un compte intervenante</li>
+    <li>Créer un compte référent</li>
     <li>Réinitialiser un mot de passe</li>
     <li>Assigner des clients</li>
-    <li>Publier une fiche de paie</li>
-    <li>Tableau de bord Direction</li>
-    <li>Intervenantes et référents</li>
     <li>Désigner un référent de famille</li>
+    <li>Corriger un relevé</li>
+    <li>Publier une fiche de paie</li>
     <li>Précautions</li>
   </ul>
 </div>
@@ -322,28 +346,17 @@
 
 <h3>Vos clients</h3>
 <p>
-  Les personnes qui vous sont assignées, avec leur adresse et leur numéro de client.
-  Si cette liste est vide ou incomplète, signalez-le à la direction : c'est elle qui
-  gère les affectations.
+  Les personnes qui vous sont assignées, avec leur adresse. Si cette liste est vide
+  ou incomplète, signalez-le à la direction : c'est elle qui gère les affectations.
 </p>
 
 <h3>Récapitulatif du mois</h3>
 <p>
-  Vos heures réalisées, le chiffre d'affaires correspondant, et deux graphiques par
-  semaine. Les flèches <strong>‹ ›</strong> de part et d'autre du mois permettent de
-  remonter dans les mois précédents. La flèche de droite est grisée sur le mois en
-  cours : on ne peut pas consulter un mois à venir.
+  Vos <strong>heures réalisées</strong> et le <strong>chiffre d'affaires</strong>
+  correspondant. Les flèches <strong>‹ ›</strong> de part et d'autre du mois
+  permettent de remonter dans les mois précédents. La flèche de droite est grisée
+  sur le mois en cours : on ne peut pas consulter un mois à venir.
 </p>
-
-<div class="note">
-  <p>
-    Le découpage en semaines suit les jours du mois, pas le calendrier :
-    Sem. 1 = du 1<sup>er</sup> au 7, Sem. 2 = du 8 au 14, et ainsi de suite.
-  </p>
-</div>
-
-<h3>Chiffre d'affaires de l'année</h3>
-<p>Le cumul mois par mois sur l'année en cours.</p>
 
 <h2>Saisir un relevé d'heures</h2>
 
@@ -355,7 +368,7 @@
   </thead>
   <tbody>
     <tr><td>Client</td><td>Uniquement vos clients assignés</td></tr>
-    <tr><td>Date</td><td>Le jour même par défaut, modifiable — mais pas de date future : un relevé se saisit après l'intervention</td></tr>
+    <tr><td>Date</td><td>Le jour même par défaut, modifiable — mais pas de date future</td></tr>
     <tr><td>Heure d'arrivée</td><td>Heure et minutes, séparément</td></tr>
     <tr><td>Heure de départ</td><td>Idem</td></tr>
     <tr><td>Heures réalisées</td><td>Calculé automatiquement, affiché en direct</td></tr>
@@ -373,6 +386,12 @@
   <strong>Une intervention qui passe minuit est gérée.</strong> Une arrivée à
   <code>22:00</code> et un départ à <code>02:00</code> donnent bien 4h00, pas une
   erreur.
+</p>
+
+<p>
+  <strong>Pas de date à venir.</strong> Un relevé se saisit une fois l'intervention
+  terminée. Si vous choisissez une date qui n'est pas encore arrivée, un message
+  rouge apparaît sous le champ et l'enregistrement est refusé.
 </p>
 
 <p>
@@ -431,18 +450,155 @@
 
 <!-- ============ PARTIE 2 ============ -->
 
-<h1 class="part-title page-break">Partie 2 — Pour la direction</h1>
+<h1 class="part-title page-break">Partie 2 — Pour les référents</h1>
+<p class="part-intro">
+  Les référents encadrent des familles sans effectuer d'intervention. Leur
+  application n'est pas la même que celle des intervenantes.
+</p>
+
+<h2>Ce qu'est un référent</h2>
+
+<p>
+  Un référent suit un portefeuille de familles : il sait qui intervient chez elles,
+  à quel rythme et pour combien d'heures. Il ne saisit pas de relevé et ne reçoit
+  pas de fiche de paie.
+</p>
+
+<p>
+  Les deux rôles vivent donc dans des tables Airtable séparées, et l'application
+  n'affiche pas les mêmes onglets à l'un et à l'autre :
+</p>
+
+<table>
+  <thead>
+    <tr><th>Rôle</th><th>Onglets disponibles</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Intervenante</td>
+      <td>Accueil, Relevé d'heure, Historique, Fiches de paie</td>
+    </tr>
+    <tr>
+      <td>Référent</td>
+      <td>Accueil (avec le bloc Direction), Mes familles</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note">
+  <p>
+    Les pages de saisie, d'historique et de fiches de paie sont inaccessibles à un
+    référent, y compris en tapant leur adresse directement : il est renvoyé sur
+    l'accueil.
+  </p>
+</div>
+
+<h2>Se connecter</h2>
+
+<p>
+  Exactement comme une intervenante : « Première connexion ? », email, code
+  d'activation de la forme <code>CAPAREL-4TB9KD</code>, puis le mot de passe de
+  votre choix. Les connexions suivantes se font avec email et mot de passe.
+</p>
+
+<h2>Le bloc Direction</h2>
+
+<p>
+  Il s'affiche en tête de l'accueil et donne la photographie de l'activité, toutes
+  intervenantes et toutes familles confondues :
+</p>
+
+<table>
+  <thead>
+    <tr><th>Indicateur</th><th>Ce qu'il compte</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Interventions aujourd'hui</td><td>Les relevés saisis pour la date du jour</td></tr>
+    <tr><td>Cette semaine</td><td>Le nombre d'interventions et le total d'heures depuis lundi</td></tr>
+    <tr><td>Chiffre d'affaires du mois</td><td>Heures réalisées × taux horaire de chaque intervenante</td></tr>
+    <tr><td>Intervenantes actives</td><td>Les comptes cochés « Actif » dans la table Intervenants</td></tr>
+  </tbody>
+</table>
+
+<p>
+  En dessous, la liste des <strong>interventions du jour</strong> : intervenante,
+  famille, horaires et durée.
+</p>
+
+<div class="note">
+  <p>
+    Ces chiffres ne portent que sur ce qui a <strong>déjà été saisi</strong>.
+    L'application ne contient aucun planning prévisionnel : une intervention
+    n'apparaît qu'une fois son relevé validé par l'intervenante.
+  </p>
+</div>
+
+<h2>L'onglet Mes familles</h2>
+
+<p>Une fiche par famille dont vous êtes référent, avec :</p>
+
+<ul>
+  <li>le <strong>nom</strong> et l'<strong>adresse</strong> de la famille ;</li>
+  <li>le total d'<strong>heures du mois en cours</strong> ;</li>
+  <li>la ou les <strong>intervenantes</strong> qui y travaillent ;</li>
+  <li>les <strong>cinq dernières interventions</strong>, avec date, horaires et durée.</li>
+</ul>
+
+<p>
+  Une famille peut avoir plusieurs référents, et un référent plusieurs familles.
+  C'est la direction qui décide des affectations.
+</p>
+
+<h2>Le compte de direction</h2>
+
+<p>
+  Un référent peut recevoir un <strong>accès complet</strong> : son onglet s'intitule
+  alors « Toutes les familles » et liste l'ensemble des clients de Caparel, qu'il en
+  soit référent ou non. C'est le réglage du compte de direction.
+</p>
+
+<div class="key">
+  <p>
+    Les droits sont relus à chaque affichage. Retirer un accès prend effet
+    immédiatement, sans attendre que la personne se reconnecte.
+  </p>
+</div>
+
+<!-- ============ PARTIE 3 ============ -->
+
+<h1 class="part-title page-break">Partie 3 — Pour la direction</h1>
 <p class="part-intro">
   Toute l'administration se fait dans Airtable. L'application ne lit et n'écrit que
   dans cette base — il n'y a pas d'interface d'administration séparée.
 </p>
+
+<h2>Les deux tables de comptes</h2>
+
+<table>
+  <thead>
+    <tr><th>Table</th><th>Qui s'y trouve</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Intervenants</td><td>Les personnes qui effectuent les interventions et saisissent leurs heures</td></tr>
+    <tr><td>Referents</td><td>Les personnes qui encadrent des familles, direction comprise</td></tr>
+  </tbody>
+</table>
+
+<div class="warn">
+  <p>
+    <strong>Une personne ne figure que dans une seule table.</strong> Si le même
+    email apparaît dans les deux, c'est la ligne de <strong>Referents</strong> qui
+    l'emporte à la connexion, et la personne perd l'accès à la saisie.
+  </p>
+</div>
 
 <h2>Créer un compte intervenante</h2>
 
 <p>Dans la table <strong>Intervenants</strong> :</p>
 
 <ol>
-  <li>Créer la ligne : <code>Nom et Prenom</code>, <code>Email</code>, <code>Actif</code> coché, <code>TauxHoraire</code></li>
+  <li>Créer la ligne : <code>Nom et Prenom</code>, <code>Email</code>,
+      <code>Actif</code> coché, <code>TauxHoraire</code></li>
   <li>Laisser <strong><code>MotDePasseHash</code> vide</strong> — il se remplira tout seul</li>
   <li>Relever le <code>Code activation</code>, généré automatiquement</li>
   <li>Transmettre à l'intervenante : l'adresse du site, son email, son code</li>
@@ -454,15 +610,30 @@
 </p>
 
 <p>
-  <strong>Décocher <code>Actif</code></strong> bloque la connexion immédiatement :
+  <strong>Décocher <code>Actif</code></strong> bloque la connexion immédiatement —
   c'est la manière de suspendre un accès sans supprimer l'historique.
+</p>
+
+<h2>Créer un compte référent</h2>
+
+<p>
+  Même procédure, dans la table <strong>Referents</strong> : nom, email,
+  <code>Actif</code> coché, <code>MotDePasseHash</code> vide, puis transmettre le
+  <code>Code activation</code>. Ni taux horaire ni photo — un référent n'intervient
+  pas.
+</p>
+
+<p>
+  Cocher <code>Acces complet</code> sur sa ligne lui donne la vue sur l'ensemble des
+  familles plutôt que sur son seul portefeuille.
 </p>
 
 <h2>Réinitialiser un mot de passe</h2>
 
 <p>
-  Vider la colonne <code>MotDePasseHash</code> de la ligne concernée. Son code
-  d'activation redevient valable et elle peut redéfinir son mot de passe.
+  Vider la colonne <code>MotDePasseHash</code> de la ligne concernée, dans l'une ou
+  l'autre table. Son code d'activation redevient valable et la personne peut
+  redéfinir son mot de passe.
 </p>
 
 <h2>Assigner des clients</h2>
@@ -474,6 +645,34 @@
 </p>
 
 <p>Un client dont <code>Actif</code> n'est pas coché n'apparaît nulle part.</p>
+
+<h2>Désigner un référent de famille</h2>
+
+<p>
+  Toujours dans <strong>Clients</strong>, la colonne <code>Referent famille</code>
+  désigne la ou les personnes de la table <strong>Referents</strong> responsables de
+  cette famille. Elles la retrouvent aussitôt dans leur onglet Mes familles.
+</p>
+
+<h2>Corriger un relevé</h2>
+
+<p>
+  Un relevé validé n'est plus modifiable depuis l'application : les corrections
+  passent par la table <strong>Releves</strong> dans Airtable. C'est voulu — les
+  heures servant de base à la paie ne doivent plus bouger une fois certifiées.
+</p>
+
+<p>
+  Chaque ligne porte un libellé lisible de la forme
+  <code>Intervenante — Client — 07/10/2026</code>, écrit à la création du relevé.
+</p>
+
+<div class="note">
+  <p>
+    Ce libellé ne se recalcule pas : si vous changez la date ou le client d'un
+    relevé, pensez à le corriger aussi.
+  </p>
+</div>
 
 <h2>Publier une fiche de paie</h2>
 
@@ -490,94 +689,6 @@
   intervenante. Cela permet de préparer tous les bulletins tranquillement, puis de
   les publier d'un coup. Le libellé de la ligne se remplit automatiquement.
 </p>
-
-<h2>Tableau de bord Direction</h2>
-
-<p>
-  Un compte de la table <strong>Referents</strong> voit, en tête de son accueil, un
-  bloc <strong>Direction</strong> qui regroupe :
-</p>
-
-<ul>
-  <li>les <strong>interventions du jour</strong>, toutes intervenantes confondues,
-      avec le client et les horaires ;</li>
-  <li>le <strong>nombre d'interventions de la semaine</strong> et le total d'heures ;</li>
-  <li>le <strong>chiffre d'affaires du mois</strong>, calculé avec le taux horaire
-      propre à chaque intervenante ;</li>
-  <li>le <strong>nombre d'intervenantes actives</strong>.</li>
-</ul>
-
-<p>
-  L'autorisation est relue à chaque affichage : retirer la ligne de la table
-  <strong>Referents</strong> coupe l'accès sans attendre une reconnexion.
-</p>
-
-<h2>Intervenantes et référents</h2>
-
-<p>
-  Les comptes vivent dans <strong>deux tables distinctes</strong>, et ce choix
-  détermine ce que la personne voit en se connectant :
-</p>
-
-<table>
-  <thead>
-    <tr><th>Table</th><th>Rôle</th><th>Onglets disponibles</th></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Intervenants</td>
-      <td>Effectue les interventions</td>
-      <td>Accueil, Relevé d'heure, Historique, Fiches de paie</td>
-    </tr>
-    <tr>
-      <td>Referents</td>
-      <td>Encadre des familles, n'intervient pas</td>
-      <td>Accueil (avec le bloc Direction), Mes familles</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>
-  Un référent n'a ni client assigné, ni relevé, ni fiche de paie : ces pages lui
-  sont inaccessibles, et il n'est pas compté dans les « intervenantes actives ».
-  Son compte se crée comme celui d'une intervenante (nom, email, <code>Actif</code>
-  coché, <code>MotDePasseHash</code> vide, puis transmettre le
-  <code>Code activation</code>), sans taux horaire ni photo.
-</p>
-
-<div class="note">
-  <p>
-    Une même personne ne doit figurer que dans <strong>une seule</strong> des deux
-    tables. Si son email apparaît dans les deux, c'est la ligne de
-    <strong>Referents</strong> qui l'emporte à la connexion.
-  </p>
-</div>
-
-<h2>Désigner un référent de famille</h2>
-
-<p>
-  Dans la table <strong>Clients</strong>, la colonne <code>Referent famille</code>
-  désigne la ou les personnes de <strong>Referents</strong> responsables d'une
-  famille. Chaque référent retrouve ses familles dans l'onglet
-  <strong>Mes familles</strong> : heures du mois, intervenantes qui y travaillent,
-  et cinq dernières interventions. Une famille peut avoir plusieurs référents, et
-  un référent plusieurs familles.
-</p>
-
-<p>
-  <strong>Voir toutes les familles.</strong> Cocher <code>Acces complet</code> sur
-  une ligne de la table <strong>Referents</strong> donne à cette personne la vue sur
-  l'ensemble des clients, qu'elle en soit référente ou non — c'est le réglage du
-  compte de direction. L'onglet s'intitule alors « Toutes les familles ».
-</p>
-
-<div class="note">
-  <p>
-    Cet onglet ne montre que ce qui a <strong>déjà eu lieu</strong>. L'application
-    ne contient aucun planning prévisionnel : les relevés sont saisis après
-    l'intervention.
-  </p>
-</div>
 
 <h2>Précautions</h2>
 
@@ -599,6 +710,14 @@
     colonne attend une empreinte chiffrée, pas un mot de passe. Y écrire du texte en
     clair empêche la connexion, en plus d'exposer le mot de passe dans l'historique
     des cellules d'Airtable.
+  </p>
+</div>
+
+<div class="warn">
+  <p>
+    <strong>L'application contient les adresses des familles.</strong> Elle est
+    accessible publiquement sur internet : les mots de passe des comptes de
+    direction méritent le même soin que ceux d'une messagerie professionnelle.
   </p>
 </div>
 
