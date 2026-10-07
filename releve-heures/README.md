@@ -55,6 +55,7 @@ leur propre table, avec les seuls champs nécessaires à la connexion :
 
 | Champ                | Type                                  |
 | --------------------- | -------------------------------------- |
+| `Recapitulatif`        | Texte sur une ligne (champ principal) — libellé `Intervenante — Client — JJ/MM/AAAA`, écrit par l'app à la création |
 | `Intervenant`          | Lien vers un autre enregistrement → `Intervenants` |
 | `Client`               | Lien vers un autre enregistrement → `Clients`      |
 | `Date`                 | Date                                   |

@@ -1,4 +1,5 @@
 import Airtable from "airtable";
+import { formatDateFr } from "@/lib/format";
 
 // Connexion Airtable initialisée à la demande (pas au chargement du module),
 // pour ne pas planter le build/le mode démo quand ces variables ne sont pas
@@ -208,8 +209,46 @@ export type NouveauReleve = {
   certifie: boolean;
 };
 
+/**
+ * Lit un champ texte d'un enregistrement désigné par son identifiant.
+ *
+ * On filtre sur `RECORD_ID()` plutôt que d'utiliser `find()`, qui résout un
+ * identifiant à l'échelle de la base entière et renverrait donc la ligne même
+ * si elle appartient à une autre table.
+ */
+async function lireChamp(table: string, id: string, champ: string) {
+  if (!/^rec[A-Za-z0-9]+$/.test(id)) return "";
+
+  const records = await base(table)
+    .select({
+      filterByFormula: `RECORD_ID() = "${id}"`,
+      fields: [champ],
+      maxRecords: 1,
+    })
+    .firstPage();
+
+  return (records[0]?.get(champ) as string) || "";
+}
+
 export async function creerReleve(releve: NouveauReleve) {
+  // Airtable affiche le champ principal partout où un relevé est référencé
+  // (liens, notifications, vues). On y recopie donc un libellé lisible
+  // « Intervenante — Client — Date », les identifiants seuls étant illisibles.
+  const [nomIntervenante, nomClient] = await Promise.all([
+    lireChamp(TABLES.intervenants, releve.intervenantId, "Nom et Prenom"),
+    lireChamp(TABLES.clients, releve.clientId, "Nom"),
+  ]);
+
+  const recapitulatif = [
+    nomIntervenante,
+    nomClient,
+    formatDateFr(releve.date),
+  ]
+    .filter(Boolean)
+    .join(" — ");
+
   const record = await base(TABLES.releves).create({
+    Recapitulatif: recapitulatif,
     Intervenant: [releve.intervenantId],
     Client: [releve.clientId],
     Date: releve.date,
