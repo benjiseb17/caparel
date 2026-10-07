@@ -125,7 +125,7 @@ de commande :
 1. Créer la ligne dans `Intervenants` (ou `Referents`) avec `Nom et Prenom`,
    `Email` et `Actif` coché. Laisser `MotDePasseHash` vide.
 2. Transmettre l'adresse du site à l'intervenante.
-3. Elle se rend sur `/activation` (bouton « Créer mon mot de passe » depuis la page
+3. Elle se rend sur `/activation` (bouton « Première connexion » depuis la page
    de connexion), saisit son email et choisit son mot de passe.
 
 L'app hashe le mot de passe côté serveur et l'écrit dans `MotDePasseHash`.
@@ -138,9 +138,10 @@ faut donc saisir dans Airtable exactement l'adresse communiquée par l'intervena
 passe existe, la route refuse toute nouvelle définition.
 
 **Réinitialiser un accès** : vider `MotDePasseHash` dans Airtable. L'intervenante
-peut alors repasser par « Créer mon mot de passe ».
+peut alors repasser par « Première connexion ».
 
-**Mot de passe oublié** : depuis la page de connexion, le lien « Oublié ? » dépose
+**Mot de passe oublié** : depuis la page de connexion, le lien « Mot de passe
+oublié ? » dépose
 une ligne dans `Reinitialisations`. L'app ne réinitialise jamais d'elle-même — laisser
 n'importe qui redéfinir un mot de passe sur simple connaissance d'une adresse
 ouvrirait tous les comptes en permanence. La direction vérifie qui demande, vide

@@ -66,7 +66,7 @@ export default function MotDePasseOubliePage() {
             </div>
             <p className="text-xs text-muted mt-4">
               Une fois votre accès réinitialisé, revenez sur la page de
-              connexion et choisissez « Créer mon mot de passe ».
+              connexion et choisissez « Première connexion ».
             </p>
           </>
         ) : (

@@ -74,20 +74,12 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <div className="flex items-baseline justify-between mb-1">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-ink"
-              >
-                Mot de passe
-              </label>
-              <Link
-                href="/mot-de-passe-oublie"
-                className="text-xs text-muted hover:text-navy underline underline-offset-2"
-              >
-                Oublié ?
-              </Link>
-            </div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-ink mb-1"
+            >
+              Mot de passe
+            </label>
             <input
               id="password"
               type="password"
@@ -112,6 +104,15 @@ export default function LoginPage() {
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
+
+          <p className="text-center">
+            <Link
+              href="/mot-de-passe-oublie"
+              className="text-sm text-muted hover:text-navy underline underline-offset-2"
+            >
+              Mot de passe oublié ?
+            </Link>
+          </p>
         </form>
 
         <div className="mt-8 pt-6 border-t border-line">
@@ -126,7 +127,7 @@ export default function LoginPage() {
             href="/activation"
             className="block w-full rounded-lg border border-teal-dark text-teal-dark text-center text-sm font-medium py-2.5 hover:bg-soft-2 transition-colors"
           >
-            Créer mon mot de passe
+            Première connexion
           </Link>
         </div>
       </div>

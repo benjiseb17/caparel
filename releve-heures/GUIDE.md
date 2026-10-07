@@ -22,7 +22,7 @@ La direction vous transmet **l'adresse du site**. Votre compte y est déjà cré
 avec l'adresse email que vous avez communiquée à Caparel.
 
 1. Ouvrez l'adresse du site
-2. En bas de la page, cliquez sur **« Créer mon mot de passe »**
+2. En bas de la page, cliquez sur **« Première connexion »**
 3. Saisissez cette adresse email
 4. Choisissez **votre** mot de passe — 8 caractères minimum — et confirmez-le
 5. Vous êtes connectée directement
@@ -38,10 +38,11 @@ vôtre, c'est qu'elle n'est pas celle que la direction a saisie — contactez-la
 
 Email et mot de passe, comme sur n'importe quel service.
 
-**Mot de passe oublié ?** Sur la page de connexion, cliquez sur « Oublié ? » à côté
-du champ Mot de passe, saisissez votre adresse email et envoyez la demande. La
+**Mot de passe oublié ?** Sur la page de connexion, cliquez sur « Mot de passe
+oublié ? », sous le bouton Se connecter, saisissez votre adresse email et envoyez
+la demande. La
 direction est prévenue : elle vous recontacte, réinitialise votre accès, et vous
-revenez créer un nouveau mot de passe avec le bouton **« Créer mon mot de passe »**.
+revenez créer un nouveau mot de passe avec le bouton **« Première connexion »**.
 
 Votre ancien mot de passe n'est récupérable par personne, pas même par Caparel : il
 n'est pas stocké, seule une empreinte à sens unique l'est.
@@ -144,10 +145,10 @@ pas les mêmes onglets à l'un et à l'autre :
 
 ## Se connecter
 
-Exactement comme une intervenante : « Créer mon mot de passe », l'adresse email
+Exactement comme une intervenante : « Première connexion », l'adresse email
 communiquée à Caparel, puis le mot de passe de votre choix. Les connexions
-suivantes se font avec email et mot de passe, et le lien « Oublié ? » sert aussi
-bien aux référents.
+suivantes se font avec email et mot de passe, et le lien « Mot de passe oublié ? »
+sert aussi bien aux référents.
 
 ## Le bloc Direction
 
@@ -215,7 +216,7 @@ Dans la table **Intervenants** :
 2. Laisser **`MotDePasseHash` vide** — il se remplira tout seul
 3. Transmettre à l'intervenante l'adresse du site
 
-Elle s'y rend, clique sur **« Créer mon mot de passe »**, saisit son adresse email
+Elle s'y rend, clique sur **« Première connexion »**, saisit son adresse email
 et choisit son mot de passe. Rien à lui communiquer d'autre.
 
 > **Ne cochez `Actif` qu'au moment où la personne va se connecter.** Tant que la
@@ -252,7 +253,7 @@ chacune :
    `Referents`
 3. Cocher `Traite` sur la demande
 
-La personne peut alors cliquer sur « Créer mon mot de passe » et en choisir un
+La personne peut alors cliquer sur « Première connexion » et en choisir un
 nouveau.
 
 > Une Automation Airtable sur la table **Reinitialisations** (« quand un
