@@ -37,6 +37,8 @@ export const TABLES = {
   fichesDePaie:
     process.env.AIRTABLE_TABLE_FICHES_PAIE || "tbljqZpHw1hvgrQPI", // Fiches de Paie
   leads: process.env.AIRTABLE_TABLE_LEADS || "tblcVywextjxuUGYK", // Leads
+  reinitialisations:
+    process.env.AIRTABLE_TABLE_REINITIALISATIONS || "tbl1tA2DDGikRaOra", // Reinitialisations
 };
 
 type AirtableAttachment = {
@@ -148,6 +150,45 @@ export async function activerCompteIntervenant(
  * de la base entière et renvoie donc la ligne même quand on interroge la
  * mauvaise table — de quoi prendre une intervenante pour une référente.
  */
+/**
+ * Enregistre une demande de réinitialisation de mot de passe.
+ *
+ * L'app ne réinitialise rien d'elle-même : laisser n'importe qui redéfinir un
+ * mot de passe sur simple connaissance d'une adresse email ouvrirait tous les
+ * comptes en permanence. La demande est donc déposée dans Airtable, et c'est la
+ * direction qui vide `MotDePasseHash` après avoir vérifié qui la formule.
+ *
+ * Renvoie `false` si l'adresse ne correspond à aucun compte actif — mais
+ * l'appelant doit répondre la même chose dans tous les cas, pour ne pas révéler
+ * quels comptes existent.
+ */
+export async function demanderReinitialisation(
+  email: string
+): Promise<boolean> {
+  const trouve = await trouverCompteParEmail(email);
+  if (!trouve) return false;
+
+  const compte = mapCompte(trouve.record, trouve.referent);
+  if (!compte.actif) return false;
+
+  const maintenant = new Date();
+  const horodatage = new Intl.DateTimeFormat("fr-FR", {
+    dateStyle: "short",
+    timeStyle: "short",
+    timeZone: "Europe/Paris",
+  }).format(maintenant);
+
+  await base(TABLES.reinitialisations).create({
+    Recapitulatif: `${compte.nomComplet} — ${horodatage}`,
+    Nom: compte.nomComplet,
+    Email: compte.email,
+    "Demande le": maintenant.toISOString(),
+    Traite: false,
+  });
+
+  return true;
+}
+
 export async function getIntervenantById(
   id: string
 ): Promise<Intervenant | null> {

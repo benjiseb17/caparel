@@ -267,6 +267,7 @@
     <li class="part">Partie 1 — Pour les intervenantes</li>
     <li>Se connecter la première fois</li>
     <li>Se connecter ensuite</li>
+    <li>Mot de passe oublié</li>
     <li>Accueil</li>
     <li>Saisir un relevé d'heures</li>
     <li>Historique</li>
@@ -282,7 +283,7 @@
     <li>Les deux tables de comptes</li>
     <li>Créer un compte intervenante</li>
     <li>Créer un compte référent</li>
-    <li>Réinitialiser un mot de passe</li>
+    <li>Traiter un mot de passe oublié</li>
     <li>Assigner des clients</li>
     <li>Désigner un référent de famille</li>
     <li>Corriger un relevé</li>
@@ -307,7 +308,7 @@
 
 <ol>
   <li>Ouvrez l'adresse du site</li>
-  <li>Sous le formulaire, cliquez sur <strong>« Première connexion ? »</strong></li>
+  <li>En bas de la page, cliquez sur <strong>« Créer mon mot de passe »</strong></li>
   <li>Saisissez cette adresse email</li>
   <li>Choisissez <strong>votre</strong> mot de passe — 8 caractères minimum — et confirmez-le</li>
   <li>Vous êtes connectée directement</li>
@@ -330,11 +331,25 @@
 
 <p>Email et mot de passe, comme sur n'importe quel service.</p>
 
-<p>
-  <strong>Mot de passe oublié ?</strong> Contactez la direction. Elle réinitialise
-  votre accès et vous repassez par « Première connexion ? » pour en choisir un
-  nouveau. Votre ancien mot de passe n'est récupérable par personne.
-</p>
+<h2>Mot de passe oublié</h2>
+
+<ol>
+  <li>Sur la page de connexion, cliquez sur <strong>« Oublié ? »</strong>, à côté du
+      champ Mot de passe</li>
+  <li>Saisissez votre adresse email et envoyez la demande</li>
+  <li>La direction est prévenue : elle vous recontacte et réinitialise votre accès</li>
+  <li>Revenez sur la page de connexion et cliquez sur
+      <strong>« Créer mon mot de passe »</strong></li>
+</ol>
+
+<div class="key">
+  <p>
+    <strong>Votre ancien mot de passe n'est récupérable par personne</strong>, pas
+    même par Caparel. Il n'est pas conservé : seule une empreinte à sens unique
+    l'est, et on ne peut pas remonter d'une empreinte au mot de passe. La seule
+    issue est d'en choisir un nouveau.
+  </p>
+</div>
 
 <h2>Accueil</h2>
 
@@ -495,9 +510,10 @@
 <h2>Se connecter</h2>
 
 <p>
-  Exactement comme une intervenante : « Première connexion ? », l'adresse email
+  Exactement comme une intervenante : « Créer mon mot de passe », l'adresse email
   communiquée à Caparel, puis le mot de passe de votre choix. Les connexions
-  suivantes se font avec email et mot de passe.
+  suivantes se font avec email et mot de passe, et le lien « Oublié ? » sert aussi
+  bien aux référents.
 </p>
 
 <h2>Le bloc Direction</h2>
@@ -603,9 +619,18 @@
 </ol>
 
 <p>
-  Elle s'y rend, clique sur « Première connexion ? », saisit son adresse email et
-  choisit son mot de passe. Rien à lui communiquer d'autre.
+  Elle s'y rend, clique sur <strong>« Créer mon mot de passe »</strong>, saisit son
+  adresse email et choisit son mot de passe. Rien à lui communiquer d'autre.
 </p>
+
+<div class="key">
+  <p>
+    <strong>Ne cochez <code>Actif</code> qu'au moment où la personne va se
+    connecter.</strong> Tant que la case est décochée, personne ne peut définir de
+    mot de passe sur ce compte. C'est la façon la plus simple de réduire la fenêtre
+    pendant laquelle quelqu'un d'autre pourrait s'en emparer.
+  </p>
+</div>
 
 <div class="warn">
   <p>
@@ -638,13 +663,41 @@
   familles plutôt que sur son seul portefeuille.
 </p>
 
-<h2>Réinitialiser un mot de passe</h2>
+<h2>Traiter un mot de passe oublié</h2>
 
 <p>
-  Vider la colonne <code>MotDePasseHash</code> de la ligne concernée, dans l'une ou
-  l'autre table. La personne peut alors repasser par « Première connexion ? » et
-  redéfinir son mot de passe.
+  Les demandes envoyées depuis la page de connexion arrivent dans la table
+  <strong>Reinitialisations</strong> : nom, email, date. Pour chacune :
 </p>
+
+<ol>
+  <li><strong>Vérifier qui demande</strong> — un appel suffit</li>
+  <li>Vider la colonne <code>MotDePasseHash</code> de la ligne concernée, dans
+      <strong>Intervenants</strong> ou <strong>Referents</strong></li>
+  <li>Cocher <code>Traite</code> sur la demande</li>
+</ol>
+
+<p>
+  La personne peut alors cliquer sur « Créer mon mot de passe » et en choisir un
+  nouveau.
+</p>
+
+<div class="warn">
+  <p>
+    <strong>L'application ne réinitialise jamais un mot de passe toute seule.</strong>
+    Si elle le faisait, n'importe qui connaissant l'adresse email d'une intervenante
+    pourrait s'emparer de son compte à tout moment. C'est votre vérification qui
+    tient lieu de preuve d'identité.
+  </p>
+</div>
+
+<div class="note">
+  <p>
+    Une Automation Airtable sur la table <strong>Reinitialisations</strong> (« quand
+    un enregistrement est créé → envoyer un email ») vous préviendra sans avoir à
+    surveiller la table.
+  </p>
+</div>
 
 <h2>Assigner des clients</h2>
 
