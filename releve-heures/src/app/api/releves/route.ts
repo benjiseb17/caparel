@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { creerReleve, getRelevesByIntervenant } from "@/lib/airtable";
+import {
+  creerReleve,
+  getIntervenantById,
+  getRelevesByIntervenant,
+} from "@/lib/airtable";
 import { isDemoMode, addDemoReleve, getDemoReleves } from "@/lib/demo";
 import { calculerHeures } from "@/lib/heures";
 
@@ -29,6 +33,16 @@ export async function POST(request: Request) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
+  }
+
+  // Un référent ne figure pas dans la table Intervenants : un relevé à son nom
+  // serait refusé par Airtable. On le dit clairement plutôt que de laisser
+  // remonter une erreur 500.
+  if (!isDemoMode() && (await getIntervenantById(session.user.id))?.referent) {
+    return NextResponse.json(
+      { error: "Les référents ne saisissent pas de relevés d'heures." },
+      { status: 403 }
+    );
   }
 
   const body = await request.json();

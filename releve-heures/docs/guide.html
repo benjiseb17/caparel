@@ -260,6 +260,9 @@
     <li>Réinitialiser un mot de passe</li>
     <li>Assigner des clients</li>
     <li>Publier une fiche de paie</li>
+    <li>Tableau de bord Direction</li>
+    <li>Intervenantes et référents</li>
+    <li>Désigner un référent de famille</li>
     <li>Précautions</li>
   </ul>
 </div>
@@ -487,6 +490,87 @@
   intervenante. Cela permet de préparer tous les bulletins tranquillement, puis de
   les publier d'un coup. Le libellé de la ligne se remplit automatiquement.
 </p>
+
+<h2>Tableau de bord Direction</h2>
+
+<p>
+  Un compte de la table <strong>Referents</strong> voit, en tête de son accueil, un
+  bloc <strong>Direction</strong> qui regroupe :
+</p>
+
+<ul>
+  <li>les <strong>interventions du jour</strong>, toutes intervenantes confondues,
+      avec le client et les horaires ;</li>
+  <li>le <strong>nombre d'interventions de la semaine</strong> et le total d'heures ;</li>
+  <li>le <strong>chiffre d'affaires du mois</strong>, calculé avec le taux horaire
+      propre à chaque intervenante ;</li>
+  <li>le <strong>nombre d'intervenantes actives</strong>.</li>
+</ul>
+
+<p>
+  L'autorisation est relue à chaque affichage : retirer la ligne de la table
+  <strong>Referents</strong> coupe l'accès sans attendre une reconnexion.
+</p>
+
+<h2>Intervenantes et référents</h2>
+
+<p>
+  Les comptes vivent dans <strong>deux tables distinctes</strong>, et ce choix
+  détermine ce que la personne voit en se connectant :
+</p>
+
+<table>
+  <thead>
+    <tr><th>Table</th><th>Rôle</th><th>Onglets disponibles</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Intervenants</td>
+      <td>Effectue les interventions</td>
+      <td>Accueil, Relevé d'heure, Historique, Fiches de paie</td>
+    </tr>
+    <tr>
+      <td>Referents</td>
+      <td>Encadre des familles, n'intervient pas</td>
+      <td>Accueil (avec le bloc Direction), Mes familles</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  Un référent n'a ni client assigné, ni relevé, ni fiche de paie : ces pages lui
+  sont inaccessibles, et il n'est pas compté dans les « intervenantes actives ».
+  Son compte se crée comme celui d'une intervenante (nom, email, <code>Actif</code>
+  coché, <code>MotDePasseHash</code> vide, puis transmettre le
+  <code>Code activation</code>), sans taux horaire ni photo.
+</p>
+
+<div class="note">
+  <p>
+    Une même personne ne doit figurer que dans <strong>une seule</strong> des deux
+    tables. Si son email apparaît dans les deux, c'est la ligne de
+    <strong>Referents</strong> qui l'emporte à la connexion.
+  </p>
+</div>
+
+<h2>Désigner un référent de famille</h2>
+
+<p>
+  Dans la table <strong>Clients</strong>, la colonne <code>Referent famille</code>
+  désigne la ou les personnes de <strong>Referents</strong> responsables d'une
+  famille. Chaque référent retrouve ses familles dans l'onglet
+  <strong>Mes familles</strong> : heures du mois, intervenantes qui y travaillent,
+  et cinq dernières interventions. Une famille peut avoir plusieurs référents, et
+  un référent plusieurs familles.
+</p>
+
+<div class="note">
+  <p>
+    Cet onglet ne montre que ce qui a <strong>déjà eu lieu</strong>. L'application
+    ne contient aucun planning prévisionnel : les relevés sont saisis après
+    l'intervention.
+  </p>
+</div>
 
 <h2>Précautions</h2>
 

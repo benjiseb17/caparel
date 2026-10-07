@@ -28,7 +28,9 @@ function base(table: string) {
 // Les noms correspondants sont indiqués en commentaire.
 export const TABLES = {
   intervenants:
-    process.env.AIRTABLE_TABLE_INTERVENANTS || "tblqD8nNvzcQJODxj", // Equipe
+    process.env.AIRTABLE_TABLE_INTERVENANTS || "tblqD8nNvzcQJODxj", // Intervenants
+  referents:
+    process.env.AIRTABLE_TABLE_REFERENTS || "tblbwEZIuN0A29rXs", // Referents
   clients: process.env.AIRTABLE_TABLE_CLIENTS || "tblq2AHLMnFw2cmfQ", // Clients
   releves: process.env.AIRTABLE_TABLE_RELEVES || "tblehEGJM3vZP9oOb", // Releves
   fichesDePaie:
@@ -41,6 +43,11 @@ type AirtableAttachment = {
   filename: string;
 };
 
+/**
+ * Un compte de connexion. Les intervenantes et les référents vivent dans deux
+ * tables distinctes : `referent` dit de laquelle vient le compte, et commande
+ * l'accès au bloc Direction comme à la page Mes familles.
+ */
 export type Intervenant = {
   id: string;
   nomComplet: string;
@@ -48,12 +55,15 @@ export type Intervenant = {
   motDePasseHash: string;
   codeActivation: string;
   actif: boolean;
-  admin: boolean;
+  referent: boolean;
   photoUrl: string;
   tauxHoraire: number;
 };
 
-function mapIntervenant(record: Airtable.Record<Airtable.FieldSet>): Intervenant {
+function mapCompte(
+  record: Airtable.Record<Airtable.FieldSet>,
+  referent: boolean
+): Intervenant {
   const photos = (record.get("Photo") as AirtableAttachment[] | undefined) || [];
   return {
     id: record.id,
@@ -62,28 +72,44 @@ function mapIntervenant(record: Airtable.Record<Airtable.FieldSet>): Intervenant
     motDePasseHash: (record.get("MotDePasseHash") as string) || "",
     codeActivation: (record.get("Code activation") as string) || "",
     actif: Boolean(record.get("Actif")),
-    admin: Boolean(record.get("Admin")),
+    referent,
     photoUrl: photos[0]?.url || "",
     tauxHoraire: (record.get("TauxHoraire") as number) || 0,
   };
 }
 
+// Les comptes vivent dans deux tables : Referents est consultée en premier,
+// de sorte qu'un référent reste reconnu comme tel même si une ancienne ligne
+// à son nom traîne encore dans Intervenants.
+const SOURCES_COMPTE = [
+  { table: TABLES.referents, referent: true },
+  { table: TABLES.intervenants, referent: false },
+] as const;
+
+async function trouverCompteParEmail(email: string) {
+  const formule = `LOWER({Email}) = LOWER("${email.replace(/"/g, '\\"')}")`;
+
+  for (const source of SOURCES_COMPTE) {
+    const records = await base(source.table)
+      .select({ filterByFormula: formule, maxRecords: 1 })
+      .firstPage();
+
+    if (records.length > 0) return { ...source, record: records[0] };
+  }
+
+  return null;
+}
+
 export async function getIntervenantByEmail(
   email: string
 ): Promise<Intervenant | null> {
-  const records = await base(TABLES.intervenants)
-    .select({
-      filterByFormula: `LOWER({Email}) = LOWER("${email.replace(/"/g, '\\"')}")`,
-      maxRecords: 1,
-    })
-    .firstPage();
-
-  if (records.length === 0) return null;
-  return mapIntervenant(records[0]);
+  const trouve = await trouverCompteParEmail(email);
+  if (!trouve) return null;
+  return mapCompte(trouve.record, trouve.referent);
 }
 
 /**
- * Définit le mot de passe d'un intervenant à partir de son code d'activation.
+ * Définit le mot de passe d'un compte à partir de son code d'activation.
  *
  * Le code est une formule Airtable, donc impossible à effacer depuis l'app :
  * l'usage unique repose sur l'absence de mot de passe. Dès qu'un mot de passe
@@ -95,31 +121,49 @@ export async function activerCompteIntervenant(
   code: string,
   motDePasseHash: string
 ): Promise<boolean> {
-  const intervenant = await getIntervenantByEmail(email);
+  const trouve = await trouverCompteParEmail(email);
+  if (!trouve) return false;
 
-  if (!intervenant || !intervenant.actif) return false;
-  if (intervenant.motDePasseHash) return false;
-  if (!intervenant.codeActivation) return false;
+  const compte = mapCompte(trouve.record, trouve.referent);
+
+  if (!compte.actif) return false;
+  if (compte.motDePasseHash) return false;
+  if (!compte.codeActivation) return false;
 
   const normaliser = (valeur: string) => valeur.trim().toUpperCase();
-  if (normaliser(intervenant.codeActivation) !== normaliser(code)) return false;
+  if (normaliser(compte.codeActivation) !== normaliser(code)) return false;
 
-  await base(TABLES.intervenants).update(intervenant.id, {
+  await base(trouve.table).update(compte.id, {
     MotDePasseHash: motDePasseHash,
   });
 
   return true;
 }
 
+/**
+ * Retrouve un compte par son identifiant, dans Referents puis Intervenants.
+ *
+ * On filtre sur `RECORD_ID()` plutôt que d'utiliser `find()` : l'endpoint
+ * « récupérer un enregistrement » d'Airtable résout un identifiant à l'échelle
+ * de la base entière et renvoie donc la ligne même quand on interroge la
+ * mauvaise table — de quoi prendre une intervenante pour une référente.
+ */
 export async function getIntervenantById(
   id: string
 ): Promise<Intervenant | null> {
-  try {
-    const record = await base(TABLES.intervenants).find(id);
-    return mapIntervenant(record);
-  } catch {
-    return null;
+  // Un identifiant Airtable est alphanumérique : on le valide avant de
+  // l'injecter dans la formule.
+  if (!/^rec[A-Za-z0-9]+$/.test(id)) return null;
+
+  for (const source of SOURCES_COMPTE) {
+    const records = await base(source.table)
+      .select({ filterByFormula: `RECORD_ID() = "${id}"`, maxRecords: 1 })
+      .firstPage();
+
+    if (records.length > 0) return mapCompte(records[0], source.referent);
   }
+
+  return null;
 }
 
 export type Client = {
@@ -298,7 +342,9 @@ export async function getFamillesDuReferent(
   );
 
   const miennes = clientRecords.filter((c) =>
-    ((c.get("Referent") as string[] | undefined) || []).includes(referentId)
+    (
+      (c.get("Referent famille") as string[] | undefined) || []
+    ).includes(referentId)
   );
 
   return miennes.map((client) => {
@@ -458,7 +504,7 @@ export async function getStatsAdmin(maintenant = new Date()): Promise<StatsAdmin
     // Les référents partagent la table Equipe avec les intervenantes : sans ce
     // filtre, ils gonfleraient le décompte sans intervenir chez personne.
     intervenantesActives: intervenantRecords.filter(
-      (i) => Boolean(i.get("Actif")) && i.get("Role") !== "Referent"
+      (i) => Boolean(i.get("Actif"))
     ).length,
   };
 }

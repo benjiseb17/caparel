@@ -25,6 +25,13 @@ export default async function SaisiePage() {
         getClientsForIntervenant(session.user.id),
       ]);
 
+  // Les référents n'effectuent pas d'intervention : ils n'ont pas de client
+  // assigné et leur fiche ne vit pas dans la table Intervenants, donc un relevé
+  // à leur nom serait refusé par Airtable.
+  if (profil?.referent) {
+    redirect("/");
+  }
+
   return (
     <div className="min-h-screen bg-soft flex flex-col overflow-x-hidden">
       <AppHeader active="saisie" />

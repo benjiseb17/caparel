@@ -5,27 +5,31 @@ import LogoutButton from "@/components/LogoutButton";
 
 type Onglet = "accueil" | "saisie" | "historique" | "fiches" | "familles";
 
-const LIENS: { href: string; label: string; key: Onglet }[] = [
-  { href: "/", label: "Accueil", key: "accueil" },
+type Lien = { href: string; label: string; key: Onglet };
+
+const ACCUEIL: Lien = { href: "/", label: "Accueil", key: "accueil" };
+
+// Deux parcours distincts : une intervenante saisit ses heures et consulte sa
+// paie ; un référent suit les familles dont il a la charge et n'effectue pas
+// d'intervention. Les onglets de l'autre parcours ne lui serviraient à rien.
+const LIENS_INTERVENANTE: Lien[] = [
+  ACCUEIL,
   { href: "/saisie", label: "Relevé d'heure", key: "saisie" },
   { href: "/historique", label: "Historique", key: "historique" },
   { href: "/fiches-de-paie", label: "Fiches de paie", key: "fiches" },
 ];
 
-const LIEN_FAMILLES = {
-  href: "/familles",
-  label: "Mes familles",
-  key: "familles" as Onglet,
-};
+const LIENS_REFERENT: Lien[] = [
+  ACCUEIL,
+  { href: "/familles", label: "Mes familles", key: "familles" },
+];
 
 export default async function AppHeader({ active }: { active: Onglet }) {
-  // Le jeton de session sert uniquement à décider de l'affichage de l'onglet,
-  // ce qui évite un appel Airtable sur chaque page. L'accès à /familles est,
-  // lui, vérifié contre Airtable : promouvoir quelqu'un demande une
-  // reconnexion pour voir l'onglet, mais retirer le droit coupe l'accès
-  // immédiatement.
+  // Le jeton de session sert uniquement à décider des onglets affichés, ce qui
+  // évite un appel Airtable sur chaque page. Les accès eux-mêmes sont vérifiés
+  // contre Airtable, page par page.
   const session = await auth();
-  const liens = session?.user?.admin ? [...LIENS, LIEN_FAMILLES] : LIENS;
+  const liens = session?.user?.referent ? LIENS_REFERENT : LIENS_INTERVENANTE;
 
   return (
     <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-8 py-3 sm:py-4 gap-2 sm:gap-3 border-b border-line bg-soft">

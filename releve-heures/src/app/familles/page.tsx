@@ -18,12 +18,13 @@ export default async function FamillesPage() {
   }
 
   // Autorisation relue depuis Airtable, comme pour le bloc Direction :
-  // décocher Admin coupe l'accès sans attendre une reconnexion.
+  // retirer le compte de la table Referents coupe l'accès sans attendre une
+  // reconnexion.
   const profil = isDemoMode()
     ? DEMO_INTERVENANT
     : await getIntervenantById(session.user.id);
 
-  if (!profil?.admin) {
+  if (!profil?.referent) {
     redirect("/");
   }
 

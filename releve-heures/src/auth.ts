@@ -41,7 +41,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: intervenant.nomComplet,
           email: intervenant.email,
           nomComplet: intervenant.nomComplet,
-          admin: intervenant.admin,
+          referent: intervenant.referent,
         };
       },
     }),
@@ -51,7 +51,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.intervenantId = user.id;
         token.nomComplet = user.nomComplet;
-        token.admin = user.admin;
+        token.referent = user.referent;
       }
       return token;
     },
@@ -59,7 +59,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.intervenantId as string;
         session.user.nomComplet = token.nomComplet as string | undefined;
-        session.user.admin = Boolean(token.admin);
+        session.user.referent = Boolean(token.referent);
       }
       return session;
     },

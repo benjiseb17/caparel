@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { getRelevesByIntervenant } from "@/lib/airtable";
+import { getIntervenantById, getRelevesByIntervenant } from "@/lib/airtable";
 import { isDemoMode, getDemoReleves } from "@/lib/demo";
 import AppHeader from "@/components/AppHeader";
 import HistoriqueReleves from "@/components/HistoriqueReleves";
@@ -10,6 +10,12 @@ export default async function HistoriquePage() {
 
   if (!session?.user?.id) {
     redirect("/login");
+  }
+
+  // Les référents n'effectuent pas d'intervention : cette page ne les concerne
+  // pas, et l'autorisation est relue depuis Airtable à chaque affichage.
+  if (!isDemoMode() && (await getIntervenantById(session.user.id))?.referent) {
+    redirect("/");
   }
 
   const releves = isDemoMode()

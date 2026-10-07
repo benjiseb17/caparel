@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { getFichesDePaieByIntervenant } from "@/lib/airtable";
+import {
+  getIntervenantById,
+  getFichesDePaieByIntervenant,
+} from "@/lib/airtable";
 import { isDemoMode, getDemoFichesDePaie } from "@/lib/demo";
 import { formatMoisFr } from "@/lib/format";
 import AppHeader from "@/components/AppHeader";
@@ -10,6 +13,12 @@ export default async function FichesDePaiePage() {
 
   if (!session?.user?.id) {
     redirect("/login");
+  }
+
+  // Les référents n'effectuent pas d'intervention : cette page ne les concerne
+  // pas, et l'autorisation est relue depuis Airtable à chaque affichage.
+  if (!isDemoMode() && (await getIntervenantById(session.user.id))?.referent) {
+    redirect("/");
   }
 
   const fiches = isDemoMode()

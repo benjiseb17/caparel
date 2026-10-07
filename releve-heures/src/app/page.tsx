@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import AppHeader from "@/components/AppHeader";
 import ClientsAssignes from "@/components/ClientsAssignes";
 import BlocDirection from "@/components/BlocDirection";
+import type { Client } from "@/lib/airtable";
 import {
   getIntervenantById,
   getClientsForIntervenant,
@@ -78,8 +79,15 @@ export default async function AccueilPage({
 
   const tauxHoraire = profil?.tauxHoraire || 0;
 
-  let clients, statsMois;
-  if (isDemoMode()) {
+  // Un référent n'intervient pas : il n'a ni clients assignés ni heures à
+  // récapituler. On évite les appels inutiles et on masque le bloc.
+  const estReferent = Boolean(profil?.referent);
+
+  let clients: Client[], statsMois;
+  if (estReferent) {
+    clients = [];
+    statsMois = { totalHeures: 0, totalCA: 0 };
+  } else if (isDemoMode()) {
     clients = getDemoClientsForIntervenant();
     statsMois = await getDemoStatsMensuelles(tauxHoraire, refDate);
   } else {
@@ -92,10 +100,10 @@ export default async function AccueilPage({
   }
 
   // Les chiffres de direction ne sont chargés que pour les comptes autorisés,
-  // et l'autorisation vient d'Airtable : retirer la case Admin coupe l'accès
-  // sans attendre que la personne se reconnecte.
+  // et l'autorisation vient d'Airtable : sortir le compte de la table
+  // Referents coupe l'accès sans attendre que la personne se reconnecte.
   const maintenant = new Date();
-  const statsDirection = profil?.admin ? await getStatsAdmin(maintenant) : null;
+  const statsDirection = estReferent ? await getStatsAdmin(maintenant) : null;
 
   const nomComplet = profil?.nomComplet || session.user.nomComplet || "";
   const initiales = initialesDe(nomComplet);
@@ -143,6 +151,7 @@ export default async function AccueilPage({
             <BlocDirection stats={statsDirection} jour={maintenant} />
           )}
 
+          {!estReferent && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
             <div>
               <h2 className="text-sm font-medium text-muted mb-2">
@@ -230,6 +239,7 @@ export default async function AccueilPage({
               </div>
             </div>
           </div>
+          )}
 
         </div>
       </main>

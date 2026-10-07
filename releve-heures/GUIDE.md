@@ -118,10 +118,9 @@ que dans cette base — il n'y a pas d'interface d'administration séparée.
 
 ## Créer un compte intervenante
 
-Dans la table **Equipe** :
+Dans la table **Intervenants** :
 
-1. Créer la ligne : `Nom et Prenom`, `Email`, `Actif` coché, `TauxHoraire`,
-   et `Role` = **Intervenante**
+1. Créer la ligne : `Nom et Prenom`, `Email`, `Actif` coché, `TauxHoraire`
 2. Laisser **`MotDePasseHash` vide** — il se remplira tout seul
 3. Relever le `Code activation`, généré automatiquement
 4. Transmettre à l'intervenante : l'adresse du site, son email, son code
@@ -159,8 +158,8 @@ coup. Le libellé de la ligne se remplit automatiquement.
 
 ## Tableau de bord Direction
 
-Cocher la case `Admin` sur une ligne de la table **Equipe** ajoute un bloc
-**Direction** en tête de l'accueil de cette personne, qui regroupe :
+Un compte de la table **Referents** voit, en tête de son accueil, un bloc
+**Direction** qui regroupe :
 
 - les **interventions du jour**, toutes intervenantes confondues, avec le client
   et les horaires ;
@@ -169,31 +168,38 @@ Cocher la case `Admin` sur une ligne de la table **Equipe** ajoute un bloc
   chaque intervenante ;
 - le **nombre d'intervenantes actives**.
 
-Le bloc apparaît dès le prochain affichage de l'accueil ; décocher `Admin` le
-retire tout aussi vite. Le reste de l'accueil (clients, récapitulatif du mois)
-reste visible, une même personne pouvant être à la fois dirigeante et
-intervenante.
+L'autorisation est relue à chaque affichage : retirer la ligne de la table
+**Referents** coupe l'accès sans attendre une reconnexion.
 
-## Intervenantes et référents
+## Intervenantes et référents : deux tables, deux parcours
 
-La table **Equipe** réunit tous les comptes de connexion, qu'il s'agisse d'une
-intervenante ou d'un référent. La colonne `Role` les distingue :
+Les comptes vivent dans **deux tables distinctes**, et ce choix détermine ce que
+la personne voit en se connectant :
 
-- **Intervenante** — effectue les interventions et saisit ses heures.
-- **Referent** — encadre des familles, ne figure pas dans le décompte
-  « intervenantes actives » du bloc Direction.
+| Table              | Rôle                                   | Onglets disponibles                                       |
+| ------------------ | -------------------------------------- | --------------------------------------------------------- |
+| **Intervenants**   | Effectue les interventions             | Accueil, Relevé d'heure, Historique, Fiches de paie        |
+| **Referents**      | Encadre des familles, n'intervient pas | Accueil (avec le bloc Direction), Mes familles             |
 
-> Si tu oublies de mettre `Role` = **Intervenante** sur une nouvelle recrue, elle
-> ne sera pas comptée dans les intervenantes actives, sans message d'erreur.
+Un référent n'a ni client assigné, ni relevé, ni fiche de paie : ces pages lui
+sont inaccessibles, et il n'est pas compté dans les « intervenantes actives ».
+
+> Une même personne ne doit figurer que dans **une seule** des deux tables. Si
+> son email apparaît dans les deux, c'est la ligne de **Referents** qui l'emporte
+> à la connexion.
+
+Un compte référent se crée exactement comme un compte intervenante (`Nom et
+Prenom`, `Email`, `Actif` coché, `MotDePasseHash` vide, puis transmettre le
+`Code activation`), à ceci près qu'il n'y a ni `TauxHoraire` ni photo.
 
 ## Désigner un référent de famille
 
-Dans la table **Clients**, la colonne `Referent` désigne l'admin responsable d'une
-famille. Chaque référent retrouve ses familles dans l'onglet **Mes familles** :
-heures du mois, intervenantes qui y travaillent, et cinq dernières interventions.
+Dans la table **Clients**, la colonne `Referent famille` désigne la ou les
+personnes de **Referents** responsables d'une famille. Chaque référent retrouve
+ses familles dans l'onglet **Mes familles** : heures du mois, intervenantes qui y
+travaillent, et cinq dernières interventions.
 
 Une famille peut avoir plusieurs référents, et un référent plusieurs familles.
-L'onglet n'apparaît que pour les comptes dont la case `Admin` est cochée.
 
 > Cet onglet ne montre que ce qui a **déjà eu lieu**. L'application ne contient
 > aucun planning prévisionnel : les relevés sont saisis après l'intervention.
