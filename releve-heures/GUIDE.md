@@ -66,7 +66,7 @@ Onglet **Relevé d'heure**.
 | Champ | Détail |
 |---|---|
 | **Client** | Uniquement vos clients assignés |
-| **Date** | Le jour même par défaut, modifiable |
+| **Date** | Le jour même par défaut, modifiable — mais **pas de date future** : un relevé se saisit après l'intervention |
 | **Heure d'arrivée** | Heure et minutes, séparément |
 | **Heure de départ** | Idem |
 | **Heures réalisées** | Calculé automatiquement, affiché en direct |

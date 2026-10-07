@@ -6,7 +6,7 @@ import {
   getRelevesByIntervenant,
 } from "@/lib/airtable";
 import { isDemoMode, addDemoReleve, getDemoReleves } from "@/lib/demo";
-import { calculerHeures } from "@/lib/heures";
+import { calculerHeures, dateSaisissable } from "@/lib/heures";
 
 export async function GET() {
   const session = await auth();
@@ -59,6 +59,15 @@ export async function POST(request: Request) {
   if (!clientId || !date || !heureArrivee || !heureDepart) {
     return NextResponse.json(
       { error: "Champs requis manquants" },
+      { status: 400 }
+    );
+  }
+
+  // Une intervention se saisit après coup : une date future signalerait une
+  // erreur de saisie, ou une tentative de déclarer des heures non effectuées.
+  if (!dateSaisissable(date)) {
+    return NextResponse.json(
+      { error: "La date doit être celle du jour ou une date passée." },
       { status: 400 }
     );
   }

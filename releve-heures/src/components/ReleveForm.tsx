@@ -25,7 +25,10 @@ export default function ReleveForm({
   clients: Client[];
 }) {
   const [clientId, setClientId] = useState("");
-  const [date, setDate] = useState(todayIso());
+  // Figé au premier rendu : la date du jour sert à la fois de valeur par défaut
+  // et de borne supérieure, une intervention ne pouvant être saisie à l'avance.
+  const [aujourdhui] = useState(todayIso);
+  const [date, setDate] = useState(aujourdhui);
   const [heureArrivee, setHeureArrivee] = useState("");
   const [heureDepart, setHeureDepart] = useState("");
   const [commentaire, setCommentaire] = useState("");
@@ -142,6 +145,7 @@ export default function ReleveForm({
               id="date"
               type="date"
               required
+              max={aujourdhui}
               value={date}
               onChange={(e) => setDate(e.target.value)}
               className="block h-[19px] w-full min-w-0 border-0 bg-transparent p-0 text-sm leading-[19px] focus:outline-none"
