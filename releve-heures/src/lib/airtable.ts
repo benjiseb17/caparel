@@ -28,7 +28,7 @@ function base(table: string) {
 // Les noms correspondants sont indiqués en commentaire.
 export const TABLES = {
   intervenants:
-    process.env.AIRTABLE_TABLE_INTERVENANTS || "tblqD8nNvzcQJODxj", // Intervenants
+    process.env.AIRTABLE_TABLE_INTERVENANTS || "tblqD8nNvzcQJODxj", // Equipe
   clients: process.env.AIRTABLE_TABLE_CLIENTS || "tblq2AHLMnFw2cmfQ", // Clients
   releves: process.env.AIRTABLE_TABLE_RELEVES || "tblehEGJM3vZP9oOb", // Releves
   fichesDePaie:
@@ -455,8 +455,10 @@ export async function getStatsAdmin(maintenant = new Date()): Promise<StatsAdmin
     nombreSemaine,
     heuresSemaine: Math.round(heuresSemaine * 100) / 100,
     caMois: Math.round(caMois * 100) / 100,
-    intervenantesActives: intervenantRecords.filter((i) =>
-      Boolean(i.get("Actif"))
+    // Les référents partagent la table Equipe avec les intervenantes : sans ce
+    // filtre, ils gonfleraient le décompte sans intervenir chez personne.
+    intervenantesActives: intervenantRecords.filter(
+      (i) => Boolean(i.get("Actif")) && i.get("Role") !== "Referent"
     ).length,
   };
 }

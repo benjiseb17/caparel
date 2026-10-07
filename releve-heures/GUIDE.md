@@ -118,9 +118,10 @@ que dans cette base — il n'y a pas d'interface d'administration séparée.
 
 ## Créer un compte intervenante
 
-Dans la table **Intervenants** :
+Dans la table **Equipe** :
 
-1. Créer la ligne : `Nom et Prenom`, `Email`, `Actif` coché, `TauxHoraire`
+1. Créer la ligne : `Nom et Prenom`, `Email`, `Actif` coché, `TauxHoraire`,
+   et `Role` = **Intervenante**
 2. Laisser **`MotDePasseHash` vide** — il se remplira tout seul
 3. Relever le `Code activation`, généré automatiquement
 4. Transmettre à l'intervenante : l'adresse du site, son email, son code
@@ -158,7 +159,7 @@ coup. Le libellé de la ligne se remplit automatiquement.
 
 ## Tableau de bord Direction
 
-Cocher la case `Admin` sur une ligne de la table **Intervenants** ajoute un bloc
+Cocher la case `Admin` sur une ligne de la table **Equipe** ajoute un bloc
 **Direction** en tête de l'accueil de cette personne, qui regroupe :
 
 - les **interventions du jour**, toutes intervenantes confondues, avec le client
@@ -172,6 +173,18 @@ Le bloc apparaît dès le prochain affichage de l'accueil ; décocher `Admin` le
 retire tout aussi vite. Le reste de l'accueil (clients, récapitulatif du mois)
 reste visible, une même personne pouvant être à la fois dirigeante et
 intervenante.
+
+## Intervenantes et référents
+
+La table **Equipe** réunit tous les comptes de connexion, qu'il s'agisse d'une
+intervenante ou d'un référent. La colonne `Role` les distingue :
+
+- **Intervenante** — effectue les interventions et saisit ses heures.
+- **Referent** — encadre des familles, ne figure pas dans le décompte
+  « intervenantes actives » du bloc Direction.
+
+> Si tu oublies de mettre `Role` = **Intervenante** sur une nouvelle recrue, elle
+> ne sera pas comptée dans les intervenantes actives, sans message d'erreur.
 
 ## Désigner un référent de famille
 

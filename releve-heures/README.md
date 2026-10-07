@@ -10,7 +10,7 @@ Application Next.js pour la saisie des heures des intervenants à domicile. Le b
 
 Crée une base Airtable avec **4 tables** :
 
-### Table `Intervenants`
+### Table `Equipe`
 
 | Champ            | Type                         |
 | ---------------- | ---------------------------- |
@@ -20,6 +20,7 @@ Crée une base Airtable avec **4 tables** :
 | `MotDePasseHash`  | Texte sur une ligne          |
 | `Actif`           | Case à cocher                |
 | `Admin`           | Case à cocher — ajoute le bloc Direction sur l'accueil |
+| `Role`            | Liste — `Intervenante` ou `Referent`. Les référents sont exclus du décompte « intervenantes actives » |
 | `Photo`           | Pièce jointe (optionnel — sans photo, des initiales sont affichées) |
 | `TauxHoraire`     | Nombre (décimal, en €/h — sert à calculer le chiffre d'affaires) |
 
@@ -31,8 +32,12 @@ Crée une base Airtable avec **4 tables** :
 | `Adresse`               | Texte sur une ligne                                 |
 | `Numero client`         | Texte sur une ligne                                 |
 | `Actif`                 | Case à cocher                                       |
-| `Intervenants assignes` | Lien vers un autre enregistrement → `Intervenants` (plusieurs possibles) |
-| `Referent`              | Lien vers `Intervenants` — l'admin référent de cette famille (plusieurs possibles) |
+| `Intervenants assignes` | Lien vers un autre enregistrement → `Equipe` (plusieurs possibles) |
+| `Referent`              | Lien vers `Equipe` — l'admin référent de cette famille (plusieurs possibles) |
+
+> La table s'appelle `Equipe` et non `Intervenants` : elle contient aussi les
+> référents, qui disposent d'un compte sans effectuer d'interventions. La colonne
+> `Role` les distingue.
 
 > `Intervenants assignes` détermine quels intervenants voient ce client (sur la page d'accueil et dans le menu déroulant de saisie).
 
@@ -40,7 +45,7 @@ Crée une base Airtable avec **4 tables** :
 
 | Champ                | Type                                  |
 | --------------------- | -------------------------------------- |
-| `Intervenant`          | Lien vers un autre enregistrement → `Intervenants` |
+| `Intervenant`          | Lien vers un autre enregistrement → `Equipe` |
 | `Client`               | Lien vers un autre enregistrement → `Clients`      |
 | `Date`                 | Date                                   |
 | `Heure d'arrivee`      | Texte sur une ligne (format `HH:mm`)   |
@@ -53,7 +58,7 @@ Crée une base Airtable avec **4 tables** :
 
 | Champ               | Type                                                |
 | -------------------- | ---------------------------------------------------- |
-| `Intervenant`        | Lien vers un autre enregistrement → `Intervenants`    |
+| `Intervenant`        | Lien vers un autre enregistrement → `Equipe`    |
 | `Mois`               | Date (ex. premier jour du mois : `2026-08-01`)        |
 | `Fichier`            | Pièce jointe (le PDF de la fiche de paie)             |
 | `Publiee`            | Case à cocher — la fiche n'apparaît dans l'app **que si elle est cochée** |
@@ -94,7 +99,7 @@ Les mots de passe sont stockés **hashés** (bcrypt) dans Airtable, jamais en cl
 Personne n'a besoin de connaître le mot de passe de l'intervenante, ni de lancer
 de commande :
 
-1. Créer la ligne dans `Intervenants` avec `Nom et Prenom`, `Email` et `Actif` coché.
+1. Créer la ligne dans `Equipe` avec `Nom et Prenom`, `Email` et `Actif` coché.
    Laisser `MotDePasseHash` vide.
 2. Lire le `Code activation` de la ligne (généré automatiquement, rien à saisir) et
    le transmettre à l'intervenante.
@@ -116,7 +121,7 @@ l'intervenante redevient valable et elle peut redéfinir son mot de passe.
 node scripts/hash-password.mjs "mon-mot-de-passe"
 ```
 
-Copie le résultat dans le champ `MotDePasseHash` de la ligne correspondante dans la table `Intervenants`, avec `Actif` coché.
+Copie le résultat dans le champ `MotDePasseHash` de la ligne correspondante dans la table `Equipe`, avec `Actif` coché.
 
 ## 5. Lancer l'application
 
@@ -129,7 +134,7 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 
 ## Fonctionnement
 
-- **Connexion** (`/login`) : email + mot de passe, vérifiés contre la table `Intervenants`.
+- **Connexion** (`/login`) : email + mot de passe, vérifiés contre la table `Equipe`.
 - **Première connexion** (`/activation`) : email + code d'activation + nouveau mot de passe. La route `/api/activation` vérifie le code (insensible à la casse), hashe le mot de passe (bcrypt) et l'enregistre. Elle refuse tout compte disposant déjà d'un mot de passe, ce qui rend le code inutilisable une fois consommé. Un mauvais code et un email inconnu renvoient le même message, pour ne pas révéler quels comptes existent.
 - **Accueil** (`/`) : pour un compte dont la case `Admin` est cochée, un bloc **Direction** s'ajoute en tête — interventions du jour toutes intervenantes confondues, volume de la semaine, chiffre d'affaires du mois et nombre d'intervenantes actives. L'autorisation est relue depuis Airtable à chaque affichage, de sorte que décocher `Admin` retire le bloc immédiatement. Ensuite, pour tout le monde : profil de l'intervenant (photo ou initiales, prénom, nom), la liste des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`), et un récapitulatif chiffré — heures et chiffre d'affaires du mois (avec graphiques par semaine) et chiffre d'affaires de l'année en cours (graphique par mois). Le chiffre d'affaires est calculé comme `heures réalisées × TauxHoraire` de l'intervenant. Sur grand écran, clients et récapitulatif s'affichent côte à côte ; en mobile, tout est empilé.
 - **Relevé d'heure** (`/saisie`) : l'intervenant choisit un client (parmi les siens), une date (aujourd'hui par défaut), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.
