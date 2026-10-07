@@ -201,6 +201,11 @@ travaillent, et cinq dernières interventions.
 
 Une famille peut avoir plusieurs référents, et un référent plusieurs familles.
 
+**Voir toutes les familles.** Cocher `Acces complet` sur une ligne de la table
+**Referents** donne à cette personne la vue sur l'ensemble des clients, qu'elle
+en soit référente ou non — c'est le réglage du compte de direction. L'onglet
+s'intitule alors « Toutes les familles ».
+
 > Cet onglet ne montre que ce qui a **déjà eu lieu**. L'application ne contient
 > aucun planning prévisionnel : les relevés sont saisis après l'intervention.
 

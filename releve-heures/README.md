@@ -34,6 +34,7 @@ leur propre table, avec les seuls champs nécessaires à la connexion :
 | `Code activation` | Formule — même expression que ci-dessus |
 | `MotDePasseHash`  | Texte sur une ligne          |
 | `Actif`           | Case à cocher                |
+| `Acces complet`   | Case à cocher — donne accès à **toutes** les familles dans l'onglet Mes familles, et pas seulement à celles dont la personne est référente (compte de direction) |
 
 > Une personne ne doit figurer que dans **une seule** des deux tables. En cas de
 > doublon d'email, c'est la ligne de `Referents` qui l'emporte à la connexion.
@@ -152,7 +153,7 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 - **Relevé d'heure** (`/saisie`) : l'intervenant choisit un client (parmi les siens), une date (aujourd'hui par défaut), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.
 - **Validation** : le bouton "Valider" envoie les données à `/api/releves`, qui recalcule les heures côté serveur (pour éviter toute manipulation côté client), vérifie que la certification a bien été cochée, et crée un enregistrement dans la table `Releves`, lié à l'intervenant connecté et au client choisi.
 - **Historique** (`/historique`) : liste des relevés déjà saisis par l'intervenant, en lecture seule. Un relevé validé n'est plus modifiable depuis l'app — les corrections passent par la direction dans Airtable, afin que les heures servant de base à la paie ne changent plus après coup.
-- **Mes familles** (`/familles`) : réservé aux comptes de la table `Referents`. Chaque référent y voit les familles dont il est `Referent famille` dans la table `Clients` : heures du mois, intervenantes concernées et cinq dernières interventions. L'autorisation est relue depuis Airtable à chaque affichage.
+- **Mes familles** (`/familles`) : réservé aux comptes de la table `Referents`. Chaque référent y voit les familles dont il est `Referent famille` dans la table `Clients` — ou **toutes** les familles si `Acces complet` est coché sur sa ligne : heures du mois, intervenantes concernées et cinq dernières interventions. L'autorisation est relue depuis Airtable à chaque affichage.
 - **Fiches de paie** (`/fiches-de-paie`) : ses bulletins (table `Fiches de Paie`), du plus récent au plus ancien, avec un lien de téléchargement direct. Seules les fiches cochées `Publiee` apparaissent.
 
 ## Déploiement

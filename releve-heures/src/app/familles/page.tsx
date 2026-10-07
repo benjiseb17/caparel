@@ -31,7 +31,11 @@ export default async function FamillesPage() {
   const maintenant = new Date();
   const familles = isDemoMode()
     ? []
-    : await getFamillesDuReferent(session.user.id, maintenant);
+    : await getFamillesDuReferent(
+        session.user.id,
+        maintenant,
+        profil.accesComplet
+      );
 
   return (
     <div className="min-h-screen bg-soft flex flex-col overflow-x-hidden">
@@ -39,16 +43,20 @@ export default async function FamillesPage() {
       <main className="flex-1 px-5 sm:px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] flex justify-center">
         <div className="w-full max-w-md lg:max-w-3xl">
           <h1 className="font-heading text-xl font-bold text-navy mb-2">
-            Mes familles
+            {profil.accesComplet ? "Toutes les familles" : "Mes familles"}
           </h1>
           <p className="text-sm text-muted mb-6">
-            Les familles dont vous êtes référent, et leur activité récente.
+            {profil.accesComplet
+              ? "L'ensemble des familles suivies par Caparel, et leur activité récente."
+              : "Les familles dont vous êtes référent, et leur activité récente."}
           </p>
 
           {familles.length === 0 ? (
             <div className="bg-white rounded-2xl border border-line p-6 text-center">
               <p className="text-sm text-muted">
-                Aucune famille ne vous est assignée comme référent.
+                {profil.accesComplet
+                  ? "Aucune famille enregistrée pour le moment."
+                  : "Aucune famille ne vous est assignée comme référent."}
               </p>
             </div>
           ) : (

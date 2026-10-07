@@ -57,6 +57,8 @@ export type Intervenant = {
   codeActivation: string;
   actif: boolean;
   referent: boolean;
+  /** Référent de direction : voit toutes les familles, pas seulement les siennes. */
+  accesComplet: boolean;
   photoUrl: string;
   tauxHoraire: number;
 };
@@ -74,6 +76,7 @@ function mapCompte(
     codeActivation: (record.get("Code activation") as string) || "",
     actif: Boolean(record.get("Actif")),
     referent,
+    accesComplet: referent && Boolean(record.get("Acces complet")),
     photoUrl: photos[0]?.url || "",
     tauxHoraire: (record.get("TauxHoraire") as number) || 0,
   };
@@ -360,12 +363,16 @@ export type Famille = {
 /**
  * Les familles dont `referentId` est le référent, avec leur activité récente.
  *
+ * Avec `accesComplet`, toutes les familles sont renvoyées : c'est le cas du
+ * compte de direction, qui suit l'activité de l'ensemble des clients.
+ *
  * Ne couvre que le passé : la base ne contient aucune intervention planifiée,
  * seulement les relevés saisis après coup.
  */
 export async function getFamillesDuReferent(
   referentId: string,
-  maintenant = new Date()
+  maintenant = new Date(),
+  accesComplet = false
 ): Promise<Famille[]> {
   const [clientRecords, releveRecords, intervenantRecords] = await Promise.all([
     base(TABLES.clients).select({ sort: [{ field: "Nom", direction: "asc" }] }).all(),
@@ -380,11 +387,13 @@ export async function getFamillesDuReferent(
     ])
   );
 
-  const miennes = clientRecords.filter((c) =>
-    (
-      (c.get("Referent famille") as string[] | undefined) || []
-    ).includes(referentId)
-  );
+  const miennes = accesComplet
+    ? clientRecords
+    : clientRecords.filter((c) =>
+        (
+          (c.get("Referent famille") as string[] | undefined) || []
+        ).includes(referentId)
+      );
 
   return miennes.map((client) => {
     const siens = releveRecords.filter((r) =>

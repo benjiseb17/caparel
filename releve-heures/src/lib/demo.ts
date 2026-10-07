@@ -21,6 +21,7 @@ export const DEMO_INTERVENANT: Intervenant = {
   codeActivation: "",
   actif: true,
   referent: true,
+  accesComplet: true,
   photoUrl: "",
   tauxHoraire: 15.5,
 };
