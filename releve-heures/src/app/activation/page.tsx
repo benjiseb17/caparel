@@ -11,7 +11,6 @@ const LONGUEUR_MIN = 8;
 export default function ActivationPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +34,7 @@ export default function ActivationPage() {
       const res = await fetch("/api/activation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code, motDePasse }),
+        body: JSON.stringify({ email, motDePasse }),
       });
       const data = await res.json();
 
@@ -81,8 +80,8 @@ export default function ActivationPage() {
           Première connexion
         </h1>
         <p className="text-sm text-muted mb-6">
-          Définissez votre mot de passe à l&apos;aide du code d&apos;activation
-          que Caparel vous a transmis.
+          Saisissez l&apos;adresse email que vous avez communiquée à Caparel,
+          puis choisissez votre mot de passe.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -101,24 +100,6 @@ export default function ActivationPage() {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
               autoComplete="email"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="code"
-              className="block text-sm font-medium text-ink mb-1"
-            >
-              Code d&apos;activation
-            </label>
-            <input
-              id="code"
-              type="text"
-              required
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-              autoComplete="off"
             />
           </div>
 

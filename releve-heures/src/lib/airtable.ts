@@ -54,7 +54,6 @@ export type Intervenant = {
   nomComplet: string;
   email: string;
   motDePasseHash: string;
-  codeActivation: string;
   actif: boolean;
   referent: boolean;
   /** Référent de direction : voit toutes les familles, pas seulement les siennes. */
@@ -73,7 +72,6 @@ function mapCompte(
     nomComplet: (record.get("Nom et Prenom") as string) || "",
     email: (record.get("Email") as string) || "",
     motDePasseHash: (record.get("MotDePasseHash") as string) || "",
-    codeActivation: (record.get("Code activation") as string) || "",
     actif: Boolean(record.get("Actif")),
     referent,
     accesComplet: referent && Boolean(record.get("Acces complet")),
@@ -113,16 +111,18 @@ export async function getIntervenantByEmail(
 }
 
 /**
- * Définit le mot de passe d'un compte à partir de son code d'activation.
+ * Définit le mot de passe d'un compte lors de sa première connexion.
  *
- * Le code est une formule Airtable, donc impossible à effacer depuis l'app :
- * l'usage unique repose sur l'absence de mot de passe. Dès qu'un mot de passe
- * existe, le code devient inerte même s'il reste affiché dans Airtable. Pour
- * réinitialiser un accès, il faut vider `MotDePasseHash`.
+ * Deux conditions, et deux seulement : l'adresse doit être celle d'un compte
+ * actif que la direction a déjà créée dans Airtable, et ce compte ne doit pas
+ * encore avoir de mot de passe. L'absence de mot de passe fait donc office
+ * d'usage unique — une fois défini, la route refuse toute nouvelle tentative.
+ *
+ * Pour réinitialiser un accès, la direction vide `MotDePasseHash` : la personne
+ * peut alors repasser par la première connexion.
  */
 export async function activerCompteIntervenant(
   email: string,
-  code: string,
   motDePasseHash: string
 ): Promise<boolean> {
   const trouve = await trouverCompteParEmail(email);
@@ -132,10 +132,6 @@ export async function activerCompteIntervenant(
 
   if (!compte.actif) return false;
   if (compte.motDePasseHash) return false;
-  if (!compte.codeActivation) return false;
-
-  const normaliser = (valeur: string) => valeur.trim().toUpperCase();
-  if (normaliser(compte.codeActivation) !== normaliser(code)) return false;
 
   await base(trouve.table).update(compte.id, {
     MotDePasseHash: motDePasseHash,

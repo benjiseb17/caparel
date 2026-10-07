@@ -18,27 +18,28 @@ Ce guide couvre les trois usages de l'application :
 
 ## Se connecter la première fois
 
-La direction vous transmet trois éléments : **l'adresse du site**, **votre adresse
-email**, et un **code d'activation** de la forme `CAPAREL-4TB9KD`.
+La direction vous transmet **l'adresse du site**. Votre compte y est déjà créé,
+avec l'adresse email que vous avez communiquée à Caparel.
 
 1. Ouvrez l'adresse du site
 2. Sous le formulaire, cliquez sur **« Première connexion ? »**
-3. Saisissez votre email et votre code d'activation
+3. Saisissez cette adresse email
 4. Choisissez **votre** mot de passe — 8 caractères minimum — et confirmez-le
 5. Vous êtes connectée directement
 
 Votre mot de passe vous appartient : Caparel ne le choisit pas et ne peut pas le
-consulter. Le code d'activation, lui, ne fonctionne qu'une fois : une fois votre
+consulter. Cette page ne fonctionne qu'une fois : une fois votre
 mot de passe défini, il ne sert plus à rien.
 
-Le code n'est pas sensible à la casse — `caparel-4tb9kd` fonctionne aussi bien.
+Seule une adresse déjà enregistrée par Caparel fonctionne. Si la page refuse la
+vôtre, c'est qu'elle n'est pas celle que la direction a saisie — contactez-la.
 
 ## Se connecter ensuite
 
 Email et mot de passe, comme sur n'importe quel service.
 
 **Mot de passe oublié ?** Contactez la direction. Elle réinitialise votre accès et
-vous repassez par « Première connexion ? » avec votre code pour en choisir un
+vous repassez par « Première connexion ? » pour en choisir un
 nouveau. Votre ancien mot de passe n'est récupérable par personne.
 
 ## Accueil
@@ -140,7 +141,7 @@ pas les mêmes onglets à l'un et à l'autre :
 ## Se connecter
 
 Exactement comme une intervenante : « Première connexion ? », email, code
-d'activation de la forme `CAPAREL-4TB9KD`, puis le mot de passe de votre choix. Les
+l'adresse email communiquée à Caparel, puis le mot de passe de votre choix. Les
 connexions suivantes se font avec email et mot de passe.
 
 ## Le bloc Direction
@@ -207,8 +208,13 @@ Dans la table **Intervenants** :
 
 1. Créer la ligne : `Nom et Prenom`, `Email`, `Actif` coché, `TauxHoraire`
 2. Laisser **`MotDePasseHash` vide** — il se remplira tout seul
-3. Relever le `Code activation`, généré automatiquement
-4. Transmettre à l'intervenante : l'adresse du site, son email, son code
+3. Transmettre à l'intervenante l'adresse du site
+
+Elle s'y rend, clique sur « Première connexion ? », saisit son adresse email et
+choisit son mot de passe. Rien à lui communiquer d'autre.
+
+> L'adresse saisie dans Airtable doit être **exactement** celle que l'intervenante
+> a communiquée : c'est elle qui lui sert de clé d'entrée.
 
 Le `TauxHoraire` sert à calculer le chiffre d'affaires affiché sur son accueil
 (heures réalisées × taux). Sans lui, ses montants resteront à zéro.
@@ -219,8 +225,7 @@ suspendre un accès sans supprimer l'historique.
 ## Créer un compte référent
 
 Même procédure, dans la table **Referents** : nom, email, `Actif` coché,
-`MotDePasseHash` vide, puis transmettre le `Code activation`. Ni taux horaire ni
-photo — un référent n'intervient pas.
+`MotDePasseHash` vide. Ni taux horaire ni photo — un référent n'intervient pas.
 
 Cocher `Acces complet` sur sa ligne lui donne la vue sur l'ensemble des familles
 plutôt que sur son seul portefeuille.
@@ -228,8 +233,8 @@ plutôt que sur son seul portefeuille.
 ## Réinitialiser un mot de passe
 
 Vider la colonne `MotDePasseHash` de la ligne concernée, dans l'une ou l'autre
-table. Son code d'activation redevient valable et la personne peut redéfinir son
-mot de passe.
+table. La personne peut alors repasser par « Première connexion ? » et redéfinir
+son mot de passe.
 
 ## Assigner des clients
 

@@ -301,15 +301,14 @@
 <h2>Se connecter la première fois</h2>
 
 <p>
-  La direction vous transmet trois éléments : <strong>l'adresse du site</strong>,
-  <strong>votre adresse email</strong>, et un <strong>code d'activation</strong> de
-  la forme <code>CAPAREL-4TB9KD</code>.
+  La direction vous transmet <strong>l'adresse du site</strong>. Votre compte y est
+  déjà créé, avec l'adresse email que vous avez communiquée à Caparel.
 </p>
 
 <ol>
   <li>Ouvrez l'adresse du site</li>
   <li>Sous le formulaire, cliquez sur <strong>« Première connexion ? »</strong></li>
-  <li>Saisissez votre email et votre code d'activation</li>
+  <li>Saisissez cette adresse email</li>
   <li>Choisissez <strong>votre</strong> mot de passe — 8 caractères minimum — et confirmez-le</li>
   <li>Vous êtes connectée directement</li>
 </ol>
@@ -317,14 +316,14 @@
 <div class="key">
   <p>
     <strong>Votre mot de passe vous appartient.</strong> Caparel ne le choisit pas
-    et ne peut pas le consulter. Le code d'activation, lui, ne fonctionne qu'une
-    fois : une fois votre mot de passe défini, il ne sert plus à rien.
+    et ne peut pas le consulter. Cette page ne fonctionne qu'une fois : dès que
+    votre mot de passe est défini, elle ne sert plus à rien.
   </p>
 </div>
 
 <p>
-  Le code n'est pas sensible à la casse : <code>caparel-4tb9kd</code> fonctionne
-  aussi bien.
+  Seule une adresse déjà enregistrée par Caparel fonctionne. Si la page refuse la
+  vôtre, c'est qu'elle n'est pas celle que la direction a saisie — contactez-la.
 </p>
 
 <h2>Se connecter ensuite</h2>
@@ -333,8 +332,8 @@
 
 <p>
   <strong>Mot de passe oublié ?</strong> Contactez la direction. Elle réinitialise
-  votre accès et vous repassez par « Première connexion ? » avec votre code pour en
-  choisir un nouveau. Votre ancien mot de passe n'est récupérable par personne.
+  votre accès et vous repassez par « Première connexion ? » pour en choisir un
+  nouveau. Votre ancien mot de passe n'est récupérable par personne.
 </p>
 
 <h2>Accueil</h2>
@@ -496,9 +495,9 @@
 <h2>Se connecter</h2>
 
 <p>
-  Exactement comme une intervenante : « Première connexion ? », email, code
-  d'activation de la forme <code>CAPAREL-4TB9KD</code>, puis le mot de passe de
-  votre choix. Les connexions suivantes se font avec email et mot de passe.
+  Exactement comme une intervenante : « Première connexion ? », l'adresse email
+  communiquée à Caparel, puis le mot de passe de votre choix. Les connexions
+  suivantes se font avec email et mot de passe.
 </p>
 
 <h2>Le bloc Direction</h2>
@@ -600,9 +599,21 @@
   <li>Créer la ligne : <code>Nom et Prenom</code>, <code>Email</code>,
       <code>Actif</code> coché, <code>TauxHoraire</code></li>
   <li>Laisser <strong><code>MotDePasseHash</code> vide</strong> — il se remplira tout seul</li>
-  <li>Relever le <code>Code activation</code>, généré automatiquement</li>
-  <li>Transmettre à l'intervenante : l'adresse du site, son email, son code</li>
+  <li>Transmettre à l'intervenante l'adresse du site</li>
 </ol>
+
+<p>
+  Elle s'y rend, clique sur « Première connexion ? », saisit son adresse email et
+  choisit son mot de passe. Rien à lui communiquer d'autre.
+</p>
+
+<div class="warn">
+  <p>
+    <strong>L'adresse saisie dans Airtable doit être exactement celle que
+    l'intervenante a communiquée</strong> : c'est elle qui lui sert de clé d'entrée.
+    Une faute de frappe, et la personne ne pourra pas créer son mot de passe.
+  </p>
+</div>
 
 <p>
   Le <code>TauxHoraire</code> sert à calculer le chiffre d'affaires affiché sur son
@@ -618,9 +629,8 @@
 
 <p>
   Même procédure, dans la table <strong>Referents</strong> : nom, email,
-  <code>Actif</code> coché, <code>MotDePasseHash</code> vide, puis transmettre le
-  <code>Code activation</code>. Ni taux horaire ni photo — un référent n'intervient
-  pas.
+  <code>Actif</code> coché, <code>MotDePasseHash</code> vide. Ni taux horaire ni
+  photo — un référent n'intervient pas.
 </p>
 
 <p>
@@ -632,7 +642,7 @@
 
 <p>
   Vider la colonne <code>MotDePasseHash</code> de la ligne concernée, dans l'une ou
-  l'autre table. Son code d'activation redevient valable et la personne peut
+  l'autre table. La personne peut alors repasser par « Première connexion ? » et
   redéfinir son mot de passe.
 </p>
 

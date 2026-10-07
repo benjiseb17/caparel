@@ -14,13 +14,12 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { email, code, motDePasse } = body as {
+  const { email, motDePasse } = body as {
     email?: string;
-    code?: string;
     motDePasse?: string;
   };
 
-  if (!email || !code || !motDePasse) {
+  if (!email || !motDePasse) {
     return NextResponse.json(
       { error: "Champs requis manquants" },
       { status: 400 }
@@ -38,12 +37,16 @@ export async function POST(request: Request) {
 
   try {
     const hash = bcrypt.hashSync(motDePasse, 10);
-    const active = await activerCompteIntervenant(email.trim(), code.trim(), hash);
+    const active = await activerCompteIntervenant(email.trim(), hash);
 
     if (!active) {
-      // Message volontairement vague : ne pas reveler quels emails existent.
+      // Message volontairement vague : ne pas reveler quels emails existent,
+      // ni lesquels ont deja un mot de passe.
       return NextResponse.json(
-        { error: "Email ou code d'activation invalide." },
+        {
+          error:
+            "Cette adresse ne permet pas de definir un mot de passe. Contactez Caparel.",
+        },
         { status: 400 }
       );
     }

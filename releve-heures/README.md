@@ -16,7 +16,6 @@ Crée une base Airtable avec **5 tables** :
 | ---------------- | ---------------------------- |
 | `Nom et Prenom`   | Texte sur une ligne — nom complet, ex. `Benjamin Sebahoun` (champ principal) |
 | `Email`           | Texte sur une ligne          |
-| `Code activation` | Formule — `"CAPAREL-" & UPPER(RIGHT(RECORD_ID(), 6))`. Code de première connexion, généré automatiquement et unique par intervenant |
 | `MotDePasseHash`  | Texte sur une ligne          |
 | `Actif`           | Case à cocher                |
 | `Photo`           | Pièce jointe (optionnel — sans photo, des initiales sont affichées) |
@@ -31,7 +30,6 @@ leur propre table, avec les seuls champs nécessaires à la connexion :
 | ---------------- | ---------------------------- |
 | `Nom et Prenom`   | Texte sur une ligne (champ principal) |
 | `Email`           | Texte sur une ligne          |
-| `Code activation` | Formule — même expression que ci-dessus |
 | `MotDePasseHash`  | Texte sur une ligne          |
 | `Actif`           | Case à cocher                |
 | `Acces complet`   | Case à cocher — donne accès à **toutes** les familles dans l'onglet Mes familles, et pas seulement à celles dont la personne est référente (compte de direction) |
@@ -106,27 +104,33 @@ Renseigne dans `.env.local` :
 
 Les mots de passe sont stockés **hashés** (bcrypt) dans Airtable, jamais en clair.
 
-### Méthode recommandée : code d'activation
+### Méthode recommandée : première connexion
 
 Personne n'a besoin de connaître le mot de passe de l'intervenante, ni de lancer
 de commande :
 
 1. Créer la ligne dans `Intervenants` (ou `Referents`) avec `Nom et Prenom`,
-   `Email` et `Actif` coché.
-   Laisser `MotDePasseHash` vide.
-2. Lire le `Code activation` de la ligne (généré automatiquement, rien à saisir) et
-   le transmettre à l'intervenante.
+   `Email` et `Actif` coché. Laisser `MotDePasseHash` vide.
+2. Transmettre l'adresse du site à l'intervenante.
 3. Elle se rend sur `/activation` (lien « Première connexion ? » depuis la page de
-   connexion), saisit son email, le code, et choisit son mot de passe.
+   connexion), saisit son email et choisit son mot de passe.
 
 L'app hashe le mot de passe côté serveur et l'écrit dans `MotDePasseHash`.
 
-**Usage unique** : le code étant une formule, l'app ne peut pas l'effacer. Il devient
-donc inerte dès qu'un mot de passe existe — la route refuse l'activation d'un compte
-déjà pourvu, même avec le bon code.
+**L'email fait office de clé** : seule une adresse déjà enregistrée dans l'une des
+deux tables, sur un compte `Actif` et sans mot de passe, permet d'en définir un. Il
+faut donc saisir dans Airtable exactement l'adresse communiquée par l'intervenante.
 
-**Réinitialiser un accès** : vider `MotDePasseHash` dans Airtable. Le code de
-l'intervenante redevient valable et elle peut redéfinir son mot de passe.
+**Usage unique** : l'absence de mot de passe est la condition. Dès qu'un mot de
+passe existe, la route refuse toute nouvelle définition.
+
+**Réinitialiser un accès** : vider `MotDePasseHash` dans Airtable. L'intervenante
+peut alors repasser par « Première connexion ? ».
+
+> Ce choix assume un compromis : entre la création de la ligne et la première
+> connexion, quiconque connaît l'adresse email pourrait définir le mot de passe à la
+> place de l'intervenante. Créer la ligne au moment où la personne est prête à se
+> connecter referme cette fenêtre.
 
 ### Méthode manuelle (dépannage)
 
@@ -148,7 +152,7 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 ## Fonctionnement
 
 - **Connexion** (`/login`) : email + mot de passe, vérifiés contre `Referents` puis `Intervenants`. La table d'origine détermine le parcours : une intervenante saisit ses heures et consulte sa paie, un référent suit ses familles et ne voit ni saisie, ni historique, ni fiches de paie.
-- **Première connexion** (`/activation`) : email + code d'activation + nouveau mot de passe. La route `/api/activation` vérifie le code (insensible à la casse), hashe le mot de passe (bcrypt) et l'enregistre. Elle refuse tout compte disposant déjà d'un mot de passe, ce qui rend le code inutilisable une fois consommé. Un mauvais code et un email inconnu renvoient le même message, pour ne pas révéler quels comptes existent.
+- **Première connexion** (`/activation`) : email + nouveau mot de passe. La route `/api/activation` n'accepte que les comptes existants, `Actif` et dépourvus de mot de passe — l'absence de mot de passe fait office d'usage unique. Un email inconnu, un compte inactif et un compte déjà pourvu renvoient le même message, pour ne pas révéler quels comptes existent.
 - **Accueil** (`/`) : pour un compte de la table `Referents`, un bloc **Direction** s'affiche — interventions du jour toutes intervenantes confondues, volume de la semaine, chiffre d'affaires du mois et nombre d'intervenantes actives ; le reste de l'accueil, propre aux intervenantes, lui est masqué. L'autorisation est relue depuis Airtable à chaque affichage, de sorte que retirer la ligne coupe l'accès immédiatement. Pour une intervenante : profil de l'intervenant (photo ou initiales, prénom, nom), la liste des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`), et un récapitulatif chiffré — heures et chiffre d'affaires du mois, avec des flèches pour remonter dans les mois précédents. Le chiffre d'affaires est calculé comme `heures réalisées × TauxHoraire` de l'intervenant. Sur grand écran, clients et récapitulatif s'affichent côte à côte ; en mobile, tout est empilé.
 - **Relevé d'heure** (`/saisie`) : l'intervenant choisit un client (parmi les siens), une date (aujourd'hui par défaut, et pas au-delà : un relevé se saisit après l'intervention), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.
 - **Validation** : le bouton "Valider" envoie les données à `/api/releves`, qui recalcule les heures côté serveur (pour éviter toute manipulation côté client), refuse toute date postérieure au jour même — évaluée sur le fuseau `Europe/Paris`, le serveur tournant en UTC —, vérifie que la certification a bien été cochée, et crée un enregistrement dans la table `Releves`, lié à l'intervenant connecté et au client choisi.

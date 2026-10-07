@@ -18,7 +18,6 @@ export const DEMO_INTERVENANT: Intervenant = {
   nomComplet: "Camille Dupont",
   email: "demo@test.fr",
   motDePasseHash: "$2b$10$5UO/soFoHjpiOvb0b2Og4OgiYezYQgP3GSX0F4tDWzo2eeZeW0kOe", // demo1234
-  codeActivation: "",
   actif: true,
   referent: true,
   accesComplet: true,
