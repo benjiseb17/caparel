@@ -39,13 +39,13 @@ vôtre, c'est qu'elle n'est pas celle que la direction a saisie — contactez-la
 Email et mot de passe, comme sur n'importe quel service.
 
 **Mot de passe oublié ?** Sur la page de connexion, cliquez sur « Mot de passe
-oublié ? », sous le bouton Se connecter, saisissez votre adresse email et envoyez
-la demande. La
-direction est prévenue : elle vous recontacte, réinitialise votre accès, et vous
-revenez créer un nouveau mot de passe avec le bouton **« Première connexion »**.
+oublié ? », sous le bouton Se connecter. Saisissez l'adresse email que vous avez
+communiquée à Caparel et choisissez un nouveau mot de passe : vous êtes connectée
+dans la foulée. Personne n'a besoin d'intervenir.
 
 Votre ancien mot de passe n'est récupérable par personne, pas même par Caparel : il
-n'est pas stocké, seule une empreinte à sens unique l'est.
+n'est pas stocké, seule une empreinte à sens unique l'est. La seule issue est donc
+d'en choisir un nouveau.
 
 ## Accueil
 
@@ -243,22 +243,21 @@ plutôt que sur son seul portefeuille.
 
 ## Réinitialiser un mot de passe
 
-Les demandes arrivent dans la table **Reinitialisations** : nom, email, date. Pour
-chacune :
+Vous n'avez rien à faire : l'intervenante réinitialise elle-même son mot de passe
+depuis la page de connexion, avec son adresse email.
 
-1. **Vérifier qui demande** — un appel suffit. C'est tout l'intérêt de passer par
-   vous : l'app ne réinitialise rien toute seule, sinon n'importe qui connaissant
-   une adresse email pourrait s'emparer d'un compte.
-2. Vider la colonne `MotDePasseHash` de la ligne concernée, dans `Intervenants` ou
-   `Referents`
-3. Cocher `Traite` sur la demande
+La table **Reinitialisations** en tient le **journal** : une ligne à chaque
+réinitialisation, avec le nom, l'email et l'horodatage. C'est votre seul moyen de
+repérer un changement que vous n'attendiez pas.
 
-La personne peut alors cliquer sur « Première connexion » et en choisir un
-nouveau.
+> **Mettez une Automation Airtable dessus** (« quand un enregistrement est créé →
+> envoyer un email »). Comme l'adresse email suffit à réinitialiser un accès,
+> quiconque connaît celle d'une intervenante peut prendre son compte. Cette alerte
+> est ce qui vous permet de le savoir au lieu de l'ignorer.
 
-> Une Automation Airtable sur la table **Reinitialisations** (« quand un
-> enregistrement est créé → envoyer un email ») vous préviendra sans avoir à
-> surveiller la table.
+Vous gardez par ailleurs la possibilité de couper un accès à tout moment en
+décochant `Actif` : un compte inactif ne peut ni se connecter, ni réinitialiser son
+mot de passe.
 
 ## Assigner des clients
 

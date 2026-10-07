@@ -151,25 +151,29 @@ export async function activerCompteIntervenant(
  * mauvaise table — de quoi prendre une intervenante pour une référente.
  */
 /**
- * Enregistre une demande de réinitialisation de mot de passe.
+ * Redéfinit le mot de passe d'un compte actif, qu'il en ait déjà un ou non.
  *
- * L'app ne réinitialise rien d'elle-même : laisser n'importe qui redéfinir un
- * mot de passe sur simple connaissance d'une adresse email ouvrirait tous les
- * comptes en permanence. La demande est donc déposée dans Airtable, et c'est la
- * direction qui vide `MotDePasseHash` après avoir vérifié qui la formule.
+ * Contrairement à la première connexion, la présence d'un mot de passe n'est pas
+ * un obstacle : c'est tout l'objet d'un « mot de passe oublié ». L'adresse email
+ * fait donc seule office de preuve d'identité.
  *
- * Renvoie `false` si l'adresse ne correspond à aucun compte actif — mais
- * l'appelant doit répondre la même chose dans tous les cas, pour ne pas révéler
- * quels comptes existent.
+ * Chaque réinitialisation est journalisée dans la table `Reinitialisations`,
+ * seule trace permettant à la direction de repérer un changement qu'elle
+ * n'attendait pas.
  */
-export async function demanderReinitialisation(
-  email: string
+export async function reinitialiserMotDePasse(
+  email: string,
+  motDePasseHash: string
 ): Promise<boolean> {
   const trouve = await trouverCompteParEmail(email);
   if (!trouve) return false;
 
   const compte = mapCompte(trouve.record, trouve.referent);
   if (!compte.actif) return false;
+
+  await base(trouve.table).update(compte.id, {
+    MotDePasseHash: motDePasseHash,
+  });
 
   const maintenant = new Date();
   const horodatage = new Intl.DateTimeFormat("fr-FR", {
@@ -178,13 +182,17 @@ export async function demanderReinitialisation(
     timeZone: "Europe/Paris",
   }).format(maintenant);
 
-  await base(TABLES.reinitialisations).create({
-    Recapitulatif: `${compte.nomComplet} — ${horodatage}`,
-    Nom: compte.nomComplet,
-    Email: compte.email,
-    "Demande le": maintenant.toISOString(),
-    Traite: false,
-  });
+  try {
+    await base(TABLES.reinitialisations).create({
+      Recapitulatif: `${compte.nomComplet} — ${horodatage}`,
+      Nom: compte.nomComplet,
+      Email: compte.email,
+      "Demande le": maintenant.toISOString(),
+    });
+  } catch (error) {
+    // Le journal ne doit pas faire échouer une réinitialisation qui a réussi.
+    console.error("Erreur lors de la journalisation de la reinitialisation:", error);
+  }
 
   return true;
 }

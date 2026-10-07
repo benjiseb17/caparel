@@ -79,8 +79,8 @@ leur propre table, avec les seuls champs nécessaires à la connexion :
 
 ### Table `Reinitialisations`
 
-Les demandes de réinitialisation de mot de passe déposées depuis la page de
-connexion. L'app y écrit, la direction y répond.
+Le journal des réinitialisations de mot de passe. L'app y écrit une ligne à chaque
+fois que quelqu'un redéfinit son mot de passe depuis la page de connexion.
 
 | Champ            | Type                                               |
 | ---------------- | -------------------------------------------------- |
@@ -88,7 +88,7 @@ connexion. L'app y écrit, la direction y répond.
 | `Nom`            | Texte sur une ligne                                 |
 | `Email`          | Texte sur une ligne                                 |
 | `Demande le`     | Date et heure                                       |
-| `Traite`         | Case à cocher — à cocher une fois l'accès réinitialisé |
+| `Traite`         | Inutilisée depuis que la réinitialisation se fait sans intervention — supprimable |
 
 **Déposer une fiche de paie** : créer un enregistrement, lier l'`Intervenant`, choisir le `Mois`, joindre le PDF dans `Fichier`, puis cocher `Publiee` quand elle doit devenir visible. Le libellé de la ligne (`Fiche`) se remplit tout seul.
 
@@ -141,11 +141,14 @@ passe existe, la route refuse toute nouvelle définition.
 peut alors repasser par « Première connexion ».
 
 **Mot de passe oublié** : depuis la page de connexion, le lien « Mot de passe
-oublié ? » dépose
-une ligne dans `Reinitialisations`. L'app ne réinitialise jamais d'elle-même — laisser
-n'importe qui redéfinir un mot de passe sur simple connaissance d'une adresse
-ouvrirait tous les comptes en permanence. La direction vérifie qui demande, vide
-`MotDePasseHash`, puis coche `Traite`.
+oublié ? » mène à `/mot-de-passe-oublie`, où l'adresse email et un nouveau mot de
+passe suffisent à réinitialiser l'accès, sans intervention de la direction.
+
+> **Conséquence assumée** : l'adresse email est la seule preuve d'identité. Quiconque
+> connaît celle d'une personne peut redéfinir son mot de passe, à tout moment et sur
+> n'importe quel compte actif. Les réinitialisations sont journalisées dans
+> `Reinitialisations` — y brancher une Automation Airtable est le seul garde-fou en
+> place. Décocher `Actif` reste le moyen de couper un accès.
 
 > Ce choix assume un compromis : entre la création de la ligne et la première
 > connexion, quiconque connaît l'adresse email pourrait définir le mot de passe à la
@@ -172,7 +175,7 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 ## Fonctionnement
 
 - **Connexion** (`/login`) : email + mot de passe, vérifiés contre `Referents` puis `Intervenants`. La table d'origine détermine le parcours : une intervenante saisit ses heures et consulte sa paie, un référent suit ses familles et ne voit ni saisie, ni historique, ni fiches de paie.
-- **Mot de passe oublié** (`/mot-de-passe-oublie`) : email seul. La route `/api/mot-de-passe-oublie` enregistre la demande dans `Reinitialisations` si le compte existe et est actif, et renvoie **toujours** le même message, y compris sur erreur serveur, pour ne pas transformer la page en annuaire des comptes.
+- **Mot de passe oublié** (`/mot-de-passe-oublie`) : email + nouveau mot de passe. La route `/api/mot-de-passe-oublie` écrase `MotDePasseHash` sur tout compte actif, qu'il en ait déjà un ou non, journalise l'opération dans `Reinitialisations`, puis la page connecte la personne. Une adresse inconnue et un compte inactif renvoient le même message, pour ne pas révéler quels comptes existent.
 - **Première connexion** (`/activation`) : email + nouveau mot de passe. La route `/api/activation` n'accepte que les comptes existants, `Actif` et dépourvus de mot de passe — l'absence de mot de passe fait office d'usage unique. Un email inconnu, un compte inactif et un compte déjà pourvu renvoient le même message, pour ne pas révéler quels comptes existent.
 - **Accueil** (`/`) : pour un compte de la table `Referents`, un bloc **Direction** s'affiche — interventions du jour toutes intervenantes confondues, volume de la semaine, chiffre d'affaires du mois et nombre d'intervenantes actives ; le reste de l'accueil, propre aux intervenantes, lui est masqué. L'autorisation est relue depuis Airtable à chaque affichage, de sorte que retirer la ligne coupe l'accès immédiatement. Pour une intervenante : profil de l'intervenant (photo ou initiales, prénom, nom), la liste des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`), et un récapitulatif chiffré — heures et chiffre d'affaires du mois, avec des flèches pour remonter dans les mois précédents. Le chiffre d'affaires est calculé comme `heures réalisées × TauxHoraire` de l'intervenant. Sur grand écran, clients et récapitulatif s'affichent côte à côte ; en mobile, tout est empilé.
 - **Relevé d'heure** (`/saisie`) : l'intervenant choisit un client (parmi les siens), une date (aujourd'hui par défaut, et pas au-delà : un relevé se saisit après l'intervention), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.

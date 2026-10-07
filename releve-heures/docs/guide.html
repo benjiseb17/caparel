@@ -283,7 +283,7 @@
     <li>Les deux tables de comptes</li>
     <li>Créer un compte intervenante</li>
     <li>Créer un compte référent</li>
-    <li>Traiter un mot de passe oublié</li>
+    <li>Les mots de passe oubliés</li>
     <li>Assigner des clients</li>
     <li>Désigner un référent de famille</li>
     <li>Corriger un relevé</li>
@@ -336,18 +336,19 @@
 <ol>
   <li>Sur la page de connexion, cliquez sur
       <strong>« Mot de passe oublié ? »</strong>, sous le bouton Se connecter</li>
-  <li>Saisissez votre adresse email et envoyez la demande</li>
-  <li>La direction est prévenue : elle vous recontacte et réinitialise votre accès</li>
-  <li>Revenez sur la page de connexion et cliquez sur
-      <strong>« Première connexion »</strong></li>
+  <li>Saisissez l'adresse email que vous avez communiquée à Caparel</li>
+  <li>Choisissez un nouveau mot de passe et confirmez-le</li>
+  <li>Vous êtes connectée directement</li>
 </ol>
+
+<p>Personne n'a besoin d'intervenir : vous reprenez la main vous-même.</p>
 
 <div class="key">
   <p>
     <strong>Votre ancien mot de passe n'est récupérable par personne</strong>, pas
     même par Caparel. Il n'est pas conservé : seule une empreinte à sens unique
-    l'est, et on ne peut pas remonter d'une empreinte au mot de passe. La seule
-    issue est d'en choisir un nouveau.
+    l'est, et on ne peut pas remonter d'une empreinte au mot de passe. C'est
+    pourquoi on ne vous le rappelle pas : on vous en fait choisir un nouveau.
   </p>
 </div>
 
@@ -663,41 +664,37 @@
   familles plutôt que sur son seul portefeuille.
 </p>
 
-<h2>Traiter un mot de passe oublié</h2>
+<h2>Les mots de passe oubliés</h2>
 
 <p>
-  Les demandes envoyées depuis la page de connexion arrivent dans la table
-  <strong>Reinitialisations</strong> : nom, email, date. Pour chacune :
+  Vous n'avez rien à faire : l'intervenante réinitialise elle-même son mot de passe
+  depuis la page de connexion, avec son adresse email.
 </p>
 
-<ol>
-  <li><strong>Vérifier qui demande</strong> — un appel suffit</li>
-  <li>Vider la colonne <code>MotDePasseHash</code> de la ligne concernée, dans
-      <strong>Intervenants</strong> ou <strong>Referents</strong></li>
-  <li>Cocher <code>Traite</code> sur la demande</li>
-</ol>
-
 <p>
-  La personne peut alors cliquer sur « Première connexion » et en choisir un
-  nouveau.
+  La table <strong>Reinitialisations</strong> en tient le <strong>journal</strong> :
+  une ligne à chaque réinitialisation, avec le nom, l'email et l'horodatage.
 </p>
 
 <div class="warn">
   <p>
-    <strong>L'application ne réinitialise jamais un mot de passe toute seule.</strong>
-    Si elle le faisait, n'importe qui connaissant l'adresse email d'une intervenante
-    pourrait s'emparer de son compte à tout moment. C'est votre vérification qui
-    tient lieu de preuve d'identité.
+    <strong>L'adresse email est la seule preuve d'identité.</strong> Quiconque connaît
+    celle d'une intervenante peut redéfinir son mot de passe et accéder à son compte,
+    à tout moment. C'est un choix assumé pour la simplicité du quotidien, mais il
+    mérite d'être connu.
+  </p>
+  <p>
+    <strong>Mettez une Automation Airtable sur Reinitialisations</strong> (« quand un
+    enregistrement est créé → envoyer un email »). C'est ce qui vous permet de
+    repérer un changement que vous n'attendiez pas, au lieu de l'ignorer.
   </p>
 </div>
 
-<div class="note">
-  <p>
-    Une Automation Airtable sur la table <strong>Reinitialisations</strong> (« quand
-    un enregistrement est créé → envoyer un email ») vous préviendra sans avoir à
-    surveiller la table.
-  </p>
-</div>
+<p>
+  Vous gardez par ailleurs la possibilité de couper un accès à tout moment en
+  décochant <code>Actif</code> : un compte inactif ne peut ni se connecter, ni
+  réinitialiser son mot de passe.
+</p>
 
 <h2>Assigner des clients</h2>
 

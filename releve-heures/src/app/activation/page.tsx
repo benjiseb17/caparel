@@ -5,8 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
-const LONGUEUR_MIN = 8;
+import { LONGUEUR_MIN_MOT_DE_PASSE as LONGUEUR_MIN } from "@/lib/mot-de-passe";
 
 export default function ActivationPage() {
   const router = useRouter();

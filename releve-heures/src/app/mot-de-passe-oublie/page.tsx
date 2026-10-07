@@ -3,24 +3,37 @@
 import { useState, FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { LONGUEUR_MIN_MOT_DE_PASSE as LONGUEUR_MIN } from "@/lib/mot-de-passe";
 
 export default function MotDePasseOubliePage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
+  const [motDePasse, setMotDePasse] = useState("");
+  const [confirmation, setConfirmation] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
-    setMessage(null);
-    setLoading(true);
 
+    if (motDePasse.length < LONGUEUR_MIN) {
+      setError(`Le mot de passe doit faire au moins ${LONGUEUR_MIN} caractères.`);
+      return;
+    }
+    if (motDePasse !== confirmation) {
+      setError("Les deux mots de passe ne sont pas identiques.");
+      return;
+    }
+
+    setLoading(true);
     try {
       const res = await fetch("/api/mot-de-passe-oublie", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, motDePasse }),
       });
       const data = await res.json();
 
@@ -29,7 +42,20 @@ export default function MotDePasseOubliePage() {
         return;
       }
 
-      setMessage(data.message);
+      // Le mot de passe vient d'être redéfini : on connecte directement.
+      const result = await signIn("credentials", {
+        email,
+        password: motDePasse,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Mot de passe modifié, mais la connexion a échoué.");
+        return;
+      }
+
+      router.push("/");
+      router.refresh();
     } catch {
       setError("Impossible de contacter le serveur.");
     } finally {
@@ -53,57 +79,82 @@ export default function MotDePasseOubliePage() {
           Mot de passe oublié
         </h1>
         <p className="text-sm text-muted mb-6">
-          Indiquez votre adresse email : la direction sera prévenue et
-          réinitialisera votre accès.
+          Saisissez l&apos;adresse email que vous avez communiquée à Caparel,
+          puis choisissez un nouveau mot de passe.
         </p>
 
-        {message ? (
-          <>
-            <div className="rounded-lg bg-soft-2 border border-line p-4">
-              <p className="text-sm text-ink" role="status">
-                {message}
-              </p>
-            </div>
-            <p className="text-xs text-muted mt-4">
-              Une fois votre accès réinitialisé, revenez sur la page de
-              connexion et choisissez « Première connexion ».
-            </p>
-          </>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-ink mb-1"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-                autoComplete="email"
-              />
-            </div>
-
-            {error && (
-              <p className="text-sm text-red-600" role="alert">
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-lg bg-navylogo text-white text-sm font-medium py-2.5 hover:bg-navy-2 transition-colors disabled:opacity-60"
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-ink mb-1"
             >
-              {loading ? "Envoi..." : "Envoyer ma demande"}
-            </button>
-          </form>
-        )}
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
+              autoComplete="email"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="motDePasse"
+              className="block text-sm font-medium text-ink mb-1"
+            >
+              Nouveau mot de passe
+            </label>
+            <input
+              id="motDePasse"
+              type="password"
+              required
+              value={motDePasse}
+              onChange={(e) => setMotDePasse(e.target.value)}
+              className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
+              autoComplete="new-password"
+            />
+            <p className="text-xs text-muted mt-1">
+              {LONGUEUR_MIN} caractères minimum.
+            </p>
+          </div>
+
+          <div>
+            <label
+              htmlFor="confirmation"
+              className="block text-sm font-medium text-ink mb-1"
+            >
+              Confirmer le mot de passe
+            </label>
+            <input
+              id="confirmation"
+              type="password"
+              required
+              value={confirmation}
+              onChange={(e) => setConfirmation(e.target.value)}
+              className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
+              autoComplete="new-password"
+            />
+          </div>
+
+          {error && (
+            <p className="text-sm text-red-600" role="alert">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-navylogo text-white text-sm font-medium py-2.5 hover:bg-navy-2 transition-colors disabled:opacity-60"
+          >
+            {loading ? "Enregistrement..." : "Définir mon nouveau mot de passe"}
+          </button>
+        </form>
 
         <p className="text-sm text-muted mt-6 text-center">
           <Link

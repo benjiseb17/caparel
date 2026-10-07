@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { activerCompteIntervenant } from "@/lib/airtable";
 import { isDemoMode } from "@/lib/demo";
-
-export const LONGUEUR_MIN_MOT_DE_PASSE = 8;
+import { LONGUEUR_MIN_MOT_DE_PASSE } from "@/lib/mot-de-passe";
 
 export async function POST(request: Request) {
   if (isDemoMode()) {

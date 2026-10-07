@@ -1,34 +1,61 @@
 import { NextResponse } from "next/server";
-import { demanderReinitialisation } from "@/lib/airtable";
+import bcrypt from "bcryptjs";
+import { reinitialiserMotDePasse } from "@/lib/airtable";
 import { isDemoMode } from "@/lib/demo";
-
-// Réponse unique, quelle que soit l'issue : dire « cette adresse est inconnue »
-// transformerait la page en annuaire des comptes Caparel.
-const REPONSE = {
-  ok: true,
-  message:
-    "Si cette adresse correspond à un compte, la direction vient d'être prévenue. Elle vous recontactera pour réinitialiser votre accès.",
-};
+import { LONGUEUR_MIN_MOT_DE_PASSE } from "@/lib/mot-de-passe";
 
 export async function POST(request: Request) {
   if (isDemoMode()) {
-    return NextResponse.json(REPONSE);
+    return NextResponse.json(
+      { error: "Reinitialisation indisponible en mode demo" },
+      { status: 400 }
+    );
   }
 
   const body = await request.json();
-  const { email } = body as { email?: string };
+  const { email, motDePasse } = body as {
+    email?: string;
+    motDePasse?: string;
+  };
 
-  if (!email) {
-    return NextResponse.json({ error: "Email manquant" }, { status: 400 });
+  if (!email || !motDePasse) {
+    return NextResponse.json(
+      { error: "Champs requis manquants" },
+      { status: 400 }
+    );
+  }
+
+  if (motDePasse.length < LONGUEUR_MIN_MOT_DE_PASSE) {
+    return NextResponse.json(
+      {
+        error: `Le mot de passe doit faire au moins ${LONGUEUR_MIN_MOT_DE_PASSE} caracteres.`,
+      },
+      { status: 400 }
+    );
   }
 
   try {
-    await demanderReinitialisation(email.trim());
-  } catch (error) {
-    // Une panne Airtable ne doit pas non plus distinguer les cas : on la trace
-    // côté serveur sans rien en dire à la personne.
-    console.error("Erreur lors de la demande de reinitialisation:", error);
-  }
+    const hash = bcrypt.hashSync(motDePasse, 10);
+    const reinitialise = await reinitialiserMotDePasse(email.trim(), hash);
 
-  return NextResponse.json(REPONSE);
+    if (!reinitialise) {
+      // Adresse inconnue ou compte desactive : meme message, pour ne pas
+      // reveler quels comptes existent.
+      return NextResponse.json(
+        {
+          error:
+            "Cette adresse ne permet pas de reinitialiser un mot de passe. Contactez Caparel.",
+        },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("Erreur lors de la reinitialisation:", error);
+    return NextResponse.json(
+      { error: "Impossible de reinitialiser le mot de passe" },
+      { status: 500 }
+    );
+  }
 }
