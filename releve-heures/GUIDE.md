@@ -173,6 +173,18 @@ retire tout aussi vite. Le reste de l'accueil (clients, récapitulatif du mois)
 reste visible, une même personne pouvant être à la fois dirigeante et
 intervenante.
 
+## Désigner un référent de famille
+
+Dans la table **Clients**, la colonne `Referent` désigne l'admin responsable d'une
+famille. Chaque référent retrouve ses familles dans l'onglet **Mes familles** :
+heures du mois, intervenantes qui y travaillent, et cinq dernières interventions.
+
+Une famille peut avoir plusieurs référents, et un référent plusieurs familles.
+L'onglet n'apparaît que pour les comptes dont la case `Admin` est cochée.
+
+> Cet onglet ne montre que ce qui a **déjà eu lieu**. L'application ne contient
+> aucun planning prévisionnel : les relevés sont saisis après l'intervention.
+
 ## Consulter les relevés
 
 La table **Releves** contient toutes les saisies, avec l'intervenante, le client,

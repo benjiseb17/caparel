@@ -256,6 +256,96 @@ export async function getRelevesByIntervenant(
     });
 }
 
+export type InterventionFamille = {
+  id: string;
+  date: string;
+  intervenante: string;
+  heureArrivee: string;
+  heureDepart: string;
+  heures: number;
+};
+
+export type Famille = {
+  id: string;
+  nom: string;
+  adresse: string;
+  heuresMois: number;
+  intervenantes: string[];
+  interventions: InterventionFamille[];
+};
+
+/**
+ * Les familles dont `referentId` est le référent, avec leur activité récente.
+ *
+ * Ne couvre que le passé : la base ne contient aucune intervention planifiée,
+ * seulement les relevés saisis après coup.
+ */
+export async function getFamillesDuReferent(
+  referentId: string,
+  maintenant = new Date()
+): Promise<Famille[]> {
+  const [clientRecords, releveRecords, intervenantRecords] = await Promise.all([
+    base(TABLES.clients).select({ sort: [{ field: "Nom", direction: "asc" }] }).all(),
+    base(TABLES.releves).select({ sort: [{ field: "Date", direction: "desc" }] }).all(),
+    base(TABLES.intervenants).select().all(),
+  ]);
+
+  const nomsIntervenantes = new Map(
+    intervenantRecords.map((i) => [
+      i.id,
+      (i.get("Nom et Prenom") as string) || "Intervenante inconnue",
+    ])
+  );
+
+  const miennes = clientRecords.filter((c) =>
+    ((c.get("Referent") as string[] | undefined) || []).includes(referentId)
+  );
+
+  return miennes.map((client) => {
+    const siens = releveRecords.filter((r) =>
+      ((r.get("Client") as string[] | undefined) || []).includes(client.id)
+    );
+
+    let heuresMois = 0;
+    const intervenantes = new Set<string>();
+
+    for (const r of siens) {
+      const date = new Date((r.get("Date") as string) || "");
+      if (Number.isNaN(date.getTime())) continue;
+
+      const nom = nomsIntervenantes.get(
+        ((r.get("Intervenant") as string[]) || [])[0] || ""
+      );
+      if (nom) intervenantes.add(nom);
+
+      if (
+        date.getFullYear() === maintenant.getFullYear() &&
+        date.getMonth() === maintenant.getMonth()
+      ) {
+        heuresMois += (r.get("Heures realisees") as number) || 0;
+      }
+    }
+
+    return {
+      id: client.id,
+      nom: (client.get("Nom") as string) || "",
+      adresse: (client.get("Adresse") as string) || "",
+      heuresMois: Math.round(heuresMois * 100) / 100,
+      intervenantes: [...intervenantes].sort(),
+      interventions: siens.slice(0, 5).map((r) => ({
+        id: r.id,
+        date: (r.get("Date") as string) || "",
+        intervenante:
+          nomsIntervenantes.get(((r.get("Intervenant") as string[]) || [])[0] || "") ||
+          "Intervenante inconnue",
+        heureArrivee: (r.get("Heure d'arrivee") as string) || "",
+        heureDepart: (r.get("Heure de depart") as string) || "",
+        heures: (r.get("Heures realisees") as number) || 0,
+      })),
+    };
+  });
+}
+
 export type InterventionAdmin = {
   id: string;
   date: string;

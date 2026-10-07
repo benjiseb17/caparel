@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { auth } from "@/auth";
 import LogoutButton from "@/components/LogoutButton";
 
-type Onglet = "accueil" | "saisie" | "historique" | "fiches";
+type Onglet = "accueil" | "saisie" | "historique" | "fiches" | "familles";
 
 const LIENS: { href: string; label: string; key: Onglet }[] = [
   { href: "/", label: "Accueil", key: "accueil" },
@@ -11,7 +12,21 @@ const LIENS: { href: string; label: string; key: Onglet }[] = [
   { href: "/fiches-de-paie", label: "Fiches de paie", key: "fiches" },
 ];
 
-export default function AppHeader({ active }: { active: Onglet }) {
+const LIEN_FAMILLES = {
+  href: "/familles",
+  label: "Mes familles",
+  key: "familles" as Onglet,
+};
+
+export default async function AppHeader({ active }: { active: Onglet }) {
+  // Le jeton de session sert uniquement à décider de l'affichage de l'onglet,
+  // ce qui évite un appel Airtable sur chaque page. L'accès à /familles est,
+  // lui, vérifié contre Airtable : promouvoir quelqu'un demande une
+  // reconnexion pour voir l'onglet, mais retirer le droit coupe l'accès
+  // immédiatement.
+  const session = await auth();
+  const liens = session?.user?.admin ? [...LIENS, LIEN_FAMILLES] : LIENS;
+
   return (
     <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-8 py-3 sm:py-4 gap-2 sm:gap-3 border-b border-line bg-soft">
       <div className="flex items-center justify-between">
@@ -33,7 +48,7 @@ export default function AppHeader({ active }: { active: Onglet }) {
           deux côtés en cas de débordement, et le passage à la ligne évite
           d'en masquer un hors écran. */}
       <nav className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5 sm:gap-x-5">
-        {LIENS.map((lien) => (
+        {liens.map((lien) => (
           <Link
             key={lien.key}
             href={lien.href}

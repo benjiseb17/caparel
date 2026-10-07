@@ -32,6 +32,7 @@ Crée une base Airtable avec **4 tables** :
 | `Numero client`         | Texte sur une ligne                                 |
 | `Actif`                 | Case à cocher                                       |
 | `Intervenants assignes` | Lien vers un autre enregistrement → `Intervenants` (plusieurs possibles) |
+| `Referent`              | Lien vers `Intervenants` — l'admin référent de cette famille (plusieurs possibles) |
 
 > `Intervenants assignes` détermine quels intervenants voient ce client (sur la page d'accueil et dans le menu déroulant de saisie).
 
@@ -134,6 +135,7 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 - **Relevé d'heure** (`/saisie`) : l'intervenant choisit un client (parmi les siens), une date (aujourd'hui par défaut), une heure d'arrivée et de départ. Le nombre d'heures est calculé automatiquement et affiché en direct. Une case à cocher lui fait certifier sur l'honneur l'exactitude des informations avant de pouvoir valider.
 - **Validation** : le bouton "Valider" envoie les données à `/api/releves`, qui recalcule les heures côté serveur (pour éviter toute manipulation côté client), vérifie que la certification a bien été cochée, et crée un enregistrement dans la table `Releves`, lié à l'intervenant connecté et au client choisi.
 - **Historique** (`/historique`) : liste des relevés déjà saisis par l'intervenant, en lecture seule. Un relevé validé n'est plus modifiable depuis l'app — les corrections passent par la direction dans Airtable, afin que les heures servant de base à la paie ne changent plus après coup.
+- **Mes familles** (`/familles`) : réservé aux comptes `Admin`. Chaque référent y voit les familles dont il est `Referent` dans la table `Clients` : heures du mois, intervenantes concernées et cinq dernières interventions. L'autorisation est relue depuis Airtable à chaque affichage.
 - **Fiches de paie** (`/fiches-de-paie`) : ses bulletins (table `Fiches de Paie`), du plus récent au plus ancien, avec un lien de téléchargement direct. Seules les fiches cochées `Publiee` apparaissent.
 
 ## Déploiement
