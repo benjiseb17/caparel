@@ -555,7 +555,7 @@
   fetch(AVIS_ENDPOINT)
     .then(function(res){ if(!res.ok) throw new Error('avis ' + res.status); return res.json(); })
     .then(function(data){
-      if(!data.avis || !data.avis.length || data.note == null) return;
+      if(data.note == null) return;
 
       document.getElementById('avisNote').textContent = data.note.toFixed(1).replace('.', ',');
       document.getElementById('avisEtoiles').textContent = stars(data.note);
@@ -564,7 +564,9 @@
       if(data.lien) lien.href = data.lien; else lien.hidden = true;
 
       var track = document.getElementById('avisTrack');
-      data.avis.forEach(function(a){
+      var liste = data.avis || [];
+      if(!liste.length) track.remove();
+      liste.forEach(function(a){
         var card = document.createElement('article');
         card.className = 'avis-card';
 
