@@ -1,37 +1,21 @@
 import { NextResponse } from "next/server";
 import { creerLead } from "@/lib/airtable";
+import { corsHeaders } from "@/lib/cors";
 
 // Route publique (pas d'auth) appelée depuis le site vitrine statique, qui
 // ne peut pas garder de secret côté client. Le token Airtable reste ici,
-// côté serveur. Plusieurs origines autorisées le temps de la transition vers
-// le domaine personnalisé caparel.fr (github.io redirige déjà dessus mais
-// garde l'entrée au cas où).
-const ALLOWED_ORIGINS = [
-  "https://caparel.fr",
-  "https://www.caparel.fr",
-  "https://benjiseb17.github.io",
-];
-
-function corsHeaders(origin: string | null) {
-  const allowOrigin =
-    origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
-  return {
-    "Access-Control-Allow-Origin": allowOrigin,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-    Vary: "Origin",
-  };
-}
+// côté serveur.
+const METHODS = "POST, OPTIONS";
 
 export async function OPTIONS(request: Request) {
   return new NextResponse(null, {
     status: 204,
-    headers: corsHeaders(request.headers.get("origin")),
+    headers: corsHeaders(request.headers.get("origin"), METHODS),
   });
 }
 
 export async function POST(request: Request) {
-  const headers = corsHeaders(request.headers.get("origin"));
+  const headers = corsHeaders(request.headers.get("origin"), METHODS);
   const body = await request.json().catch(() => null);
   const {
     nom,

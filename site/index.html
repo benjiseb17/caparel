@@ -141,6 +141,23 @@
   .hero-photo{width:100%;height:100%;object-fit:cover;}
   .hero-partners{padding:36px 0 20px;}
   #apropos{padding-top:32px;}
+
+  /* AVIS GOOGLE (bandeau dynamique, masqué tant que les avis ne sont pas chargés) */
+  .avis{padding:8px 0 40px;}
+  .avis-head{display:flex;align-items:center;justify-content:center;gap:12px 20px;flex-wrap:wrap;margin-bottom:22px;text-align:center;}
+  .avis-score{display:flex;align-items:center;gap:10px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--navy);}
+  .avis-score b{font-size:2rem;line-height:1;}
+  .avis-stars{color:var(--sand);letter-spacing:2px;font-size:1.1rem;white-space:nowrap;}
+  .avis-meta{font-size:.9rem;color:var(--muted);}
+  .avis-meta a{color:var(--teal-dark);font-weight:600;}
+  .avis-meta a:hover{text-decoration:underline;}
+  .avis-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 24px;padding:4px 24px 16px;margin:0 -24px;scrollbar-width:thin;}
+  .avis-card{flex:0 0 min(320px,82vw);scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:22px;display:flex;flex-direction:column;gap:10px;}
+  .avis-card-top{display:flex;align-items:center;gap:12px;}
+  .avis-avatar{width:38px;height:38px;border-radius:50%;background:var(--soft-2);color:var(--teal-dark);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none;}
+  .avis-author{font-weight:600;color:var(--navy);font-size:.92rem;line-height:1.3;}
+  .avis-date{font-size:.78rem;color:var(--muted);}
+  .avis-text{font-size:.9rem;color:var(--ink);display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;}
   .partners-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
   .partner-pill{
     display:flex;align-items:center;gap:8px;
@@ -250,6 +267,7 @@
   @media (max-width: 640px){
     section{padding:60px 0;}
     .container{padding:0 20px;}
+    .avis-track{margin:0 -20px;padding-left:20px;padding-right:20px;scroll-padding:0 20px;}
     .form-row{grid-template-columns:1fr;}
     .checkbox-grid{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
@@ -341,6 +359,16 @@
     </div>
   </div>
 </div>
+
+<section class="avis" id="avis" hidden aria-label="Avis Google">
+  <div class="container">
+    <div class="avis-head">
+      <div class="avis-score"><b id="avisNote"></b><span class="avis-stars" id="avisEtoiles" aria-hidden="true"></span></div>
+      <div class="avis-meta"><span id="avisCompte"></span> · <a id="avisLien" href="#" target="_blank" rel="noopener">Voir tous nos avis Google</a></div>
+    </div>
+    <div class="avis-track" id="avisTrack"></div>
+  </div>
+</section>
 
 <section id="apropos">
   <div class="container about-grid">
@@ -516,6 +544,71 @@
     </div>
   </div>
 </footer>
+
+<script>
+(function(){
+  var AVIS_ENDPOINT = "https://releve-heures-chi.vercel.app/api/avis";
+  var section = document.getElementById('avis');
+  if(!section) return;
+
+  function stars(n){
+    var full = Math.round(n);
+    return '\u2605'.repeat(full) + '\u2606'.repeat(Math.max(0, 5 - full));
+  }
+
+  fetch(AVIS_ENDPOINT)
+    .then(function(res){ if(!res.ok) throw new Error('avis ' + res.status); return res.json(); })
+    .then(function(data){
+      if(!data.avis || !data.avis.length || data.note == null) return;
+
+      document.getElementById('avisNote').textContent = data.note.toFixed(1).replace('.', ',');
+      document.getElementById('avisEtoiles').textContent = stars(data.note);
+      document.getElementById('avisCompte').textContent = data.nombreAvis + ' avis Google';
+      var lien = document.getElementById('avisLien');
+      if(data.lien) lien.href = data.lien; else lien.hidden = true;
+
+      var track = document.getElementById('avisTrack');
+      data.avis.forEach(function(a){
+        var card = document.createElement('article');
+        card.className = 'avis-card';
+
+        var top = document.createElement('div');
+        top.className = 'avis-card-top';
+        var avatar = document.createElement('div');
+        avatar.className = 'avis-avatar';
+        avatar.textContent = (a.auteur || '?').charAt(0).toUpperCase();
+        var who = document.createElement('div');
+        var name = document.createElement('div');
+        name.className = 'avis-author';
+        name.textContent = a.auteur;
+        var date = document.createElement('div');
+        date.className = 'avis-date';
+        date.textContent = a.date;
+        who.appendChild(name);
+        who.appendChild(date);
+        top.appendChild(avatar);
+        top.appendChild(who);
+
+        var rating = document.createElement('div');
+        rating.className = 'avis-stars';
+        rating.setAttribute('aria-label', a.note + ' sur 5');
+        rating.textContent = stars(a.note);
+
+        var text = document.createElement('p');
+        text.className = 'avis-text';
+        text.textContent = a.texte;
+
+        card.appendChild(top);
+        card.appendChild(rating);
+        card.appendChild(text);
+        track.appendChild(card);
+      });
+
+      section.hidden = false;
+    })
+    .catch(function(){ /* bandeau simplement non affiche si les avis sont indisponibles */ });
+})();
+</script>
 
 <script>
 (function(){
