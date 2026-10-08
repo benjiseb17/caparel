@@ -34,7 +34,6 @@ type AvisPayload = {
   note: number | null;
   nombreAvis: number;
   lien: string | null;
-  diag?: Record<string, unknown>;
   avis: {
     auteur: string;
     note: number;
@@ -48,9 +47,9 @@ const FIELDS =
 
 let cache: { at: number; data: AvisPayload } | null = null;
 
-async function fetchPlace(apiKey: string, lang = "fr"): Promise<GooglePlace> {
+async function fetchPlace(apiKey: string): Promise<GooglePlace> {
   const res = await fetch(
-    `${PLACES_BASE}/places/${encodeURIComponent(PLACE_ID)}${lang ? `?languageCode=${lang}` : ""}`,
+    `${PLACES_BASE}/places/${encodeURIComponent(PLACE_ID)}?languageCode=fr`,
     { headers: { "X-Goog-Api-Key": apiKey, "X-Goog-FieldMask": FIELDS } }
   );
   if (!res.ok) throw new Error(`Places details ${res.status}`);
@@ -79,7 +78,6 @@ function toPayload(place: GooglePlace): AvisPayload {
     nombreAvis: place.userRatingCount ?? 0,
     lien: place.googleMapsUri ?? null,
     avis,
-    diag: { recus: (place.reviews || []).length, avecTexte: avis.length, cles: Object.keys(place) },
   };
 }
 
@@ -120,12 +118,6 @@ export async function GET(request: Request) {
       );
     }
     const data = toPayload(place);
-    try {
-      const alt = await fetchPlace(apiKey, "");
-      data.diag = { ...data.diag, sansLangue: (alt.reviews || []).length, clesSansLangue: Object.keys(alt) };
-    } catch (e) {
-      data.diag = { ...data.diag, sansLangueErreur: String(e) };
-    }
     cache = { at: Date.now(), data };
     return NextResponse.json(data, {
       headers: {
