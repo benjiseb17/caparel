@@ -7,7 +7,9 @@ import { corsHeaders } from "@/lib/cors";
 const METHODS = "GET, OPTIONS";
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const PLACES_BASE = "https://places.googleapis.com/v1";
-const SEARCH_QUERY = "Caparel aide à domicile Neuilly-sur-Seine";
+// Identifiant de la fiche Google de Caparel (public, pas un secret). Une
+// recherche par nom tombait sur un autre établissement, d'où l'ID fixe.
+const PLACE_ID = process.env.GOOGLE_PLACE_ID || "ChIJB7YyA1LKp04RfnyoUXlpk6s";
 
 type GoogleReview = {
   rating?: number;
@@ -45,39 +47,13 @@ const FIELDS =
 
 let cache: { at: number; data: AvisPayload } | null = null;
 
-async function fetchPlace(apiKey: string): Promise<GooglePlace | null> {
-  const placeId = process.env.GOOGLE_PLACE_ID;
-
-  if (placeId) {
-    const res = await fetch(
-      `${PLACES_BASE}/places/${encodeURIComponent(placeId)}?languageCode=fr`,
-      {
-        headers: { "X-Goog-Api-Key": apiKey, "X-Goog-FieldMask": FIELDS },
-      }
-    );
-    if (!res.ok) throw new Error(`Places details ${res.status}`);
-    return (await res.json()) as GooglePlace;
-  }
-
-  const res = await fetch(`${PLACES_BASE}/places:searchText`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Goog-Api-Key": apiKey,
-      "X-Goog-FieldMask": FIELDS.split(",")
-        .map((f) => `places.${f}`)
-        .join(","),
-    },
-    body: JSON.stringify({
-      textQuery: SEARCH_QUERY,
-      languageCode: "fr",
-      regionCode: "FR",
-      pageSize: 1,
-    }),
-  });
-  if (!res.ok) throw new Error(`Places search ${res.status}`);
-  const json = (await res.json()) as { places?: GooglePlace[] };
-  return json.places?.[0] ?? null;
+async function fetchPlace(apiKey: string): Promise<GooglePlace> {
+  const res = await fetch(
+    `${PLACES_BASE}/places/${encodeURIComponent(PLACE_ID)}?languageCode=fr`,
+    { headers: { "X-Goog-Api-Key": apiKey, "X-Goog-FieldMask": FIELDS } }
+  );
+  if (!res.ok) throw new Error(`Places details ${res.status}`);
+  return (await res.json()) as GooglePlace;
 }
 
 function toPayload(place: GooglePlace): AvisPayload {
@@ -134,9 +110,10 @@ export async function GET(request: Request) {
 
   try {
     const place = await fetchPlace(apiKey);
-    if (!place) {
+    if (!place.displayName?.text?.toLowerCase().includes("caparel")) {
+      console.error("Fiche Google inattendue:", place.displayName?.text);
       return NextResponse.json(
-        { error: "Fiche introuvable" },
+        { error: "Fiche inattendue" },
         { status: 404, headers }
       );
     }
