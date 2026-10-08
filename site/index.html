@@ -139,11 +139,11 @@
     position:relative;overflow:hidden;
   }
   .hero-photo{width:100%;height:100%;object-fit:cover;}
-  .hero-partners{padding:36px 0 20px;}
+  .hero-partners{padding:20px 0 20px;}
   #apropos{padding-top:32px;}
 
   /* AVIS GOOGLE (bandeau dynamique, masqué tant que les avis ne sont pas chargés) */
-  .avis{padding:14px 0;background:#fff;border-bottom:1px solid var(--line);}
+  .avis{padding:30px 0 0;}
   .avis--loading{visibility:hidden;min-height:56px;}
   .avis-head{display:flex;align-items:center;justify-content:center;gap:6px 20px;flex-wrap:wrap;text-align:center;}
   .avis-score{display:flex;align-items:center;gap:10px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--navy);}
@@ -327,16 +327,6 @@
   </div>
 </header>
 
-<section class="avis avis--loading" id="avis" aria-label="Avis Google">
-  <div class="container">
-    <div class="avis-head">
-      <div class="avis-score"><b id="avisNote"></b><span class="avis-stars" id="avisEtoiles" aria-hidden="true"></span></div>
-      <div class="avis-meta"><span id="avisCompte"></span> · <a id="avisLien" href="#" target="_blank" rel="noopener">Voir tous nos avis Google</a></div>
-    </div>
-    <div class="avis-track" id="avisTrack"></div>
-  </div>
-</section>
-
 <section class="hero" id="top">
   <div class="container">
     <div class="hero-card">
@@ -358,6 +348,16 @@
         <img src="images/hero.jpg" alt="Aide à domicile Caparel" class="hero-photo" width="1385" height="1136" fetchpriority="high" decoding="async">
       </div>
     </div>
+  </div>
+</section>
+
+<section class="avis avis--loading" id="avis" aria-label="Avis Google">
+  <div class="container">
+    <div class="avis-head">
+      <div class="avis-score"><b id="avisNote"></b><span class="avis-stars" id="avisEtoiles" aria-hidden="true"></span></div>
+      <div class="avis-meta"><span id="avisCompte"></span> · <a id="avisLien" href="#" target="_blank" rel="noopener">Voir tous nos avis Google</a></div>
+    </div>
+    <div class="avis-track" id="avisTrack"></div>
   </div>
 </section>
 
