@@ -34,6 +34,7 @@ type AvisPayload = {
   note: number | null;
   nombreAvis: number;
   lien: string | null;
+  diag?: { recus: number; avecTexte: number };
   avis: {
     auteur: string;
     note: number;
@@ -78,6 +79,7 @@ function toPayload(place: GooglePlace): AvisPayload {
     nombreAvis: place.userRatingCount ?? 0,
     lien: place.googleMapsUri ?? null,
     avis,
+    diag: { recus: (place.reviews || []).length, avecTexte: avis.length },
   };
 }
 
