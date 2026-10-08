@@ -143,15 +143,16 @@
   #apropos{padding-top:32px;}
 
   /* AVIS GOOGLE (bandeau dynamique, masqué tant que les avis ne sont pas chargés) */
-  .avis{padding:8px 0 40px;}
-  .avis-head{display:flex;align-items:center;justify-content:center;gap:12px 20px;flex-wrap:wrap;margin-bottom:22px;text-align:center;}
+  .avis{padding:14px 0;background:#fff;border-bottom:1px solid var(--line);}
+  .avis--loading{visibility:hidden;min-height:56px;}
+  .avis-head{display:flex;align-items:center;justify-content:center;gap:6px 20px;flex-wrap:wrap;text-align:center;}
   .avis-score{display:flex;align-items:center;gap:10px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--navy);}
-  .avis-score b{font-size:2rem;line-height:1;}
+  .avis-score b{font-size:1.6rem;line-height:1;}
   .avis-stars{color:var(--sand);letter-spacing:2px;font-size:1.1rem;white-space:nowrap;}
   .avis-meta{font-size:.9rem;color:var(--muted);}
   .avis-meta a{color:var(--teal-dark);font-weight:600;}
   .avis-meta a:hover{text-decoration:underline;}
-  .avis-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 24px;padding:4px 24px 16px;margin:0 -24px;scrollbar-width:thin;}
+  .avis-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 24px;padding:4px 24px 8px;margin:16px -24px 0;scrollbar-width:thin;}
   .avis-card{flex:0 0 min(320px,82vw);scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:22px;display:flex;flex-direction:column;gap:10px;}
   .avis-card-top{display:flex;align-items:center;gap:12px;}
   .avis-avatar{width:38px;height:38px;border-radius:50%;background:var(--soft-2);color:var(--teal-dark);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none;}
@@ -268,7 +269,8 @@
   @media (max-width: 640px){
     section{padding:60px 0;}
     .container{padding:0 20px;}
-    .avis-track{margin:0 -20px;padding-left:20px;padding-right:20px;scroll-padding:0 20px;}
+    .avis-track{margin:16px -20px 0;padding-left:20px;padding-right:20px;scroll-padding:0 20px;}
+    .avis--loading{min-height:84px;}
     .form-row{grid-template-columns:1fr;}
     .checkbox-grid{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
@@ -325,6 +327,16 @@
   </div>
 </header>
 
+<section class="avis avis--loading" id="avis" aria-label="Avis Google">
+  <div class="container">
+    <div class="avis-head">
+      <div class="avis-score"><b id="avisNote"></b><span class="avis-stars" id="avisEtoiles" aria-hidden="true"></span></div>
+      <div class="avis-meta"><span id="avisCompte"></span> · <a id="avisLien" href="#" target="_blank" rel="noopener">Voir tous nos avis Google</a></div>
+    </div>
+    <div class="avis-track" id="avisTrack"></div>
+  </div>
+</section>
+
 <section class="hero" id="top">
   <div class="container">
     <div class="hero-card">
@@ -359,16 +371,6 @@
     </div>
   </div>
 </div>
-
-<section class="avis" id="avis" hidden aria-label="Avis Google">
-  <div class="container">
-    <div class="avis-head">
-      <div class="avis-score"><b id="avisNote"></b><span class="avis-stars" id="avisEtoiles" aria-hidden="true"></span></div>
-      <div class="avis-meta"><span id="avisCompte"></span> · <a id="avisLien" href="#" target="_blank" rel="noopener">Voir tous nos avis Google</a></div>
-    </div>
-    <div class="avis-track" id="avisTrack"></div>
-  </div>
-</section>
 
 <section id="apropos">
   <div class="container about-grid">
@@ -555,7 +557,7 @@
   fetch(AVIS_ENDPOINT)
     .then(function(res){ if(!res.ok) throw new Error('avis ' + res.status); return res.json(); })
     .then(function(data){
-      if(data.note == null) return;
+      if(data.note == null){ section.hidden = true; return; }
 
       document.getElementById('avisNote').textContent = data.note.toFixed(1).replace('.', ',');
       document.getElementById('avisEtoiles').textContent = stars(data.note);
@@ -602,9 +604,9 @@
         track.appendChild(card);
       });
 
-      section.hidden = false;
+      section.classList.remove('avis--loading');
     })
-    .catch(function(){ /* bandeau simplement non affiche si les avis sont indisponibles */ });
+    .catch(function(){ section.hidden = true; /* bandeau masque si les avis sont indisponibles */ });
 })();
 </script>
 
