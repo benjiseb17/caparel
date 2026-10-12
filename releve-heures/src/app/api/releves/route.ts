@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import {
   creerReleve,
-  getIntervenantById,
+  getCompteById,
   getRelevesByIntervenant,
 } from "@/lib/airtable";
 import { isDemoMode, addDemoReleve, getDemoReleves } from "@/lib/demo";
@@ -35,26 +35,37 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
   }
 
-  // Un référent ne figure pas dans la table Intervenants : un relevé à son nom
-  // serait refusé par Airtable. On le dit clairement plutôt que de laisser
-  // remonter une erreur 500.
-  if (!isDemoMode() && (await getIntervenantById(session.user.id))?.referent) {
+  // Seule une intervenante figure dans la table Intervenants : un relevé au nom
+  // d'un référent ou d'une famille serait refusé par Airtable. On le dit
+  // clairement plutôt que de laisser remonter une erreur 500.
+  if (
+    !isDemoMode() &&
+    (await getCompteById(session.user.id))?.role !== "intervenante"
+  ) {
     return NextResponse.json(
-      { error: "Les référents ne saisissent pas de relevés d'heures." },
+      { error: "Seules les intervenantes saisissent des relevés d'heures." },
       { status: 403 }
     );
   }
 
   const body = await request.json();
-  const { clientId, date, heureArrivee, heureDepart, commentaire, certifie } =
-    body as {
-      clientId?: string;
-      date?: string;
-      heureArrivee?: string;
-      heureDepart?: string;
-      commentaire?: string;
-      certifie?: boolean;
-    };
+  const {
+    clientId,
+    date,
+    heureArrivee,
+    heureDepart,
+    commentaire,
+    motPourLaFamille,
+    certifie,
+  } = body as {
+    clientId?: string;
+    date?: string;
+    heureArrivee?: string;
+    heureDepart?: string;
+    commentaire?: string;
+    motPourLaFamille?: string;
+    certifie?: boolean;
+  };
 
   if (!clientId || !date || !heureArrivee || !heureDepart) {
     return NextResponse.json(
@@ -98,6 +109,7 @@ export async function POST(request: Request) {
     heureDepart,
     heuresRealisees,
     commentaire,
+    motPourLaFamille,
     certifie,
   };
 

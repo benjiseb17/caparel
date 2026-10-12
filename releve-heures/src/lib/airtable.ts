@@ -39,6 +39,7 @@ export const TABLES = {
   leads: process.env.AIRTABLE_TABLE_LEADS || "tblcVywextjxuUGYK", // Leads
   reinitialisations:
     process.env.AIRTABLE_TABLE_REINITIALISATIONS || "tbl1tA2DDGikRaOra", // Reinitialisations
+  suivis: process.env.AIRTABLE_TABLE_SUIVIS || "tblxcmPuzVXXRoLyq", // Suivis
 };
 
 type AirtableAttachment = {
@@ -47,48 +48,55 @@ type AirtableAttachment = {
 };
 
 /**
- * Un compte de connexion. Les intervenantes et les référents vivent dans deux
- * tables distinctes : `referent` dit de laquelle vient le compte, et commande
- * l'accès au bloc Direction comme à la page Mes familles.
+ * Le rôle d'un compte, déterminé par la table dont il provient — et non par une
+ * case à cocher. Chaque rôle a son propre parcours dans l'app.
  */
-export type Intervenant = {
+export type RoleCompte = "referent" | "intervenante" | "famille";
+
+/** Un compte de connexion, quel que soit son rôle. */
+export type Compte = {
   id: string;
   nomComplet: string;
   email: string;
   motDePasseHash: string;
   actif: boolean;
-  referent: boolean;
+  role: RoleCompte;
   /** Référent de direction : voit toutes les familles, pas seulement les siennes. */
   accesComplet: boolean;
   photoUrl: string;
+  /** Vide pour les référents et les familles. */
   tauxHoraire: number;
 };
 
+// Les comptes vivent dans trois tables. L'ordre compte : Referents d'abord, de
+// sorte qu'un référent reste reconnu comme tel même si une ancienne ligne à son
+// nom traîne ailleurs. Le champ portant le nom diffère d'une table à l'autre.
+const SOURCES_COMPTE = [
+  { table: TABLES.referents, role: "referent", champNom: "Nom et Prenom" },
+  { table: TABLES.intervenants, role: "intervenante", champNom: "Nom et Prenom" },
+  { table: TABLES.clients, role: "famille", champNom: "Nom" },
+] as const;
+
+type SourceCompte = (typeof SOURCES_COMPTE)[number];
+
 function mapCompte(
   record: Airtable.Record<Airtable.FieldSet>,
-  referent: boolean
-): Intervenant {
+  source: SourceCompte
+): Compte {
   const photos = (record.get("Photo") as AirtableAttachment[] | undefined) || [];
   return {
     id: record.id,
-    nomComplet: (record.get("Nom et Prenom") as string) || "",
+    nomComplet: (record.get(source.champNom) as string) || "",
     email: (record.get("Email") as string) || "",
     motDePasseHash: (record.get("MotDePasseHash") as string) || "",
     actif: Boolean(record.get("Actif")),
-    referent,
-    accesComplet: referent && Boolean(record.get("Acces complet")),
+    role: source.role,
+    accesComplet:
+      source.role === "referent" && Boolean(record.get("Acces complet")),
     photoUrl: photos[0]?.url || "",
     tauxHoraire: (record.get("TauxHoraire") as number) || 0,
   };
 }
-
-// Les comptes vivent dans deux tables : Referents est consultée en premier,
-// de sorte qu'un référent reste reconnu comme tel même si une ancienne ligne
-// à son nom traîne encore dans Intervenants.
-const SOURCES_COMPTE = [
-  { table: TABLES.referents, referent: true },
-  { table: TABLES.intervenants, referent: false },
-] as const;
 
 async function trouverCompteParEmail(email: string) {
   const formule = `LOWER({Email}) = LOWER("${email.replace(/"/g, '\\"')}")`;
@@ -98,18 +106,16 @@ async function trouverCompteParEmail(email: string) {
       .select({ filterByFormula: formule, maxRecords: 1 })
       .firstPage();
 
-    if (records.length > 0) return { ...source, record: records[0] };
+    if (records.length > 0) return { source, record: records[0] };
   }
 
   return null;
 }
 
-export async function getIntervenantByEmail(
-  email: string
-): Promise<Intervenant | null> {
+export async function getCompteByEmail(email: string): Promise<Compte | null> {
   const trouve = await trouverCompteParEmail(email);
   if (!trouve) return null;
-  return mapCompte(trouve.record, trouve.referent);
+  return mapCompte(trouve.record, trouve.source);
 }
 
 /**
@@ -130,12 +136,12 @@ export async function activerCompteIntervenant(
   const trouve = await trouverCompteParEmail(email);
   if (!trouve) return false;
 
-  const compte = mapCompte(trouve.record, trouve.referent);
+  const compte = mapCompte(trouve.record, trouve.source);
 
   if (!compte.actif) return false;
   if (compte.motDePasseHash) return false;
 
-  await base(trouve.table).update(compte.id, {
+  await base(trouve.source.table).update(compte.id, {
     MotDePasseHash: motDePasseHash,
   });
 
@@ -168,10 +174,10 @@ export async function reinitialiserMotDePasse(
   const trouve = await trouverCompteParEmail(email);
   if (!trouve) return false;
 
-  const compte = mapCompte(trouve.record, trouve.referent);
+  const compte = mapCompte(trouve.record, trouve.source);
   if (!compte.actif) return false;
 
-  await base(trouve.table).update(compte.id, {
+  await base(trouve.source.table).update(compte.id, {
     MotDePasseHash: motDePasseHash,
   });
 
@@ -197,9 +203,9 @@ export async function reinitialiserMotDePasse(
   return true;
 }
 
-export async function getIntervenantById(
+export async function getCompteById(
   id: string
-): Promise<Intervenant | null> {
+): Promise<Compte | null> {
   // Un identifiant Airtable est alphanumérique : on le valide avant de
   // l'injecter dans la formule.
   if (!/^rec[A-Za-z0-9]+$/.test(id)) return null;
@@ -209,7 +215,7 @@ export async function getIntervenantById(
       .select({ filterByFormula: `RECORD_ID() = "${id}"`, maxRecords: 1 })
       .firstPage();
 
-    if (records.length > 0) return mapCompte(records[0], source.referent);
+    if (records.length > 0) return mapCompte(records[0], source);
   }
 
   return null;
@@ -254,6 +260,8 @@ export type NouveauReleve = {
   heureDepart: string;
   heuresRealisees: number;
   commentaire?: string;
+  /** Lu par la famille dans son espace, contrairement à `commentaire`. */
+  motPourLaFamille?: string;
   certifie: boolean;
 };
 
@@ -304,6 +312,7 @@ export async function creerReleve(releve: NouveauReleve) {
     "Heure de depart": releve.heureDepart,
     "Heures realisees": releve.heuresRealisees,
     Commentaire: releve.commentaire || "",
+    "Mot pour la famille": releve.motPourLaFamille || "",
     Certification: releve.certifie,
   });
 
@@ -396,6 +405,15 @@ export type InterventionFamille = {
   heures: number;
 };
 
+export type RetourFamille = {
+  id: string;
+  message: string;
+  ecritLe: string;
+  traite: boolean;
+  /** Date de l'intervention visée, vide si le retour est général. */
+  dateIntervention: string;
+};
+
 export type Famille = {
   id: string;
   nom: string;
@@ -403,6 +421,8 @@ export type Famille = {
   heuresMois: number;
   intervenantes: string[];
   interventions: InterventionFamille[];
+  /** Les retours écrits par la famille depuis son espace. */
+  retours: RetourFamille[];
 };
 
 /**
@@ -419,11 +439,23 @@ export async function getFamillesDuReferent(
   maintenant = new Date(),
   accesComplet = false
 ): Promise<Famille[]> {
-  const [clientRecords, releveRecords, intervenantRecords] = await Promise.all([
-    base(TABLES.clients).select({ sort: [{ field: "Nom", direction: "asc" }] }).all(),
-    base(TABLES.releves).select({ sort: [{ field: "Date", direction: "desc" }] }).all(),
-    base(TABLES.intervenants).select().all(),
-  ]);
+  const [clientRecords, releveRecords, intervenantRecords, suiviRecords] =
+    await Promise.all([
+      base(TABLES.clients)
+        .select({ sort: [{ field: "Nom", direction: "asc" }] })
+        .all(),
+      base(TABLES.releves)
+        .select({ sort: [{ field: "Date", direction: "desc" }] })
+        .all(),
+      base(TABLES.intervenants).select().all(),
+      base(TABLES.suivis)
+        .select({ sort: [{ field: "Ecrit le", direction: "desc" }] })
+        .all(),
+    ]);
+
+  const datesParReleve = new Map(
+    releveRecords.map((r) => [r.id, (r.get("Date") as string) || ""])
+  );
 
   const nomsIntervenantes = new Map(
     intervenantRecords.map((i) => [
@@ -465,12 +497,29 @@ export async function getFamillesDuReferent(
       }
     }
 
+    const retours = suiviRecords
+      .filter((s) =>
+        ((s.get("Client") as string[] | undefined) || []).includes(client.id)
+      )
+      .map((s) => {
+        const releveId =
+          ((s.get("Releve") as string[] | undefined) || [])[0] || "";
+        return {
+          id: s.id,
+          message: (s.get("Message") as string) || "",
+          ecritLe: (s.get("Ecrit le") as string) || "",
+          traite: Boolean(s.get("Traite")),
+          dateIntervention: datesParReleve.get(releveId) || "",
+        };
+      });
+
     return {
       id: client.id,
       nom: (client.get("Nom") as string) || "",
       adresse: (client.get("Adresse") as string) || "",
       heuresMois: Math.round(heuresMois * 100) / 100,
       intervenantes: [...intervenantes].sort(),
+      retours,
       interventions: siens.slice(0, 5).map((r) => ({
         id: r.id,
         date: (r.get("Date") as string) || "",
@@ -704,4 +753,153 @@ export async function getFichesDePaieByIntervenant(
         fichierNom: fichiers[0]?.filename || "Fiche de paie",
       };
     });
+}
+
+export type InterventionVueFamille = {
+  id: string;
+  date: string;
+  intervenante: string;
+  heureArrivee: string;
+  heureDepart: string;
+  heures: number;
+  montant: number;
+  motPourLaFamille: string;
+};
+
+export type EspaceFamille = {
+  interventions: InterventionVueFamille[];
+  heuresMois: number;
+  montantMois: number;
+};
+
+/**
+ * Ce qu'une famille voit de son propre suivi : ses interventions passées, de la
+ * plus récente à la plus ancienne, et le cumul du mois en cours.
+ *
+ * Le montant d'une intervention est calculé avec le taux horaire de
+ * l'intervenante qui l'a réalisée, comme ailleurs dans l'app. Le commentaire
+ * interne n'est jamais exposé : seul `Mot pour la famille` l'est.
+ */
+export async function getEspaceFamille(
+  clientId: string,
+  maintenant = new Date(),
+  limite = 20
+): Promise<EspaceFamille> {
+  const [releveRecords, intervenantRecords] = await Promise.all([
+    base(TABLES.releves)
+      .select({ sort: [{ field: "Date", direction: "desc" }] })
+      .all(),
+    base(TABLES.intervenants).select().all(),
+  ]);
+
+  const intervenantes = new Map(
+    intervenantRecords.map((i) => [
+      i.id,
+      {
+        nom: (i.get("Nom et Prenom") as string) || "Intervenante inconnue",
+        taux: (i.get("TauxHoraire") as number) || 0,
+      },
+    ])
+  );
+
+  const siens = releveRecords.filter((r) =>
+    ((r.get("Client") as string[] | undefined) || []).includes(clientId)
+  );
+
+  let heuresMois = 0;
+  let montantMois = 0;
+
+  const interventions = siens.map((r) => {
+    const heures = (r.get("Heures realisees") as number) || 0;
+    const intervenante = intervenantes.get(
+      ((r.get("Intervenant") as string[]) || [])[0] || ""
+    );
+    const montant = heures * (intervenante?.taux || 0);
+    const date = new Date((r.get("Date") as string) || "");
+
+    if (
+      !Number.isNaN(date.getTime()) &&
+      date.getFullYear() === maintenant.getFullYear() &&
+      date.getMonth() === maintenant.getMonth()
+    ) {
+      heuresMois += heures;
+      montantMois += montant;
+    }
+
+    return {
+      id: r.id,
+      date: (r.get("Date") as string) || "",
+      intervenante: intervenante?.nom || "Intervenante inconnue",
+      heureArrivee: (r.get("Heure d'arrivee") as string) || "",
+      heureDepart: (r.get("Heure de depart") as string) || "",
+      heures,
+      montant: Math.round(montant * 100) / 100,
+      motPourLaFamille: (r.get("Mot pour la famille") as string) || "",
+    };
+  });
+
+  return {
+    interventions: interventions.slice(0, limite),
+    heuresMois: Math.round(heuresMois * 100) / 100,
+    montantMois: Math.round(montantMois * 100) / 100,
+  };
+}
+
+export type Suivi = {
+  id: string;
+  message: string;
+  ecritLe: string;
+  traite: boolean;
+  /** Vide si le message ne porte pas sur une intervention précise. */
+  releveId: string;
+};
+
+export async function getSuivisDuClient(clientId: string): Promise<Suivi[]> {
+  const records = await base(TABLES.suivis)
+    .select({ sort: [{ field: "Ecrit le", direction: "desc" }] })
+    .all();
+
+  return records
+    .filter((r) =>
+      ((r.get("Client") as string[] | undefined) || []).includes(clientId)
+    )
+    .map((r) => ({
+      id: r.id,
+      message: (r.get("Message") as string) || "",
+      ecritLe: (r.get("Ecrit le") as string) || "",
+      traite: Boolean(r.get("Traite")),
+      releveId: ((r.get("Releve") as string[] | undefined) || [])[0] || "",
+    }));
+}
+
+/**
+ * Enregistre un retour écrit par une famille.
+ *
+ * `releveId` est vérifié côté appelant : il doit appartenir à ce client, pour
+ * qu'une famille ne puisse pas rattacher un message à l'intervention d'une
+ * autre.
+ */
+export async function creerSuivi(suivi: {
+  clientId: string;
+  nomClient: string;
+  releveId?: string;
+  message: string;
+}): Promise<string> {
+  const maintenant = new Date();
+  const horodatage = new Intl.DateTimeFormat("fr-FR", {
+    dateStyle: "short",
+    timeStyle: "short",
+    timeZone: "Europe/Paris",
+  }).format(maintenant);
+
+  const record = await base(TABLES.suivis).create({
+    Recapitulatif: `${suivi.nomClient} — ${horodatage}`,
+    Client: [suivi.clientId],
+    ...(suivi.releveId ? { Releve: [suivi.releveId] } : {}),
+    Message: suivi.message,
+    "Ecrit le": maintenant.toISOString(),
+    Traite: false,
+  });
+
+  return record.id;
 }

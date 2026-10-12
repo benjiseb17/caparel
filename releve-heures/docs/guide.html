@@ -255,10 +255,11 @@
   <p class="brand">Caparel · Aide à domicile aux personnes âgées</p>
   <h1>Guide d'utilisation<br>Relevé d'heures</h1>
   <p class="lede">
-    Saisie des heures et fiches de paie côté intervenante, suivi des familles
-    côté référent, administration des comptes côté direction. Document interne.
+    Saisie des heures et fiches de paie côté intervenante, suivi des familles côté
+    référent, espace de consultation et de suivi côté famille, administration des
+    comptes côté direction. Document interne.
   </p>
-  <p class="meta">Octobre 2026 — version 2</p>
+  <p class="meta">Octobre 2026 — version 3</p>
 </div>
 
 <div class="toc">
@@ -279,13 +280,20 @@
     <li>Le bloc Direction</li>
     <li>L'onglet Mes familles</li>
     <li>Le compte de direction</li>
-    <li class="part">Partie 3 — Pour la direction</li>
-    <li>Les deux tables de comptes</li>
+    <li class="part">Partie 3 — Pour les familles</li>
+    <li>Se connecter</li>
+    <li>Accueil</li>
+    <li>Suivi</li>
+    <li class="part">Partie 4 — Pour la direction</li>
+    <li>Les trois tables de comptes</li>
     <li>Créer un compte intervenante</li>
     <li>Créer un compte référent</li>
     <li>Les mots de passe oubliés</li>
     <li>Assigner des clients</li>
     <li>Désigner un référent de famille</li>
+    <li>Ouvrir un espace à une famille</li>
+    <li>Les deux commentaires d'un relevé</li>
+    <li>Lire les retours des familles</li>
     <li>Corriger un relevé</li>
     <li>Publier une fiche de paie</li>
     <li>Précautions</li>
@@ -480,8 +488,8 @@
 </p>
 
 <p>
-  Les deux rôles vivent donc dans des tables Airtable séparées, et l'application
-  n'affiche pas les mêmes onglets à l'un et à l'autre :
+  Chaque rôle vit dans sa propre table Airtable, et l'application n'affiche pas les
+  mêmes onglets à l'un et à l'autre :
 </p>
 
 <table>
@@ -497,14 +505,17 @@
       <td>Référent</td>
       <td>Accueil (avec le bloc Direction), Mes familles</td>
     </tr>
+    <tr>
+      <td>Famille</td>
+      <td>Accueil (ses interventions), Suivi</td>
+    </tr>
   </tbody>
 </table>
 
 <div class="note">
   <p>
-    Les pages de saisie, d'historique et de fiches de paie sont inaccessibles à un
-    référent, y compris en tapant leur adresse directement : il est renvoyé sur
-    l'accueil.
+    Les onglets d'un autre rôle sont inaccessibles, y compris en tapant leur
+    adresse directement : la personne est renvoyée sur son accueil.
   </p>
 </div>
 
@@ -582,29 +593,101 @@
 
 <!-- ============ PARTIE 3 ============ -->
 
-<h1 class="part-title page-break">Partie 3 — Pour la direction</h1>
+<h1 class="part-title page-break">Partie 3 — Pour les familles</h1>
+<p class="part-intro">
+  Chaque famille suivie par Caparel dispose d'un espace où elle retrouve les
+  interventions réalisées chez elle et peut écrire à l'équipe.
+</p>
+
+<h2>Se connecter</h2>
+
+<p>
+  Comme tout le monde : « Première connexion », l'adresse email communiquée à
+  Caparel, puis le mot de passe de votre choix. Les connexions suivantes se font
+  avec email et mot de passe, et le lien « Mot de passe oublié ? » fonctionne de la
+  même façon.
+</p>
+
+<h2>Accueil</h2>
+
+<table>
+  <thead>
+    <tr><th>Ce qui s'affiche</th><th>Détail</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Heures du mois</td><td>Le total réalisé chez vous depuis le 1<sup>er</sup></td></tr>
+    <tr><td>Montant du mois</td><td>Le total correspondant</td></tr>
+    <tr><td>Dernières interventions</td><td>Les 20 plus récentes : date, horaires, durée, montant et nom de l'intervenante</td></tr>
+    <tr><td>Mot de l'intervenante</td><td>Quand elle en a laissé un, il apparaît sous l'intervention</td></tr>
+  </tbody>
+</table>
+
+<div class="note">
+  <p>
+    L'intervenante dispose de deux champs distincts : un commentaire interne à
+    Caparel, et un « mot pour la famille ». Seul le second vous est montré.
+  </p>
+</div>
+
+<h2>Suivi</h2>
+
+<p>
+  Onglet <strong>Suivi</strong>. Vous y écrivez ce que vous souhaitez signaler : un
+  besoin, une remarque sur une intervention, un changement d'habitude.
+</p>
+
+<ol>
+  <li>Choisissez l'<strong>intervention concernée</strong> si votre message en vise
+      une — sinon laissez « Remarque générale »</li>
+  <li>Écrivez votre message</li>
+  <li>Envoyez</li>
+</ol>
+
+<p>Vos messages précédents sont listés en dessous, avec leur état :</p>
+
+<ul>
+  <li><strong>Transmis</strong> — reçu par l'équipe Caparel</li>
+  <li><strong>Pris en compte</strong> — l'équipe a traité votre demande</li>
+</ul>
+
+<div class="key">
+  <p>
+    <strong>Vos messages ne sont lus que par l'équipe Caparel</strong>, jamais par
+    l'intervenante qui vient chez vous. Vous pouvez donc écrire librement.
+  </p>
+</div>
+
+<!-- ============ PARTIE 4 ============ -->
+
+<h1 class="part-title page-break">Partie 4 — Pour la direction</h1>
 <p class="part-intro">
   Toute l'administration se fait dans Airtable. L'application ne lit et n'écrit que
   dans cette base — il n'y a pas d'interface d'administration séparée.
 </p>
 
-<h2>Les deux tables de comptes</h2>
+<h2>Les trois tables de comptes</h2>
+
+<p>
+  C'est la table d'origine qui détermine le rôle : il n'y a aucune case à cocher à
+  gérer.
+</p>
 
 <table>
   <thead>
-    <tr><th>Table</th><th>Qui s'y trouve</th></tr>
+    <tr><th>Table</th><th>Qui s'y trouve</th><th>Ce que le compte voit</th></tr>
   </thead>
   <tbody>
-    <tr><td>Intervenants</td><td>Les personnes qui effectuent les interventions et saisissent leurs heures</td></tr>
-    <tr><td>Referents</td><td>Les personnes qui encadrent des familles, direction comprise</td></tr>
+    <tr><td>Intervenants</td><td>Les personnes qui effectuent les interventions</td><td>Accueil, Relevé d'heure, Historique, Fiches de paie</td></tr>
+    <tr><td>Referents</td><td>Les personnes qui encadrent des familles, direction comprise</td><td>Accueil (bloc Direction), Mes familles</td></tr>
+    <tr><td>Clients</td><td>Les familles suivies</td><td>Accueil (leurs interventions), Suivi</td></tr>
   </tbody>
 </table>
 
 <div class="warn">
   <p>
-    <strong>Une personne ne figure que dans une seule table.</strong> Si le même
-    email apparaît dans les deux, c'est la ligne de <strong>Referents</strong> qui
-    l'emporte à la connexion, et la personne perd l'accès à la saisie.
+    <strong>Un email ne figure que dans une seule de ces trois tables.</strong> En
+    cas de doublon, c'est la première trouvée dans l'ordre du tableau ci-dessus qui
+    l'emporte à la connexion — et la personne se retrouve avec le mauvais rôle.
   </p>
 </div>
 
@@ -713,6 +796,63 @@
   désigne la ou les personnes de la table <strong>Referents</strong> responsables de
   cette famille. Elles la retrouvent aussitôt dans leur onglet Mes familles.
 </p>
+
+<h2>Ouvrir un espace à une famille</h2>
+
+<p>
+  Renseigner la colonne <code>Email</code> de sa ligne dans <strong>Clients</strong>,
+  laisser <code>MotDePasseHash</code> vide, et transmettre l'adresse du site. La
+  famille clique sur « Première connexion » et choisit son mot de passe.
+</p>
+
+<p>
+  Sans email, la famille n'a simplement pas d'espace : rien d'autre à faire pour
+  celles qui n'en veulent pas.
+</p>
+
+<div class="key">
+  <p>
+    Comme pour les autres comptes, ne renseignez l'email qu'au moment où la famille
+    va s'en servir, et vérifiez <code>Actif</code> : un client inactif ne peut ni se
+    connecter, ni réinitialiser son mot de passe.
+  </p>
+</div>
+
+<h2>Les deux commentaires d'un relevé</h2>
+
+<p>
+  Le formulaire de saisie comporte deux champs distincts, et la différence compte :
+</p>
+
+<table>
+  <thead>
+    <tr><th>Champ</th><th>Qui le lit</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Commentaire</td><td><strong>Interne.</strong> Direction seulement — la famille ne le voit jamais</td></tr>
+    <tr><td>Mot pour la famille</td><td><strong>Visible par la famille</strong> dans son espace</td></tr>
+  </tbody>
+</table>
+
+<h2>Lire les retours des familles</h2>
+
+<p>
+  Les messages écrits depuis l'onglet Suivi arrivent dans la table
+  <strong>Suivis</strong>, et s'affichent dans l'onglet <strong>Mes familles</strong>
+  des référents, au-dessus des interventions, avec une pastille « À traiter ».
+</p>
+
+<p>
+  Cocher <code>Traite</code> sur la ligne fait passer le message en « Pris en
+  compte » côté famille — c'est ce qui lui confirme que sa demande a été vue.
+</p>
+
+<div class="key">
+  <p>
+    Les intervenantes ne voient jamais ces retours. C'est ce qui permet à une
+    famille de signaler une difficulté sans gêne.
+  </p>
+</div>
 
 <h2>Corriger un relevé</h2>
 

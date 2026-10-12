@@ -34,8 +34,9 @@ leur propre table, avec les seuls champs nécessaires à la connexion :
 | `Actif`           | Case à cocher                |
 | `Acces complet`   | Case à cocher — donne accès à **toutes** les familles dans l'onglet Mes familles, et pas seulement à celles dont la personne est référente (compte de direction) |
 
-> Une personne ne doit figurer que dans **une seule** des deux tables. En cas de
-> doublon d'email, c'est la ligne de `Referents` qui l'emporte à la connexion.
+> Un email ne doit figurer que dans **une seule** des trois tables de comptes
+> (`Referents`, `Intervenants`, `Clients`). En cas de doublon, c'est la première
+> trouvée dans cet ordre qui l'emporte à la connexion.
 
 ### Table `Clients`
 
@@ -47,6 +48,12 @@ leur propre table, avec les seuls champs nécessaires à la connexion :
 | `Actif`                 | Case à cocher                                       |
 | `Intervenants assignes` | Lien vers un autre enregistrement → `Intervenants` (plusieurs possibles) |
 | `Referent famille`      | Lien vers `Referents` — le ou les référents de cette famille |
+| `Email`                 | Texte sur une ligne — adresse de connexion de la famille à son espace |
+| `MotDePasseHash`        | Texte sur une ligne                                 |
+
+> La table `Clients` est aussi une **table de comptes** : une famille s'y connecte
+> avec son `Email`, par le même parcours que les intervenantes. Sans email, la
+> famille n'a simplement pas d'espace.
 
 > `Intervenants assignes` détermine quels intervenants voient ce client (sur la page d'accueil et dans le menu déroulant de saisie).
 
@@ -61,7 +68,8 @@ leur propre table, avec les seuls champs nécessaires à la connexion :
 | `Heure d'arrivee`      | Texte sur une ligne (format `HH:mm`)   |
 | `Heure de depart`      | Texte sur une ligne (format `HH:mm`)   |
 | `Heures realisees`     | Nombre (décimal)                       |
-| `Commentaire`          | Texte long (optionnel)                 |
+| `Commentaire`          | Texte long (optionnel) — **interne**, jamais montré à la famille |
+| `Mot pour la famille`  | Texte long (optionnel) — **visible par la famille** dans son espace |
 | `Certification`        | Case à cocher (l'intervenant certifie sur l'honneur l'exactitude des informations) |
 
 ### Table `Fiches de Paie`
@@ -76,6 +84,20 @@ leur propre table, avec les seuls champs nécessaires à la connexion :
 | `Name`               | Formule — libellé auto (`Benjamin Sebahoun — Septembre 2026`) |
 
 > Chaque intervenant ne voit que ses propres fiches de paie, listées dans l'onglet Fiches de paie.
+
+### Table `Suivis`
+
+Les retours écrits par les familles depuis leur espace. L'app y écrit, les
+référents les lisent dans l'onglet Mes familles.
+
+| Champ           | Type                                                  |
+| --------------- | ----------------------------------------------------- |
+| `Recapitulatif` | Texte sur une ligne (champ principal) — `Hayat — 12/10/2026 15:53`, écrit par l'app |
+| `Client`        | Lien vers `Clients`                                    |
+| `Releve`        | Lien vers `Releves` — l'intervention visée, vide si le message est général |
+| `Message`       | Texte long                                             |
+| `Ecrit le`      | Date et heure                                          |
+| `Traite`        | Case à cocher — l'espace famille affiche « Pris en compte » une fois cochée |
 
 ### Table `Reinitialisations`
 
@@ -131,7 +153,7 @@ de commande :
 L'app hashe le mot de passe côté serveur et l'écrit dans `MotDePasseHash`.
 
 **L'email fait office de clé** : seule une adresse déjà enregistrée dans l'une des
-deux tables, sur un compte `Actif` et sans mot de passe, permet d'en définir un. Il
+trois tables de comptes, sur une ligne `Actif` et sans mot de passe, permet d'en définir un. Il
 faut donc saisir dans Airtable exactement l'adresse communiquée par l'intervenante.
 
 **Usage unique** : l'absence de mot de passe est la condition. Dès qu'un mot de
@@ -174,7 +196,7 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 
 ## Fonctionnement
 
-- **Connexion** (`/login`) : email + mot de passe, vérifiés contre `Referents` puis `Intervenants`. La table d'origine détermine le parcours : une intervenante saisit ses heures et consulte sa paie, un référent suit ses familles et ne voit ni saisie, ni historique, ni fiches de paie.
+- **Connexion** (`/login`) : email + mot de passe, vérifiés contre `Referents`, puis `Intervenants`, puis `Clients`. **La table d'origine détermine le rôle et le parcours** : une intervenante saisit ses heures et consulte sa paie, un référent suit ses familles, une famille lit ses interventions et écrit ses retours. Chaque page relit le rôle depuis Airtable avant de s'afficher.
 - **Mot de passe oublié** (`/mot-de-passe-oublie`) : email + nouveau mot de passe. La route `/api/mot-de-passe-oublie` écrase `MotDePasseHash` sur tout compte actif, qu'il en ait déjà un ou non, journalise l'opération dans `Reinitialisations`, puis la page connecte la personne. Une adresse inconnue et un compte inactif renvoient le même message, pour ne pas révéler quels comptes existent.
 - **Première connexion** (`/activation`) : email + nouveau mot de passe. La route `/api/activation` n'accepte que les comptes existants, `Actif` et dépourvus de mot de passe — l'absence de mot de passe fait office d'usage unique. Un email inconnu, un compte inactif et un compte déjà pourvu renvoient le même message, pour ne pas révéler quels comptes existent.
 - **Accueil** (`/`) : pour un compte de la table `Referents`, un bloc **Direction** s'affiche — interventions du jour toutes intervenantes confondues, volume de la semaine, chiffre d'affaires du mois et nombre d'intervenantes actives ; le reste de l'accueil, propre aux intervenantes, lui est masqué. L'autorisation est relue depuis Airtable à chaque affichage, de sorte que retirer la ligne coupe l'accès immédiatement. Pour une intervenante : profil de l'intervenant (photo ou initiales, prénom, nom), la liste des clients qui lui sont assignés (`Intervenants assignes` dans `Clients`), et un récapitulatif chiffré — heures et chiffre d'affaires du mois, avec des flèches pour remonter dans les mois précédents. Le chiffre d'affaires est calculé comme `heures réalisées × TauxHoraire` de l'intervenant. Sur grand écran, clients et récapitulatif s'affichent côte à côte ; en mobile, tout est empilé.
@@ -183,6 +205,8 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 - **Historique** (`/historique`) : liste des relevés déjà saisis par l'intervenant, en lecture seule. Un relevé validé n'est plus modifiable depuis l'app — les corrections passent par la direction dans Airtable, afin que les heures servant de base à la paie ne changent plus après coup.
 - **Mes familles** (`/familles`) : réservé aux comptes de la table `Referents`. Chaque référent y voit les familles dont il est `Referent famille` dans la table `Clients` — ou **toutes** les familles si `Acces complet` est coché sur sa ligne : heures du mois, intervenantes concernées et cinq dernières interventions. L'autorisation est relue depuis Airtable à chaque affichage.
 - **Fiches de paie** (`/fiches-de-paie`) : ses bulletins (table `Fiches de Paie`), du plus récent au plus ancien, avec un lien de téléchargement direct. Seules les fiches cochées `Publiee` apparaissent.
+- **Espace famille** (`/`) : pour un compte de la table `Clients`, l'accueil affiche les heures et le montant du mois, puis les 20 dernières interventions — date, horaires, durée, montant, intervenante et `Mot pour la famille`. Le champ `Commentaire` du relevé reste interne et n'est jamais envoyé au navigateur de la famille.
+- **Suivi** (`/suivi`) : réservé aux familles. Un formulaire pour écrire un retour, rattaché ou non à une intervention passée, et la liste de ses propres messages avec leur état (« Transmis » / « Pris en compte »). La route `/api/suivi` vérifie que le relevé visé appartient bien à cette famille, pour qu'un message ne puisse pas être rattaché à l'intervention d'un autre client. Les retours remontent dans l'onglet Mes familles des référents — jamais chez les intervenantes.
 
 ## Déploiement
 

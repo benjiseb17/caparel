@@ -1,10 +1,11 @@
 # Guide d'utilisation — Relevé d'heures Caparel
 
-Ce guide couvre les trois usages de l'application :
+Ce guide couvre les quatre usages de l'application :
 
 - **[Partie 1 — Pour les intervenantes](#partie-1--pour-les-intervenantes)** : se connecter, saisir ses heures, consulter ses fiches de paie.
 - **[Partie 2 — Pour les référents](#partie-2--pour-les-référents)** : suivre les familles dont on a la charge.
-- **[Partie 3 — Pour la direction](#partie-3--pour-la-direction)** : gérer les comptes, les clients, les fiches de paie depuis Airtable.
+- **[Partie 3 — Pour les familles](#partie-3--pour-les-familles)** : consulter les interventions et écrire à l'équipe.
+- **[Partie 4 — Pour la direction](#partie-4--pour-la-direction)** : gérer les comptes, les clients, les fiches de paie depuis Airtable.
 
 > Une version imprimable de ce guide est disponible en PDF :
 > [docs/guide-utilisation.pdf](docs/guide-utilisation.pdf).
@@ -131,17 +132,17 @@ Un référent suit un portefeuille de familles : il sait qui intervient chez ell
 quel rythme et pour combien d'heures. Il ne saisit pas de relevé et ne reçoit pas de
 fiche de paie.
 
-Les deux rôles vivent dans des tables Airtable séparées, et l'application n'affiche
-pas les mêmes onglets à l'un et à l'autre :
+Chaque rôle vit dans sa propre table Airtable, et l'application n'affiche pas les
+mêmes onglets à l'un et à l'autre :
 
 | Rôle | Onglets disponibles |
 |---|---|
 | **Intervenante** | Accueil, Relevé d'heure, Historique, Fiches de paie |
 | **Référent** | Accueil (avec le bloc Direction), Mes familles |
+| **Famille** | Accueil (ses interventions), Suivi |
 
-> Les pages de saisie, d'historique et de fiches de paie sont inaccessibles à un
-> référent, y compris en tapant leur adresse directement : il est renvoyé sur
-> l'accueil.
+> Les onglets d'un autre rôle sont inaccessibles, y compris en tapant leur adresse
+> directement : la personne est renvoyée sur son accueil.
 
 ## Se connecter
 
@@ -192,21 +193,69 @@ référent ou non. C'est le réglage du compte de direction.
 
 ---
 
-# Partie 3 — Pour la direction
+---
+
+# Partie 3 — Pour les familles
+
+Chaque famille suivie par Caparel dispose d'un espace où elle retrouve les
+interventions réalisées chez elle et peut écrire à l'équipe.
+
+## Se connecter
+
+Comme tout le monde : « Première connexion », l'adresse email communiquée à
+Caparel, puis le mot de passe de votre choix. Les connexions suivantes se font
+avec email et mot de passe, et le lien « Mot de passe oublié ? » fonctionne de la
+même façon.
+
+## Accueil
+
+| Ce qui s'affiche | Détail |
+|---|---|
+| **Heures du mois** | Le total réalisé chez vous depuis le 1er |
+| **Montant du mois** | Le total correspondant |
+| **Dernières interventions** | Les 20 plus récentes : date, horaires, durée, montant et nom de l'intervenante |
+| **Mot de l'intervenante** | Quand elle en a laissé un, il apparaît sous l'intervention |
+
+> L'intervenante dispose de deux champs distincts : un commentaire interne à
+> Caparel, et un « mot pour la famille ». Seul le second vous est montré.
+
+## Suivi
+
+Onglet **Suivi**. Vous y écrivez ce que vous souhaitez signaler : un besoin, une
+remarque sur une intervention, un changement d'habitude.
+
+1. Choisissez l'**intervention concernée** si votre message en vise une — sinon
+   laissez « Remarque générale »
+2. Écrivez votre message
+3. Envoyez
+
+Vos messages précédents sont listés en dessous, avec leur état :
+
+- **Transmis** — reçu par l'équipe Caparel
+- **Pris en compte** — l'équipe a traité votre demande
+
+> **Vos messages ne sont lus que par l'équipe Caparel**, jamais par
+> l'intervenante qui vient chez vous. Vous pouvez donc écrire librement.
+
+# Partie 4 — Pour la direction
 
 Toute l'administration se fait dans **Airtable**. L'application ne lit et n'écrit
 que dans cette base — il n'y a pas d'interface d'administration séparée.
 
-## Les deux tables de comptes
+## Les trois tables de comptes
 
-| Table | Qui s'y trouve |
-|---|---|
-| **Intervenants** | Les personnes qui effectuent les interventions et saisissent leurs heures |
-| **Referents** | Les personnes qui encadrent des familles, direction comprise |
+| Table | Qui s'y trouve | Ce que le compte voit |
+|---|---|---|
+| **Intervenants** | Les personnes qui effectuent les interventions | Accueil, Relevé d'heure, Historique, Fiches de paie |
+| **Referents** | Les personnes qui encadrent des familles, direction comprise | Accueil (bloc Direction), Mes familles |
+| **Clients** | Les familles suivies | Accueil (leurs interventions), Suivi |
 
-> **Une personne ne figure que dans une seule table.** Si le même email apparaît
-> dans les deux, c'est la ligne de **Referents** qui l'emporte à la connexion, et
-> la personne perd l'accès à la saisie.
+C'est la table d'origine qui détermine le rôle : il n'y a aucune case à cocher à
+gérer.
+
+> **Un email ne figure que dans une seule de ces trois tables.** En cas de
+> doublon, c'est la première trouvée dans l'ordre du tableau ci-dessus qui
+> l'emporte à la connexion — et la personne se retrouve avec le mauvais rôle.
 
 ## Créer un compte intervenante
 
@@ -272,6 +321,40 @@ Un client dont `Actif` n'est pas coché n'apparaît nulle part.
 Toujours dans **Clients**, la colonne `Referent famille` désigne la ou les
 personnes de la table **Referents** responsables de cette famille. Elles la
 retrouvent aussitôt dans leur onglet **Mes familles**.
+
+## Ouvrir un espace à une famille
+
+Renseigner la colonne `Email` de sa ligne dans **Clients**, laisser
+`MotDePasseHash` vide, et transmettre l'adresse du site. La famille clique sur
+« Première connexion » et choisit son mot de passe.
+
+Sans email, la famille n'a simplement pas d'espace : rien d'autre à faire pour
+celles qui n'en veulent pas.
+
+> Comme pour les autres comptes, ne renseignez l'email qu'au moment où la famille
+> va s'en servir, et vérifiez `Actif` : un client inactif ne peut ni se connecter
+> ni réinitialiser son mot de passe.
+
+## Les deux commentaires d'un relevé
+
+Le formulaire de saisie comporte deux champs distincts, et la différence compte :
+
+| Champ | Qui le lit |
+|---|---|
+| `Commentaire` | **Interne.** Direction seulement — la famille ne le voit jamais |
+| `Mot pour la famille` | **Visible par la famille** dans son espace |
+
+## Lire les retours des familles
+
+Les messages écrits depuis l'onglet Suivi arrivent dans la table **Suivis**, et
+s'affichent dans l'onglet **Mes familles** des référents, au-dessus des
+interventions, avec une pastille « À traiter ».
+
+Cocher `Traite` sur la ligne fait passer le message en « Pris en compte » côté
+famille — c'est ce qui lui confirme que sa demande a été vue.
+
+> Les intervenantes ne voient jamais ces retours. C'est ce qui permet à une
+> famille de signaler une difficulté sans gêne.
 
 ## Corriger un relevé
 

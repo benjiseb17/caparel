@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { getIntervenantByEmail } from "@/lib/airtable";
+import { getCompteByEmail, type RoleCompte } from "@/lib/airtable";
 import { isDemoMode, DEMO_INTERVENANT } from "@/lib/demo";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -26,7 +26,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           ? email.toLowerCase() === DEMO_INTERVENANT.email.toLowerCase()
             ? DEMO_INTERVENANT
             : null
-          : await getIntervenantByEmail(email);
+          : await getCompteByEmail(email);
         if (!intervenant || !intervenant.actif) return null;
         if (!intervenant.motDePasseHash) return null;
 
@@ -41,7 +41,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: intervenant.nomComplet,
           email: intervenant.email,
           nomComplet: intervenant.nomComplet,
-          referent: intervenant.referent,
+          role: intervenant.role,
         };
       },
     }),
@@ -51,7 +51,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.intervenantId = user.id;
         token.nomComplet = user.nomComplet;
-        token.referent = user.referent;
+        token.role = user.role;
       }
       return token;
     },
@@ -59,7 +59,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.intervenantId as string;
         session.user.nomComplet = token.nomComplet as string | undefined;
-        session.user.referent = Boolean(token.referent);
+        session.user.role = token.role as RoleCompte | undefined;
       }
       return session;
     },

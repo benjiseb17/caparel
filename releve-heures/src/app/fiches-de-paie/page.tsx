@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import {
-  getIntervenantById,
+  getCompteById,
   getFichesDePaieByIntervenant,
 } from "@/lib/airtable";
 import { isDemoMode, getDemoFichesDePaie } from "@/lib/demo";
@@ -15,9 +15,12 @@ export default async function FichesDePaiePage() {
     redirect("/login");
   }
 
-  // Les référents n'effectuent pas d'intervention : cette page ne les concerne
-  // pas, et l'autorisation est relue depuis Airtable à chaque affichage.
-  if (!isDemoMode() && (await getIntervenantById(session.user.id))?.referent) {
+  // Réservé aux intervenantes : ni un référent ni une famille n'a de relevés.
+  // L'autorisation est relue depuis Airtable à chaque affichage.
+  if (
+    !isDemoMode() &&
+    (await getCompteById(session.user.id))?.role !== "intervenante"
+  ) {
     redirect("/");
   }
 

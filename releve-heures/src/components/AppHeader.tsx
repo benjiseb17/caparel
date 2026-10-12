@@ -1,17 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/auth";
+import type { RoleCompte } from "@/lib/airtable";
 import LogoutButton from "@/components/LogoutButton";
 
-type Onglet = "accueil" | "saisie" | "historique" | "fiches" | "familles";
+type Onglet =
+  | "accueil"
+  | "saisie"
+  | "historique"
+  | "fiches"
+  | "familles"
+  | "suivi";
 
 type Lien = { href: string; label: string; key: Onglet };
 
 const ACCUEIL: Lien = { href: "/", label: "Accueil", key: "accueil" };
 
-// Deux parcours distincts : une intervenante saisit ses heures et consulte sa
-// paie ; un référent suit les familles dont il a la charge et n'effectue pas
-// d'intervention. Les onglets de l'autre parcours ne lui serviraient à rien.
+// Trois parcours distincts : une intervenante saisit ses heures et consulte sa
+// paie ; un référent suit les familles dont il a la charge ; une famille lit ses
+// propres interventions et écrit ses retours. Les onglets d'un autre parcours ne
+// serviraient à rien.
 const LIENS_INTERVENANTE: Lien[] = [
   ACCUEIL,
   { href: "/saisie", label: "Relevé d'heure", key: "saisie" },
@@ -24,12 +32,23 @@ const LIENS_REFERENT: Lien[] = [
   { href: "/familles", label: "Mes familles", key: "familles" },
 ];
 
+const LIENS_FAMILLE: Lien[] = [
+  ACCUEIL,
+  { href: "/suivi", label: "Suivi", key: "suivi" },
+];
+
+const PAR_ROLE: Record<RoleCompte, Lien[]> = {
+  intervenante: LIENS_INTERVENANTE,
+  referent: LIENS_REFERENT,
+  famille: LIENS_FAMILLE,
+};
+
 export default async function AppHeader({ active }: { active: Onglet }) {
   // Le jeton de session sert uniquement à décider des onglets affichés, ce qui
   // évite un appel Airtable sur chaque page. Les accès eux-mêmes sont vérifiés
   // contre Airtable, page par page.
   const session = await auth();
-  const liens = session?.user?.referent ? LIENS_REFERENT : LIENS_INTERVENANTE;
+  const liens = PAR_ROLE[session?.user?.role ?? "intervenante"];
 
   return (
     <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-8 py-3 sm:py-4 gap-2 sm:gap-3 border-b border-line bg-soft">

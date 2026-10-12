@@ -32,6 +32,7 @@ export default function ReleveForm({
   const [heureArrivee, setHeureArrivee] = useState("");
   const [heureDepart, setHeureDepart] = useState("");
   const [commentaire, setCommentaire] = useState("");
+  const [motPourLaFamille, setMotPourLaFamille] = useState("");
   const [certifie, setCertifie] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
@@ -82,6 +83,7 @@ export default function ReleveForm({
           heureArrivee,
           heureDepart,
           commentaire,
+          motPourLaFamille,
           certifie,
         }),
       });
@@ -99,6 +101,7 @@ export default function ReleveForm({
       setHeureArrivee("");
       setHeureDepart("");
       setCommentaire("");
+      setMotPourLaFamille("");
       setCertifie(false);
     } catch {
       setError("Impossible de contacter le serveur.");
@@ -241,6 +244,29 @@ export default function ReleveForm({
             onChange={(e) => setCommentaire(e.target.value)}
             className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal resize-none"
           />
+          <p className="text-xs text-muted mt-1">
+            Interne à Caparel. La famille ne le voit pas.
+          </p>
+        </div>
+
+        <div>
+          <label
+            htmlFor="motPourLaFamille"
+            className="block text-sm font-medium text-ink mb-1"
+          >
+            Mot pour la famille{" "}
+            <span className="text-muted font-normal">(optionnel)</span>
+          </label>
+          <textarea
+            id="motPourLaFamille"
+            rows={2}
+            value={motPourLaFamille}
+            onChange={(e) => setMotPourLaFamille(e.target.value)}
+            className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal resize-none"
+          />
+          <p className="text-xs text-muted mt-1">
+            Visible par la famille dans son espace.
+          </p>
         </div>
 
         <label className="flex items-start gap-2.5 cursor-pointer">

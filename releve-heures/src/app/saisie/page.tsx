@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import ReleveForm from "@/components/ReleveForm";
 import AppHeader from "@/components/AppHeader";
-import { getClientsForIntervenant, getIntervenantById } from "@/lib/airtable";
+import { getClientsForIntervenant, getCompteById } from "@/lib/airtable";
 import {
   isDemoMode,
   DEMO_INTERVENANT,
@@ -21,14 +21,14 @@ export default async function SaisiePage() {
   const [profil, clients] = isDemoMode()
     ? [DEMO_INTERVENANT, getDemoClientsForIntervenant()]
     : await Promise.all([
-        getIntervenantById(session.user.id),
+        getCompteById(session.user.id),
         getClientsForIntervenant(session.user.id),
       ]);
 
-  // Les référents n'effectuent pas d'intervention : ils n'ont pas de client
-  // assigné et leur fiche ne vit pas dans la table Intervenants, donc un relevé
-  // à leur nom serait refusé par Airtable.
-  if (profil?.referent) {
+  // Seule une intervenante saisit des relevés : la fiche d'un référent ou d'une
+  // famille ne vit pas dans la table Intervenants, et un relevé à son nom serait
+  // refusé par Airtable.
+  if (profil?.role !== "intervenante") {
     redirect("/");
   }
 

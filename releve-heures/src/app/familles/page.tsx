@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import AppHeader from "@/components/AppHeader";
-import { getIntervenantById, getFamillesDuReferent } from "@/lib/airtable";
+import { getCompteById, getFamillesDuReferent } from "@/lib/airtable";
 import { isDemoMode, DEMO_INTERVENANT } from "@/lib/demo";
 import { formatHeures, formatDateFr } from "@/lib/format";
 
@@ -9,6 +9,17 @@ const MOIS_LABEL = new Intl.DateTimeFormat("fr-FR", {
   month: "long",
   year: "numeric",
 });
+
+const HORODATAGE = new Intl.DateTimeFormat("fr-FR", {
+  dateStyle: "short",
+  timeStyle: "short",
+  timeZone: "Europe/Paris",
+});
+
+function formatHorodatage(iso: string) {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? "" : HORODATAGE.format(d);
+}
 
 export default async function FamillesPage() {
   const session = await auth();
@@ -22,9 +33,9 @@ export default async function FamillesPage() {
   // reconnexion.
   const profil = isDemoMode()
     ? DEMO_INTERVENANT
-    : await getIntervenantById(session.user.id);
+    : await getCompteById(session.user.id);
 
-  if (!profil?.referent) {
+  if (profil?.role !== "referent") {
     redirect("/");
   }
 
@@ -99,6 +110,39 @@ export default async function FamillesPage() {
                       </p>
                     )}
                   </div>
+
+                  {famille.retours.length > 0 && (
+                    <div className="px-5 py-4 bg-soft-2 border-b border-line">
+                      <p className="text-xs font-medium text-navy mb-2">
+                        Retours de la famille
+                      </p>
+                      <ul className="space-y-2.5">
+                        {famille.retours.map((r) => (
+                          <li key={r.id}>
+                            <div className="flex items-start justify-between gap-3">
+                              <p className="text-xs text-muted">
+                                {formatHorodatage(r.ecritLe)}
+                                {r.dateIntervention && (
+                                  <>
+                                    {" · intervention du "}
+                                    {formatDateFr(r.dateIntervention)}
+                                  </>
+                                )}
+                              </p>
+                              {!r.traite && (
+                                <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[11px] font-medium text-navy border border-line">
+                                  À traiter
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm text-ink whitespace-pre-line mt-0.5">
+                              {r.message}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                   {famille.interventions.length === 0 ? (
                     <p className="p-5 text-sm text-muted">

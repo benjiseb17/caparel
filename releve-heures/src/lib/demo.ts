@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import type {
   Client,
   FicheDePaie,
-  Intervenant,
+  Compte,
   NouveauReleve,
   Releve,
   StatsMensuelles,
@@ -13,13 +13,13 @@ export function isDemoMode() {
   return process.env.DEMO_MODE === "true";
 }
 
-export const DEMO_INTERVENANT: Intervenant = {
+export const DEMO_INTERVENANT: Compte = {
   id: "demo-intervenant-1",
   nomComplet: "Camille Dupont",
   email: "demo@test.fr",
   motDePasseHash: "$2b$10$5UO/soFoHjpiOvb0b2Og4OgiYezYQgP3GSX0F4tDWzo2eeZeW0kOe", // demo1234
   actif: true,
-  referent: true,
+  role: "referent",
   accesComplet: true,
   photoUrl: "",
   tauxHoraire: 15.5,

@@ -7,12 +7,14 @@ import ClientsAssignes from "@/components/ClientsAssignes";
 import BlocDirection from "@/components/BlocDirection";
 import type { Client } from "@/lib/airtable";
 import {
-  getIntervenantById,
+  getCompteById,
   getClientsForIntervenant,
   getReleveHeuresIntervenant,
   calculerStatsMensuelles,
   getStatsAdmin,
+  getEspaceFamille,
 } from "@/lib/airtable";
+import AccueilFamille from "@/components/AccueilFamille";
 import {
   isDemoMode,
   DEMO_INTERVENANT,
@@ -75,13 +77,25 @@ export default async function AccueilPage({
 
   const profil = isDemoMode()
     ? DEMO_INTERVENANT
-    : await getIntervenantById(session.user.id);
+    : await getCompteById(session.user.id);
+
+  // Une famille a son propre écran : rien de ce qui suit ne la concerne.
+  if (profil?.role === "famille") {
+    const espace = await getEspaceFamille(profil.id);
+    return (
+      <AccueilFamille
+        nomClient={profil.nomComplet}
+        espace={espace}
+        mois={new Date()}
+      />
+    );
+  }
 
   const tauxHoraire = profil?.tauxHoraire || 0;
 
   // Un référent n'intervient pas : il n'a ni clients assignés ni heures à
   // récapituler. On évite les appels inutiles et on masque le bloc.
-  const estReferent = Boolean(profil?.referent);
+  const estReferent = profil?.role === "referent";
 
   let clients: Client[], statsMois;
   if (estReferent) {
