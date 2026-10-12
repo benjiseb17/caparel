@@ -213,6 +213,7 @@ même façon.
 |---|---|
 | **Heures du mois** | Le total réalisé chez vous depuis le 1er |
 | **Montant du mois** | Le total correspondant |
+| **Vos remarques** | Les 3 dernières, avec leur état. « Tout voir » mène à l'onglet Suivi |
 | **Dernières interventions** | Les 20 plus récentes : date, horaires, durée, montant et nom de l'intervenante |
 | **Mot de l'intervenante** | Quand elle en a laissé un, il apparaît sous l'intervention |
 

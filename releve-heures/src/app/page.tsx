@@ -13,6 +13,7 @@ import {
   calculerStatsMensuelles,
   getStatsAdmin,
   getEspaceFamille,
+  getSuivisDuClient,
 } from "@/lib/airtable";
 import AccueilFamille from "@/components/AccueilFamille";
 import {
@@ -81,11 +82,15 @@ export default async function AccueilPage({
 
   // Une famille a son propre écran : rien de ce qui suit ne la concerne.
   if (profil?.role === "famille") {
-    const espace = await getEspaceFamille(profil.id);
+    const [espace, suivis] = await Promise.all([
+      getEspaceFamille(profil.id),
+      getSuivisDuClient(profil.id),
+    ]);
     return (
       <AccueilFamille
         nomClient={profil.nomComplet}
         espace={espace}
+        suivis={suivis}
         mois={new Date()}
       />
     );
