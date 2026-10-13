@@ -1079,3 +1079,115 @@
     height: 50px;
   }
 }
+
+/* Quatre chiffres de front : la synthèse de direction en compte un de plus que
+   celle d'une intervenante. */
+.a-kpis--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 900px) {
+  .a-kpis--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .a-kpis--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Bouton clair sur le bandeau marine. */
+.cp-btn--surface,
+.cp-root a.cp-btn--surface {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: var(--cp-on-navy);
+}
+.cp-btn--surface:hover,
+.cp-root a.cp-btn--surface:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--cp-on-navy);
+}
+
+/* En-tête d'une fiche famille : nom à gauche, heures du mois à droite. */
+.a-famille__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--cp-s-4);
+}
+
+/* ==========================================================================
+   Pages de connexion
+   Une carte centrée sur le fond de page, sans en-tête ni navigation.
+   ========================================================================== */
+.a-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--cp-s-6) var(--cp-s-4);
+}
+.a-auth__card {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--cp-s-8);
+}
+.a-auth__logo {
+  width: auto;
+  height: 48px;
+  margin-bottom: var(--cp-s-6);
+}
+.a-auth__title {
+  font-family: var(--cp-font-display);
+  font-weight: 600;
+  font-size: var(--cp-fs-2xl);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.a-auth__intro {
+  margin-top: 6px;
+  margin-bottom: var(--cp-s-6);
+  font-size: var(--cp-fs-base);
+  color: var(--cp-text-muted);
+}
+.a-auth__sep {
+  margin-top: var(--cp-s-8);
+  padding-top: var(--cp-s-6);
+  border-top: 1px solid var(--cp-border);
+}
+.a-auth__sep-title {
+  font-weight: 700;
+  font-size: var(--cp-fs-base);
+}
+.a-auth__sep-text {
+  margin-top: 4px;
+  margin-bottom: var(--cp-s-4);
+  font-size: var(--cp-fs-sm);
+  color: var(--cp-text-muted);
+}
+.a-auth__retour {
+  margin-top: var(--cp-s-6);
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .a-auth__card {
+    padding: var(--cp-s-6);
+  }
+  .a-auth__logo {
+    height: 40px;
+  }
+}
+
+.cp-btn--outline,
+.cp-root a.cp-btn--outline {
+  background: var(--cp-surface);
+  border-color: var(--cp-teal-ink);
+  color: var(--cp-teal-ink);
+}
+.cp-btn--outline:hover,
+.cp-root a.cp-btn--outline:hover {
+  background: var(--cp-mint);
+  color: var(--cp-teal-ink);
+}

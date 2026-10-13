@@ -13,3 +13,9 @@ export const NAV_INTERVENANTE: LienCharte[] = [
   { href: "/historique", label: "Historique", icone: "list" },
   { href: "/fiches-de-paie", label: "Fiches de paie", icone: "file" },
 ];
+
+/** Les onglets de l'espace référent. */
+export const NAV_REFERENT: LienCharte[] = [
+  { href: "/", label: "Accueil", icone: "home" },
+  { href: "/familles", label: "Mes familles", icone: "user" },
+];

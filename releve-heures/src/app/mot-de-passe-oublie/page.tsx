@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import CarteAuth from "@/components/charte/CarteAuth";
+import Icone from "@/components/charte/Icone";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { LONGUEUR_MIN_MOT_DE_PASSE as LONGUEUR_MIN } from "@/lib/mot-de-passe";
@@ -64,107 +65,79 @@ export default function MotDePasseOubliePage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-soft px-4 py-8">
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow-sm border border-line p-8">
-        <Image
-          src="/caparel-logo.png"
-          alt="Caparel — Aide à domicile aux personnes âgées"
-          width={1872}
-          height={562}
-          className="w-44 h-auto mb-6"
-          priority
-        />
+    <CarteAuth
+      titre="Mot de passe oublié"
+      intro="Saisissez l'adresse email que vous avez communiquée à Caparel, puis choisissez un nouveau mot de passe."
+    >
+      <form onSubmit={handleSubmit}>
+        <div className="cp-field">
+          <label className="cp-label" htmlFor="email">
+            Email
+          </label>
+          <input
+            className="cp-input"
+            id="email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+          />
+        </div>
 
-        <h1 className="font-heading text-xl font-bold text-navy mb-1">
-          Mot de passe oublié
-        </h1>
-        <p className="text-sm text-muted mb-6">
-          Saisissez l&apos;adresse email que vous avez communiquée à Caparel,
-          puis choisissez un nouveau mot de passe.
-        </p>
+        <div className="cp-field">
+          <label className="cp-label" htmlFor="motDePasse">
+            Nouveau mot de passe
+          </label>
+          <input
+            className="cp-input"
+            id="motDePasse"
+            type="password"
+            required
+            value={motDePasse}
+            onChange={(e) => setMotDePasse(e.target.value)}
+            autoComplete="new-password"
+          />
+          <p className="cp-hint">{LONGUEUR_MIN} caractères minimum.</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-ink mb-1"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-              autoComplete="email"
-            />
-          </div>
+        <div className="cp-field">
+          <label className="cp-label" htmlFor="confirmation">
+            Confirmer le mot de passe
+          </label>
+          <input
+            className="cp-input"
+            id="confirmation"
+            type="password"
+            required
+            value={confirmation}
+            onChange={(e) => setConfirmation(e.target.value)}
+            autoComplete="new-password"
+          />
+        </div>
 
-          <div>
-            <label
-              htmlFor="motDePasse"
-              className="block text-sm font-medium text-ink mb-1"
-            >
-              Nouveau mot de passe
-            </label>
-            <input
-              id="motDePasse"
-              type="password"
-              required
-              value={motDePasse}
-              onChange={(e) => setMotDePasse(e.target.value)}
-              className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-              autoComplete="new-password"
-            />
-            <p className="text-xs text-muted mt-1">
-              {LONGUEUR_MIN} caractères minimum.
-            </p>
-          </div>
+        {error && (
+          <p className="cp-error" role="alert">
+            <Icone nom="alert" taille="sm" />
+            {error}
+          </p>
+        )}
 
-          <div>
-            <label
-              htmlFor="confirmation"
-              className="block text-sm font-medium text-ink mb-1"
-            >
-              Confirmer le mot de passe
-            </label>
-            <input
-              id="confirmation"
-              type="password"
-              required
-              value={confirmation}
-              onChange={(e) => setConfirmation(e.target.value)}
-              className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-              autoComplete="new-password"
-            />
-          </div>
+        <button
+          className="cp-btn cp-btn--primary cp-btn--block"
+          style={{ marginTop: "var(--cp-s-5)" }}
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? "Enregistrement..." : "Définir mon nouveau mot de passe"}
+        </button>
+      </form>
 
-          {error && (
-            <p className="text-sm text-red-600" role="alert">
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-navylogo text-white text-sm font-medium py-2.5 hover:bg-navy-2 transition-colors disabled:opacity-60"
-          >
-            {loading ? "Enregistrement..." : "Définir mon nouveau mot de passe"}
-          </button>
-        </form>
-
-        <p className="text-sm text-muted mt-6 text-center">
-          <Link
-            href="/login"
-            className="font-medium text-teal-dark hover:text-teal underline underline-offset-2"
-          >
-            Retour à la connexion
-          </Link>
-        </p>
-      </div>
-    </div>
+      <p className="a-auth__retour">
+        <Link className="cp-link" href="/login">
+          Retour à la connexion
+        </Link>
+      </p>
+    </CarteAuth>
   );
 }
