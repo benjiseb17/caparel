@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Icone from "@/components/charte/Icone";
 import { formatDateFr, formatHeures } from "@/lib/format";
 import type { InterventionVueFamille } from "@/lib/airtable";
 
@@ -53,23 +54,17 @@ export default function SuiviForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white rounded-2xl border border-line p-5 sm:p-6 space-y-4"
-    >
-      <div>
-        <label
-          htmlFor="intervention"
-          className="block text-sm font-medium text-ink mb-1"
-        >
+    <form onSubmit={handleSubmit}>
+      <div className="cp-field">
+        <label className="cp-label" htmlFor="intervention">
           Intervention concernée{" "}
-          <span className="text-muted font-normal">(optionnel)</span>
+          <span className="cp-label__option">(optionnel)</span>
         </label>
         <select
+          className="cp-select"
           id="intervention"
           value={releveId}
           onChange={(e) => setReleveId(e.target.value)}
-          className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
         >
           <option value="">Remarque générale</option>
           {interventions.map((i) => (
@@ -81,38 +76,38 @@ export default function SuiviForm({
         </select>
       </div>
 
-      <div>
-        <label
-          htmlFor="message"
-          className="block text-sm font-medium text-ink mb-1"
-        >
+      <div className="cp-field">
+        <label className="cp-label" htmlFor="message">
           Votre message
         </label>
         <textarea
+          className="cp-textarea"
           id="message"
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Un besoin, une remarque, un changement d'habitude à signaler…"
-          className="w-full rounded-lg border border-line px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal resize-none"
         />
       </div>
 
       {error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="cp-error" role="alert">
+          <Icone nom="alert" taille="sm" />
           {error}
         </p>
       )}
       {success && (
-        <p className="text-sm text-teal-dark" role="status">
+        <p className="cp-success" style={{ marginTop: "var(--cp-s-4)" }} role="status">
+          <Icone nom="check" taille="sm" />
           {success}
         </p>
       )}
 
       <button
+        className="cp-btn cp-btn--primary cp-btn--block"
+        style={{ marginTop: "var(--cp-s-5)" }}
         type="submit"
         disabled={submitting}
-        className="w-full rounded-lg bg-navylogo text-white text-sm font-medium py-2.5 hover:bg-navy-2 transition-colors disabled:opacity-60"
       >
         {submitting ? "Envoi..." : "Envoyer"}
       </button>

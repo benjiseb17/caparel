@@ -1,7 +1,9 @@
 import Link from "next/link";
-import HeaderFamille from "@/components/famille/HeaderFamille";
-import IconeFamille from "@/components/famille/IconeFamille";
-import ListeInterventions from "@/components/famille/ListeInterventions";
+import Header from "@/components/charte/Header";
+import { NAV_FAMILLE } from "@/lib/navigation";
+import Icone from "@/components/charte/Icone";
+import SelecteurMois from "@/components/charte/SelecteurMois";
+import ListeInterventions from "@/components/charte/ListeInterventions";
 import { TELEPHONE_AGENCE, telHref } from "@/lib/agence";
 import type { ResumeMoisFamille, Suivi } from "@/lib/airtable";
 import { formatDateFr, formatEuros, formatHeures, initialesDe } from "@/lib/format";
@@ -43,7 +45,7 @@ export default function AccueilFamille({
 }) {
   return (
     <div className="cp-root">
-      <HeaderFamille actif="accueil" />
+      <Header liens={NAV_FAMILLE} actif="/" />
 
       <main className="cp-container a-main">
         <section className="a-hero">
@@ -60,31 +62,12 @@ export default function AccueilFamille({
             </div>
           </div>
 
-          <div className="cp-month cp-month--on-navy">
-            <Link
-              className="cp-icon-btn"
-              href={`/?mois=${moisPrecedent}`}
-              aria-label="Mois précédent"
-            >
-              <IconeFamille nom="chevron-left" />
-            </Link>
-            <span className="cp-month__label" aria-live="polite">
-              {libelleMois}
-            </span>
-            {estMoisCourant ? (
-              <span className="cp-icon-btn" aria-disabled="true" aria-hidden="true">
-                <IconeFamille nom="chevron-right" />
-              </span>
-            ) : (
-              <Link
-                className="cp-icon-btn"
-                href={`/?mois=${moisSuivant}`}
-                aria-label="Mois suivant"
-              >
-                <IconeFamille nom="chevron-right" />
-              </Link>
-            )}
-          </div>
+          <SelecteurMois
+            libelle={libelleMois}
+            moisPrecedent={moisPrecedent}
+            moisSuivant={moisSuivant}
+            estMoisCourant={estMoisCourant}
+          />
         </section>
 
         <section className="a-kpis" aria-label="Synthèse du mois">
@@ -92,7 +75,7 @@ export default function AccueilFamille({
             <div className="a-kpi__head">
               <span className="a-kpi__label">Heures d&apos;intervention</span>
               <span className="cp-chip-icon">
-                <IconeFamille nom="clock" />
+                <Icone nom="clock" />
               </span>
             </div>
             <p className="a-kpi__value">{formatHeures(resume.heures)}</p>
@@ -107,7 +90,7 @@ export default function AccueilFamille({
             <div className="a-kpi__head">
               <span className="a-kpi__label">Montant du mois</span>
               <span className="cp-chip-icon">
-                <IconeFamille nom="euro" />
+                <Icone nom="euro" />
               </span>
             </div>
             <p className="a-kpi__value a-kpi__value--money">
@@ -119,7 +102,7 @@ export default function AccueilFamille({
             <div className="a-kpi__head">
               <span className="a-kpi__label">Interventions</span>
               <span className="cp-chip-icon">
-                <IconeFamille nom="calendar" />
+                <Icone nom="calendar" />
               </span>
             </div>
             <p className="a-kpi__value">{resume.interventions.length}</p>
@@ -176,7 +159,7 @@ export default function AccueilFamille({
                         : "Remarque générale"}
                     </span>
                     <span className="cp-badge">
-                      <IconeFamille nom="check" taille="xs" />
+                      <Icone nom="check" taille="xs" />
                       {derniereRemarque.traite ? "Pris en compte" : "Transmis"}
                     </span>
                   </div>
@@ -192,7 +175,7 @@ export default function AccueilFamille({
               )}
 
               <Link className="cp-btn cp-btn--primary cp-btn--block" href="/suivi">
-                <IconeFamille nom="plus" taille="sm" />
+                <Icone nom="plus" taille="sm" />
                 Ajouter une remarque
               </Link>
             </section>
@@ -200,7 +183,7 @@ export default function AccueilFamille({
             {TELEPHONE_AGENCE && (
               <a className="cp-card a-help" href={telHref(TELEPHONE_AGENCE)}>
                 <span className="cp-chip-icon cp-chip-icon--round">
-                  <IconeFamille nom="phone" />
+                  <Icone nom="phone" />
                 </span>
                 <span>
                   <span className="a-help__title">Une question ?</span>

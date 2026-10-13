@@ -1,13 +1,10 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import ReleveForm from "@/components/ReleveForm";
-import AppHeader from "@/components/AppHeader";
+import Header from "@/components/charte/Header";
+import ReleveForm from "@/components/intervenante/ReleveForm";
+import { NAV_INTERVENANTE } from "@/lib/navigation";
 import { getClientsForIntervenant, getCompteById } from "@/lib/airtable";
-import {
-  isDemoMode,
-  DEMO_INTERVENANT,
-  getDemoClientsForIntervenant,
-} from "@/lib/demo";
+import { isDemoMode, getDemoClientsForIntervenant } from "@/lib/demo";
 
 export default async function SaisiePage() {
   const session = await auth();
@@ -16,10 +13,8 @@ export default async function SaisiePage() {
     redirect("/login");
   }
 
-  // Le nom vient de la fiche Airtable, pas du jeton de session : celui-ci est
-  // figé à la connexion et afficherait un nom périmé après une modification.
   const [profil, clients] = isDemoMode()
-    ? [DEMO_INTERVENANT, getDemoClientsForIntervenant()]
+    ? [null, getDemoClientsForIntervenant()]
     : await Promise.all([
         getCompteById(session.user.id),
         getClientsForIntervenant(session.user.id),
@@ -28,18 +23,29 @@ export default async function SaisiePage() {
   // Seule une intervenante saisit des relevés : la fiche d'un référent ou d'une
   // famille ne vit pas dans la table Intervenants, et un relevé à son nom serait
   // refusé par Airtable.
-  if (profil?.role !== "intervenante") {
+  if (!isDemoMode() && profil?.role !== "intervenante") {
     redirect("/");
   }
 
   return (
-    <div className="min-h-screen bg-soft flex flex-col overflow-x-hidden">
-      <AppHeader active="saisie" />
-      <main className="flex-1 flex items-start sm:items-center justify-center px-5 sm:px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] pt-2 sm:pt-4">
-        <ReleveForm
-          intervenantNom={profil?.nomComplet || ""}
-          clients={clients}
-        />
+    <div className="cp-root">
+      <Header liens={NAV_INTERVENANTE} actif="/saisie" />
+
+      <main className="cp-container a-main">
+        <div className="a-narrow">
+          <section className="cp-card a-card">
+            <h1 className="cp-title">Relevé d&apos;heure</h1>
+            <p
+              className="a-kpi__meta"
+              style={{ marginTop: "6px", marginBottom: "var(--cp-s-5)" }}
+            >
+              À remplir une fois l&apos;intervention terminée. Les heures se
+              comptent au quart d&apos;heure.
+            </p>
+
+            <ReleveForm clients={clients} />
+          </section>
+        </div>
       </main>
     </div>
   );

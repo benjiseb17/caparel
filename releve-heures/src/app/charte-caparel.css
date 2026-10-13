@@ -845,3 +845,237 @@
     padding: 14px var(--cp-s-4);
   }
 }
+
+/* ==========================================================================
+   Formulaires
+   La charte ne couvrait que l'accueil : ces règles en étendent le vocabulaire
+   aux pages de saisie, en reprenant ses rayons, ses bordures et son turquoise.
+   ========================================================================== */
+.a-nav__link--bouton {
+  border: 0;
+  background: transparent;
+}
+
+.cp-field + .cp-field {
+  margin-top: var(--cp-s-5);
+}
+.cp-label {
+  display: block;
+  margin-bottom: var(--cp-s-2);
+  font-weight: 700;
+  font-size: var(--cp-fs-base);
+  color: var(--cp-text);
+}
+.cp-label__option {
+  font-weight: 400;
+  color: var(--cp-text-muted);
+}
+.cp-input,
+.cp-select,
+.cp-textarea {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-r-md);
+  background: var(--cp-surface);
+  color: var(--cp-text);
+  font: inherit;
+  font-size: var(--cp-fs-md);
+}
+.cp-textarea {
+  min-height: 96px;
+  padding: 12px 14px;
+  line-height: 1.5;
+  resize: none;
+}
+.cp-input:focus-visible,
+.cp-select:focus-visible,
+.cp-textarea:focus-visible {
+  outline: 3px solid var(--cp-teal);
+  outline-offset: 1px;
+  border-color: var(--cp-teal);
+}
+.cp-input[aria-invalid="true"] {
+  border-color: #c0392b;
+}
+.cp-hint {
+  margin-top: 6px;
+  font-size: var(--cp-fs-sm);
+  color: var(--cp-text-muted);
+}
+.cp-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: var(--cp-fs-sm);
+  font-weight: 600;
+  color: #c0392b;
+}
+
+/* Le cadre est porté par le conteneur, pas par le champ : le contrôle date
+   natif de Safari iOS ne respecte pas toujours width:100% et débordait. */
+.cp-date {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  overflow: hidden;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-r-md);
+  background: var(--cp-surface);
+}
+.cp-date:focus-within {
+  outline: 3px solid var(--cp-teal);
+  outline-offset: 1px;
+  border-color: var(--cp-teal);
+}
+.cp-date.is-invalid {
+  border-color: #c0392b;
+}
+.cp-date input {
+  display: block;
+  /* Le champ occupe toute la hauteur du cadre : sinon le contrôle natif ne fait
+     que 23 px et la zone tactile tombe sous les 44 px exigés en mobile. */
+  align-self: stretch;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--cp-fs-md);
+}
+.cp-date input:focus {
+  outline: none;
+}
+
+/* Heure d'arrivée / de départ : deux listes séparées par « : ». */
+.cp-time {
+  display: flex;
+  align-items: center;
+  gap: var(--cp-s-2);
+}
+.cp-time__sep {
+  font-weight: 700;
+  color: var(--cp-text-muted);
+}
+
+.cp-check {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--cp-s-3);
+  padding: 14px;
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-r-md);
+  background: var(--cp-surface-alt);
+  cursor: pointer;
+}
+.cp-check input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  accent-color: var(--cp-teal-ink);
+}
+.cp-check span {
+  font-size: var(--cp-fs-sm);
+  line-height: 1.5;
+  color: var(--cp-text-soft);
+}
+
+/* Bandeau de résultat (heures calculées, message de succès). */
+.cp-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cp-s-3);
+  padding: 14px var(--cp-s-4);
+  border-radius: var(--cp-r-md);
+  background: var(--cp-mint);
+}
+.cp-result__label {
+  font-size: var(--cp-fs-base);
+  color: var(--cp-text-soft);
+}
+.cp-result__value {
+  font-family: var(--cp-font-display);
+  font-weight: 600;
+  font-size: var(--cp-fs-xl);
+  color: var(--cp-teal-strong);
+}
+.cp-success {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--cp-s-2);
+  padding: 14px var(--cp-s-4);
+  border-radius: var(--cp-r-md);
+  background: var(--cp-mint);
+  font-size: var(--cp-fs-base);
+  font-weight: 600;
+  color: var(--cp-teal-ink);
+}
+
+/* --- Page étroite (saisie, suivi) ---------------------------------------- */
+.a-narrow {
+  width: 100%;
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* --- Entrées de liste génériques (fiches de paie, messages) -------------- */
+.a-row {
+  display: flex;
+  align-items: center;
+  gap: var(--cp-s-4);
+  padding: var(--cp-s-4);
+  background: var(--cp-surface-alt);
+  border: 1px solid var(--cp-border-soft);
+  border-radius: var(--cp-r-md);
+}
+.a-row + .a-row {
+  margin-top: var(--cp-s-3);
+}
+.a-row__body {
+  flex: 1;
+  min-width: 0;
+}
+.a-row__title {
+  font-weight: 700;
+  font-size: var(--cp-fs-md);
+}
+.a-row__meta {
+  margin-top: var(--cp-s-1);
+  font-size: var(--cp-fs-sm);
+  color: var(--cp-text-muted);
+}
+
+@media (max-width: 640px) {
+  .cp-field + .cp-field {
+    margin-top: var(--cp-s-4);
+  }
+  .a-row {
+    gap: var(--cp-s-3);
+    padding: var(--cp-s-3);
+  }
+}
+
+/* Photo de profil dans le bandeau, à la place des initiales. */
+.a-hero__photo {
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+}
+@media (max-width: 640px) {
+  .a-hero__photo {
+    width: 50px;
+    height: 50px;
+  }
+}

@@ -4,16 +4,29 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import IconeFamille from "@/components/famille/IconeFamille";
+import Icone, { type NomIcone } from "@/components/charte/Icone";
 
-export type OngletFamille = "accueil" | "suivi";
+export type LienCharte = {
+  href: string;
+  label: string;
+  icone: NomIcone;
+};
 
-const LIENS: { href: string; label: string; cle: OngletFamille }[] = [
-  { href: "/", label: "Accueil", cle: "accueil" },
-  { href: "/suivi", label: "Suivi", cle: "suivi" },
-];
-
-export default function HeaderFamille({ actif }: { actif: OngletFamille }) {
+/**
+ * L'en-tête de la charte Caparel : logo, navigation, déconnexion, et menu
+ * repliable sous 640 px.
+ *
+ * Les liens sont fournis par l'appelant : chaque espace a les siens, mais tous
+ * partagent la même barre.
+ */
+export default function Header({
+  liens,
+  actif,
+}: {
+  liens: LienCharte[];
+  /** Le `href` du lien à marquer comme page courante. */
+  actif: string;
+}) {
   const [ouvert, setOuvert] = useState(false);
 
   return (
@@ -38,7 +51,7 @@ export default function HeaderFamille({ actif }: { actif: OngletFamille }) {
           aria-controls="nav-principale"
           onClick={() => setOuvert((o) => !o)}
         >
-          <IconeFamille nom="menu" />
+          <Icone nom="menu" />
         </button>
 
         <nav
@@ -46,25 +59,24 @@ export default function HeaderFamille({ actif }: { actif: OngletFamille }) {
           id="nav-principale"
           aria-label="Navigation principale"
         >
-          {LIENS.map((lien) => (
+          {liens.map((lien) => (
             <Link
-              key={lien.cle}
+              key={lien.href}
               className="a-nav__link"
               href={lien.href}
-              aria-current={actif === lien.cle ? "page" : undefined}
+              aria-current={actif === lien.href ? "page" : undefined}
               onClick={() => setOuvert(false)}
             >
-              <IconeFamille nom={lien.cle === "accueil" ? "home" : "suivi"} taille="sm" />
+              <Icone nom={lien.icone} taille="sm" />
               {lien.label}
             </Link>
           ))}
           <button
-            className="a-nav__link"
+            className="a-nav__link a-nav__link--bouton"
             type="button"
-            style={{ border: 0, background: "transparent" }}
             onClick={() => signOut({ callbackUrl: "/login" })}
           >
-            <IconeFamille nom="logout" taille="sm" />
+            <Icone nom="logout" taille="sm" />
             Se déconnecter
           </button>
         </nav>

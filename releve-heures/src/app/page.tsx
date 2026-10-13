@@ -1,11 +1,8 @@
 import { redirect } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
 import { auth } from "@/auth";
-import AppHeader from "@/components/AppHeader";
-import ClientsAssignes from "@/components/ClientsAssignes";
-import BlocDirection from "@/components/BlocDirection";
-import type { Client } from "@/lib/airtable";
+import AccueilFamille from "@/components/famille/AccueilFamille";
+import AccueilIntervenante from "@/components/intervenante/AccueilIntervenante";
+import AccueilReferent from "@/components/referent/AccueilReferent";
 import {
   getCompteById,
   getClientsForIntervenant,
@@ -16,14 +13,12 @@ import {
   resumeMoisFamille,
   getSuivisDuClient,
 } from "@/lib/airtable";
-import AccueilFamille from "@/components/famille/AccueilFamille";
 import {
   isDemoMode,
   DEMO_INTERVENANT,
   getDemoClientsForIntervenant,
   getDemoStatsMensuelles,
 } from "@/lib/demo";
-import { formatHeures, initialesDe } from "@/lib/format";
 
 function resoudreMois(param?: string) {
   const now = new Date();
@@ -104,171 +99,49 @@ export default async function AccueilPage({
   }
 
   const tauxHoraire = profil?.tauxHoraire || 0;
+  const nomComplet = profil?.nomComplet || session.user.nomComplet || "";
 
   // Un référent n'intervient pas : il n'a ni clients assignés ni heures à
-  // récapituler. On évite les appels inutiles et on masque le bloc.
-  const estReferent = profil?.role === "referent";
-
-  let clients: Client[], statsMois;
-  if (estReferent) {
-    clients = [];
-    statsMois = { totalHeures: 0, totalCA: 0 };
-  } else if (isDemoMode()) {
-    clients = getDemoClientsForIntervenant();
-    statsMois = await getDemoStatsMensuelles(tauxHoraire, refDate);
-  } else {
-    const [clientsRes, releveHeures] = await Promise.all([
-      getClientsForIntervenant(session.user.id),
-      getReleveHeuresIntervenant(session.user.id),
-    ]);
-    clients = clientsRes;
-    statsMois = calculerStatsMensuelles(releveHeures, tauxHoraire, refDate);
+  // récapituler. Son accueil garde l'habillage d'origine, faute de maquette.
+  if (profil?.role === "referent") {
+    const maintenant = new Date();
+    return (
+      <AccueilReferent
+        nomComplet={nomComplet}
+        photoUrl={profil.photoUrl}
+        stats={await getStatsAdmin(maintenant)}
+        jour={maintenant}
+      />
+    );
   }
 
-  // Les chiffres de direction ne sont chargés que pour les comptes autorisés,
-  // et l'autorisation vient d'Airtable : sortir le compte de la table
-  // Referents coupe l'accès sans attendre que la personne se reconnecte.
-  const maintenant = new Date();
-  const statsDirection = estReferent ? await getStatsAdmin(maintenant) : null;
-
-  const nomComplet = profil?.nomComplet || session.user.nomComplet || "";
-  const initiales = initialesDe(nomComplet);
+  const [clients, statsMois] = isDemoMode()
+    ? [
+        getDemoClientsForIntervenant(),
+        await getDemoStatsMensuelles(tauxHoraire, refDate),
+      ]
+    : await (async () => {
+        const [clientsRes, releveHeures] = await Promise.all([
+          getClientsForIntervenant(session.user.id),
+          getReleveHeuresIntervenant(session.user.id),
+        ]);
+        return [
+          clientsRes,
+          calculerStatsMensuelles(releveHeures, tauxHoraire, refDate),
+        ] as const;
+      })();
 
   return (
-    <div className="min-h-screen bg-soft flex flex-col overflow-x-hidden">
-      <AppHeader active="accueil" />
-      <main className="flex-1 flex flex-col items-center px-5 sm:px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] pt-2 sm:pt-8">
-        <div className="w-full max-w-md lg:max-w-4xl space-y-4">
-          <div className="relative rounded-2xl border border-line bg-white p-6 overflow-hidden">
-            <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-navylogo via-teal to-teal-dark" />
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/4 h-full sm:h-[155%] aspect-square rounded-full bg-teal/10 flex items-center justify-center">
-              <Image
-                src="/caparel-icon.png"
-                alt=""
-                width={200}
-                height={200}
-                className="w-[49%] h-[49%] object-contain opacity-90 mix-blend-multiply pointer-events-none -translate-x-3"
-                aria-hidden="true"
-              />
-            </div>
-            <div className="relative flex items-center gap-4">
-              {profil?.photoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={profil.photoUrl}
-                  alt={nomComplet}
-                  className="w-16 h-16 rounded-full object-cover shrink-0"
-                />
-              ) : (
-                <div className="w-16 h-16 rounded-full bg-navylogo text-white flex items-center justify-center font-heading font-bold text-lg shrink-0">
-                  {initiales}
-                </div>
-              )}
-              <div>
-                <p className="text-sm text-muted">Bonjour</p>
-                <h1 className="font-heading text-sm font-bold text-ink">
-                  {nomComplet}
-                </h1>
-              </div>
-            </div>
-          </div>
-
-          {statsDirection && (
-            <BlocDirection stats={statsDirection} jour={maintenant} />
-          )}
-
-          {!estReferent && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-            <div>
-              <h2 className="text-sm font-medium text-muted mb-2">
-                {clients.length > 1 ? "Vos clients" : "Votre client"}
-              </h2>
-              <ClientsAssignes clients={clients} />
-            </div>
-
-            <div className="bg-white rounded-2xl border border-line p-6">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <Link
-                  href={`/?mois=${moisPrecedent}`}
-                  aria-label="Mois précédent"
-                  className="p-1 rounded-md text-muted hover:text-navy hover:bg-soft transition-colors"
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M15 18l-6-6 6-6" />
-                  </svg>
-                </Link>
-                <p className="text-sm text-muted capitalize text-center whitespace-nowrap">
-                  Récap — {label}
-                </p>
-                {estMoisCourant ? (
-                  <span
-                    className="p-1 text-line/60"
-                    aria-hidden="true"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M9 18l6-6-6-6" />
-                    </svg>
-                  </span>
-                ) : (
-                  <Link
-                    href={`/?mois=${moisSuivant}`}
-                    aria-label="Mois suivant"
-                    className="p-1 rounded-md text-muted hover:text-navy hover:bg-soft transition-colors"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M9 18l6-6-6-6" />
-                    </svg>
-                  </Link>
-                )}
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="font-heading text-2xl font-bold text-navy">
-                    {formatHeures(statsMois.totalHeures)}
-                  </p>
-                  <p className="text-xs text-muted">Heures réalisées</p>
-                </div>
-                <div>
-                  <p className="font-heading text-2xl font-bold text-teal-dark">
-                    {statsMois.totalCA.toLocaleString("fr-FR")} €
-                  </p>
-                  <p className="text-xs text-muted">Chiffre d&apos;affaires</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          )}
-
-        </div>
-      </main>
-    </div>
+    <AccueilIntervenante
+      nomComplet={nomComplet}
+      photoUrl={profil?.photoUrl || ""}
+      clients={clients}
+      totalHeures={statsMois.totalHeures}
+      totalCA={statsMois.totalCA}
+      libelleMois={label}
+      moisPrecedent={moisPrecedent}
+      moisSuivant={moisSuivant}
+      estMoisCourant={estMoisCourant}
+    />
   );
 }

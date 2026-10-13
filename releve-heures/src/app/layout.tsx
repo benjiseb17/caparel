@@ -6,7 +6,7 @@ import {
   Nunito_Sans,
 } from "next/font/google";
 import "./globals.css";
-import "./espace-famille.css";
+import "./charte-caparel.css";
 
 const inter = Inter({
   variable: "--font-inter",

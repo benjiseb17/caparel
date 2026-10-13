@@ -1,51 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
-import { auth } from "@/auth";
-import type { RoleCompte } from "@/lib/airtable";
 import LogoutButton from "@/components/LogoutButton";
 
-type Onglet =
-  | "accueil"
-  | "saisie"
-  | "historique"
-  | "fiches"
-  | "familles"
-  | "suivi";
+type Onglet = "accueil" | "familles";
 
 type Lien = { href: string; label: string; key: Onglet };
 
-const ACCUEIL: Lien = { href: "/", label: "Accueil", key: "accueil" };
-
-// Trois parcours distincts : une intervenante saisit ses heures et consulte sa
-// paie ; un référent suit les familles dont il a la charge ; une famille lit ses
-// propres interventions et écrit ses retours. Les onglets d'un autre parcours ne
-// serviraient à rien.
-const LIENS_INTERVENANTE: Lien[] = [
-  ACCUEIL,
-  { href: "/saisie", label: "Relevé d'heure", key: "saisie" },
-  { href: "/historique", label: "Historique", key: "historique" },
-  { href: "/fiches-de-paie", label: "Fiches de paie", key: "fiches" },
-];
-
-const LIENS_REFERENT: Lien[] = [
-  ACCUEIL,
+// L'en-tête d'origine ne sert plus qu'à l'espace référent, seul à ne pas avoir
+// encore de maquette. Les espaces intervenante et famille passent par
+// `components/charte/Header`.
+const LIENS: Lien[] = [
+  { href: "/", label: "Accueil", key: "accueil" },
   { href: "/familles", label: "Mes familles", key: "familles" },
 ];
 
-// Les familles ont leur propre en-tête (HeaderFamille), à la charte de leur
-// espace : elles ne passent jamais par celui-ci.
-const PAR_ROLE: Record<RoleCompte, Lien[]> = {
-  intervenante: LIENS_INTERVENANTE,
-  referent: LIENS_REFERENT,
-  famille: [ACCUEIL],
-};
-
-export default async function AppHeader({ active }: { active: Onglet }) {
-  // Le jeton de session sert uniquement à décider des onglets affichés, ce qui
-  // évite un appel Airtable sur chaque page. Les accès eux-mêmes sont vérifiés
-  // contre Airtable, page par page.
-  const session = await auth();
-  const liens = PAR_ROLE[session?.user?.role ?? "intervenante"];
+export default function AppHeader({ active }: { active: Onglet }) {
+  const liens = LIENS;
 
   return (
     <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-8 py-3 sm:py-4 gap-2 sm:gap-3 border-b border-line bg-soft">

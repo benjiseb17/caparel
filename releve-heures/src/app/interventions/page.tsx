@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/auth";
-import HeaderFamille from "@/components/famille/HeaderFamille";
-import IconeFamille from "@/components/famille/IconeFamille";
-import ListeInterventions from "@/components/famille/ListeInterventions";
+import Header from "@/components/charte/Header";
+import { NAV_FAMILLE } from "@/lib/navigation";
+import Icone from "@/components/charte/Icone";
+import ListeInterventions from "@/components/charte/ListeInterventions";
 import { getCompteById, getInterventionsFamille } from "@/lib/airtable";
 import { isDemoMode } from "@/lib/demo";
 import { formatEuros, formatHeures } from "@/lib/format";
@@ -42,7 +43,7 @@ export default async function InterventionsPage() {
 
   return (
     <div className="cp-root">
-      <HeaderFamille actif="accueil" />
+      <Header liens={NAV_FAMILLE} actif="/" />
 
       <main className="cp-container a-main">
         <section className="cp-card a-card">
@@ -76,7 +77,7 @@ export default async function InterventionsPage() {
                       textTransform: "capitalize",
                     }}
                   >
-                    <IconeFamille nom="calendar" taille="sm" />
+                    <Icone nom="calendar" taille="sm" />
                     {MOIS_LABEL.format(new Date(annee, mois - 1, 1))}
                   </h2>
 

@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import HeaderFamille from "@/components/famille/HeaderFamille";
-import SuiviForm from "@/components/SuiviForm";
+import Header from "@/components/charte/Header";
+import Icone from "@/components/charte/Icone";
+import SuiviForm from "@/components/famille/SuiviForm";
+import { NAV_FAMILLE } from "@/lib/navigation";
 import {
   getCompteById,
   getInterventionsFamille,
@@ -44,65 +46,67 @@ export default async function SuiviPage() {
   const dateParReleve = new Map(interventions.map((i) => [i.id, i.date]));
 
   return (
-    <div className="cp-root min-h-screen bg-soft flex flex-col overflow-x-hidden">
-      <HeaderFamille actif="suivi" />
-      <main className="flex-1 px-5 sm:px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] flex justify-center">
-        <div className="w-full max-w-md lg:max-w-2xl">
-          <h1 className="font-heading text-xl font-bold text-navy mb-2">
-            Suivi
-          </h1>
-          <p className="text-sm text-muted mb-6">
-            Écrivez ici ce que vous souhaitez signaler à Caparel : un besoin, une
-            remarque sur une intervention, un changement d&apos;habitude. Vos
-            messages ne sont lus que par l&apos;équipe Caparel.
-          </p>
+    <div className="cp-root">
+      <Header liens={NAV_FAMILLE} actif="/suivi" />
 
-          <SuiviForm interventions={interventions} />
+      <main className="cp-container a-main">
+        <div className="a-narrow">
+          <section className="cp-card a-card">
+            <h1 className="cp-title">Écrire à Caparel</h1>
+            <p
+              className="a-kpi__meta"
+              style={{ marginTop: "6px", marginBottom: "var(--cp-s-5)" }}
+            >
+              Un besoin, une remarque sur une intervention, un changement
+              d&apos;habitude. Vos messages ne sont lus que par l&apos;équipe
+              Caparel, jamais par l&apos;intervenante qui vient chez vous.
+            </p>
 
-          <h2 className="font-heading text-base font-bold text-navy mt-8 mb-3">
-            Vos messages
-          </h2>
+            <SuiviForm interventions={interventions} />
+          </section>
 
-          {suivis.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-line p-6 text-center">
-              <p className="text-sm text-muted">
+          <section
+            className="cp-card a-card"
+            style={{ marginTop: "var(--cp-s-4)" }}
+          >
+            <div className="cp-card__head">
+              <h2 className="cp-title">Vos messages</h2>
+            </div>
+
+            {suivis.length === 0 ? (
+              <p className="cp-empty">
                 Vous n&apos;avez encore envoyé aucun message.
               </p>
-            </div>
-          ) : (
-            <ul className="space-y-3">
-              {suivis.map((s) => (
-                <li
-                  key={s.id}
-                  className="bg-white rounded-2xl border border-line p-4"
-                >
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <p className="text-xs text-muted">
-                      {formatHorodatage(s.ecritLe)}
-                      {s.releveId && dateParReleve.has(s.releveId) && (
-                        <>
-                          {" · intervention du "}
-                          {formatDateFr(dateParReleve.get(s.releveId) || "")}
-                        </>
-                      )}
+            ) : (
+              <ol>
+                {suivis.map((s) => (
+                  <li
+                    key={s.id}
+                    className="a-remark"
+                    style={{ marginBottom: "var(--cp-s-3)" }}
+                  >
+                    <div className="a-remark__head">
+                      <span>
+                        {s.releveId && dateParReleve.has(s.releveId)
+                          ? `Intervention du ${formatDateFr(
+                              dateParReleve.get(s.releveId) || ""
+                            )}`
+                          : "Remarque générale"}
+                      </span>
+                      <span className="cp-badge">
+                        <Icone nom="check" taille="xs" />
+                        {s.traite ? "Pris en compte" : "Transmis"}
+                      </span>
+                    </div>
+                    <p className="a-remark__text">{s.message}</p>
+                    <p className="a-remark__meta">
+                      Envoyée le {formatHorodatage(s.ecritLe)}
                     </p>
-                    <span
-                      className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${
-                        s.traite
-                          ? "bg-soft-2 text-teal-dark"
-                          : "bg-soft text-muted"
-                      }`}
-                    >
-                      {s.traite ? "Pris en compte" : "Transmis"}
-                    </span>
-                  </div>
-                  <p className="text-sm text-ink whitespace-pre-line">
-                    {s.message}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          )}
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
         </div>
       </main>
     </div>

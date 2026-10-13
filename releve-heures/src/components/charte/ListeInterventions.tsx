@@ -1,4 +1,4 @@
-import IconeFamille from "@/components/famille/IconeFamille";
+import Icone from "@/components/charte/Icone";
 import type { InterventionVueFamille } from "@/lib/airtable";
 import { formatEuros, formatHeures, partsDateFr } from "@/lib/format";
 
@@ -28,7 +28,7 @@ export default function ListeInterventions({
                 {i.intervenante}
               </p>
               <p className="a-visit__time">
-                <IconeFamille nom="clock" taille="sm" />
+                <Icone nom="clock" taille="sm" />
                 {i.heureArrivee} – {i.heureDepart}
               </p>
             </div>
