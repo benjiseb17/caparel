@@ -259,7 +259,7 @@
     référent, espace de consultation et de suivi côté famille, administration des
     comptes côté direction. Document interne.
   </p>
-  <p class="meta">Octobre 2026 — version 3</p>
+  <p class="meta">Octobre 2026 — version 4</p>
 </div>
 
 <div class="toc">
@@ -283,6 +283,7 @@
     <li class="part">Partie 3 — Pour les familles</li>
     <li>Se connecter</li>
     <li>Accueil</li>
+    <li>Toutes les interventions</li>
     <li>Suivi</li>
     <li class="part">Partie 4 — Pour la direction</li>
     <li>Les trois tables de comptes</li>
@@ -292,6 +293,7 @@
     <li>Assigner des clients</li>
     <li>Désigner un référent de famille</li>
     <li>Ouvrir un espace à une famille</li>
+    <li>Ajouter une photo</li>
     <li>Les deux commentaires d'un relevé</li>
     <li>Lire les retours des familles</li>
     <li>Corriger un relevé</li>
@@ -375,10 +377,17 @@
 
 <h3>Récapitulatif du mois</h3>
 <p>
-  Vos <strong>heures réalisées</strong> et le <strong>chiffre d'affaires</strong>
-  correspondant. Les flèches <strong>‹ ›</strong> de part et d'autre du mois
+  Vos <strong>heures réalisées</strong>, le <strong>chiffre d'affaires</strong>
+  correspondant et le <strong>nombre de clients</strong> qui vous sont assignés.
+  Les flèches <strong>‹ ›</strong> de part et d'autre du mois, dans le bandeau,
   permettent de remonter dans les mois précédents. La flèche de droite est grisée
   sur le mois en cours : on ne peut pas consulter un mois à venir.
+</p>
+
+<h3>Raccourcis</h3>
+<p>
+  Deux boutons en bas de l'écran : <strong>Saisir un relevé</strong> et
+  <strong>Vos fiches de paie</strong>.
 </p>
 
 <h2>Saisir un relevé d'heures</h2>
@@ -615,11 +624,14 @@
     <tr><th>Ce qui s'affiche</th><th>Détail</th></tr>
   </thead>
   <tbody>
-    <tr><td>Heures du mois</td><td>Le total réalisé chez vous depuis le 1<sup>er</sup></td></tr>
+    <tr><td>Mois affiché</td><td>Les flèches <strong>‹ ›</strong> du bandeau remontent dans les mois précédents. Celle de droite est grisée sur le mois en cours</td></tr>
+    <tr><td>Heures du mois</td><td>Le total réalisé chez vous, et le nombre d'interventions</td></tr>
     <tr><td>Montant du mois</td><td>Le total correspondant</td></tr>
+    <tr><td>Interventions</td><td>Leur nombre et la date de la plus récente</td></tr>
     <tr><td>Vos remarques</td><td>Les 3 dernières, avec leur état. « Tout voir » mène à l'onglet Suivi</td></tr>
-    <tr><td>Dernières interventions</td><td>Les 20 plus récentes : date, horaires, durée, montant et nom de l'intervenante</td></tr>
+    <tr><td>Dernières interventions</td><td>Celles du mois affiché : date, horaires, durée, montant et nom de l'intervenante, puis le total du mois</td></tr>
     <tr><td>Mot de l'intervenante</td><td>Quand elle en a laissé un, il apparaît sous l'intervention</td></tr>
+    <tr><td>Une question ?</td><td>Le numéro de votre agence, cliquable depuis un téléphone</td></tr>
   </tbody>
 </table>
 
@@ -627,6 +639,21 @@
   <p>
     L'intervenante dispose de deux champs distincts : un commentaire interne à
     Caparel, et un « mot pour la famille ». Seul le second vous est montré.
+  </p>
+</div>
+
+<h2>Toutes les interventions</h2>
+
+<p>
+  Le lien <strong>« Tout voir »</strong>, à côté des dernières interventions, ouvre
+  l'historique complet : toutes les interventions réalisées chez vous depuis le
+  début, regroupées par mois, avec le total de chacun.
+</p>
+
+<div class="note">
+  <p>
+    L'accueil ne montre que le mois affiché — c'est ce qui donne son sens au total
+    et aux flèches. Cette page-ci ne s'arrête à aucune date.
   </p>
 </div>
 
@@ -818,6 +845,30 @@
     connecter, ni réinitialiser son mot de passe.
   </p>
 </div>
+
+<h2>Ajouter une photo</h2>
+
+<p>
+  Les trois tables de comptes ont une colonne <code>Photo</code>. La photo
+  s'affiche dans le bandeau d'accueil de la personne, à la place de ses initiales.
+</p>
+
+<table>
+  <thead>
+    <tr><th>Table</th><th>Où la photo apparaît</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Intervenants</td><td>Sur son accueil</td></tr>
+    <tr><td>Referents</td><td>Sur son accueil</td></tr>
+    <tr><td>Clients</td><td>Sur l'accueil de la famille</td></tr>
+  </tbody>
+</table>
+
+<p>
+  Rien n'est obligatoire : sans photo, les initiales sont affichées dans une
+  pastille turquoise. Une image carrée donne le meilleur résultat, la photo étant
+  découpée en rond.
+</p>
 
 <h2>Les deux commentaires d'un relevé</h2>
 

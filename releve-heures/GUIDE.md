@@ -213,9 +213,21 @@ même façon.
 |---|---|
 | **Heures du mois** | Le total réalisé chez vous depuis le 1er |
 | **Montant du mois** | Le total correspondant |
+| **Mois affiché** | Les flèches **‹ ›** du bandeau remontent dans les mois précédents |
+| **Interventions** | Leur nombre et la date de la plus récente |
 | **Vos remarques** | Les 3 dernières, avec leur état. « Tout voir » mène à l'onglet Suivi |
-| **Dernières interventions** | Les 20 plus récentes : date, horaires, durée, montant et nom de l'intervenante |
+| **Dernières interventions** | Celles du mois affiché, avec le total du mois |
 | **Mot de l'intervenante** | Quand elle en a laissé un, il apparaît sous l'intervention |
+| **Une question ?** | Le numéro de l'agence, cliquable depuis un téléphone |
+
+## Toutes les interventions
+
+Le lien **« Tout voir »**, à côté des dernières interventions, ouvre l'historique
+complet : toutes les interventions réalisées chez vous depuis le début, regroupées
+par mois, avec le total de chacun.
+
+> L'accueil ne montre que le mois affiché — c'est ce qui donne son sens au total et
+> aux flèches. Cette page-ci ne s'arrête à aucune date.
 
 > L'intervenante dispose de deux champs distincts : un commentaire interne à
 > Caparel, et un « mot pour la famille ». Seul le second vous est montré.
@@ -335,6 +347,16 @@ celles qui n'en veulent pas.
 > Comme pour les autres comptes, ne renseignez l'email qu'au moment où la famille
 > va s'en servir, et vérifiez `Actif` : un client inactif ne peut ni se connecter
 > ni réinitialiser son mot de passe.
+
+## Ajouter une photo
+
+Les trois tables de comptes ont une colonne `Photo`. Elle s'affiche dans le bandeau
+d'accueil de la personne, à la place de ses initiales : sur son accueil pour une
+intervenante et un référent, sur celui de la famille pour un client.
+
+Rien n'est obligatoire — sans photo, les initiales sont affichées dans une pastille
+turquoise. Une image carrée donne le meilleur résultat, la photo étant découpée en
+rond.
 
 ## Les deux commentaires d'un relevé
 

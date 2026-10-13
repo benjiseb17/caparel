@@ -32,6 +32,7 @@ leur propre table, avec les seuls champs nécessaires à la connexion :
 | `Email`           | Texte sur une ligne          |
 | `MotDePasseHash`  | Texte sur une ligne          |
 | `Actif`           | Case à cocher                |
+| `Photo`           | Pièce jointe (optionnel — sans photo, des initiales sont affichées) |
 | `Acces complet`   | Case à cocher — donne accès à **toutes** les familles dans l'onglet Mes familles, et pas seulement à celles dont la personne est référente (compte de direction) |
 
 > Un email ne doit figurer que dans **une seule** des trois tables de comptes
@@ -50,6 +51,7 @@ leur propre table, avec les seuls champs nécessaires à la connexion :
 | `Referent famille`      | Lien vers `Referents` — le ou les référents de cette famille |
 | `Email`                 | Texte sur une ligne — adresse de connexion de la famille à son espace |
 | `MotDePasseHash`        | Texte sur une ligne                                 |
+| `Photo`                 | Pièce jointe (optionnel — sans photo, des initiales sont affichées) |
 
 > La table `Clients` est aussi une **table de comptes** : une famille s'y connecte
 > avec son `Email`, par le même parcours que les intervenantes. Sans email, la
@@ -205,7 +207,8 @@ Ouvre [http://localhost:3000](http://localhost:3000) — tu seras redirigé vers
 - **Historique** (`/historique`) : liste des relevés déjà saisis par l'intervenant, en lecture seule. Un relevé validé n'est plus modifiable depuis l'app — les corrections passent par la direction dans Airtable, afin que les heures servant de base à la paie ne changent plus après coup.
 - **Mes familles** (`/familles`) : réservé aux comptes de la table `Referents`. Chaque référent y voit les familles dont il est `Referent famille` dans la table `Clients` — ou **toutes** les familles si `Acces complet` est coché sur sa ligne : heures du mois, intervenantes concernées et cinq dernières interventions. L'autorisation est relue depuis Airtable à chaque affichage.
 - **Fiches de paie** (`/fiches-de-paie`) : ses bulletins (table `Fiches de Paie`), du plus récent au plus ancien, avec un lien de téléchargement direct. Seules les fiches cochées `Publiee` apparaissent.
-- **Espace famille** (`/`) : pour un compte de la table `Clients`, l'accueil affiche les heures et le montant du mois, un récapitulatif des 3 dernières remarques avec leur état, puis les 20 dernières interventions — date, horaires, durée, montant, intervenante et `Mot pour la famille`. Le champ `Commentaire` du relevé reste interne et n'est jamais envoyé au navigateur de la famille.
+- **Espace famille** (`/`) : pour un compte de la table `Clients`, l'accueil affiche les heures et le montant du mois — navigables par les flèches `?mois=` comme pour une intervenante —, un récapitulatif des 3 dernières remarques avec leur état, puis les interventions du mois affiché — date, horaires, durée, montant, intervenante et `Mot pour la famille`. Le champ `Commentaire` du relevé reste interne et n'est jamais envoyé au navigateur de la famille.
+- **Toutes les interventions** (`/interventions`) : réservé aux familles. L'historique complet, regroupé par mois avec un sous-total par mois. L'accueil se limitant au mois affiché, c'est cette page qui donne accès au reste.
 - **Suivi** (`/suivi`) : réservé aux familles. Un formulaire pour écrire un retour, rattaché ou non à une intervention passée, et la liste de ses propres messages avec leur état (« Transmis » / « Pris en compte »). La route `/api/suivi` vérifie que le relevé visé appartient bien à cette famille, pour qu'un message ne puisse pas être rattaché à l'intervention d'un autre client. Les retours remontent dans l'onglet Mes familles des référents — jamais chez les intervenantes.
 
 ## Déploiement
