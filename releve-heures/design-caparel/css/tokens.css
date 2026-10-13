@@ -1,0 +1,73 @@
+/* ==========================================================================
+   CAPAREL — Charte graphique (tokens)
+   Toutes les couleurs, polices, tailles, rayons et espacements passent par
+   ces variables. N'écris aucune couleur en dur ailleurs : utilise var(--cp-…).
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap");
+
+:root {
+  /* --- Couleurs de marque ------------------------------------------------ */
+  --cp-navy: #14294A;          /* bleu marine : texte principal, fonds forts */
+  --cp-navy-hover: #0E1F3A;    /* bleu marine au survol */
+  --cp-teal: #13A090;          /* turquoise : accents, décor, barres */
+  --cp-teal-strong: #0F8F84;   /* turquoise des grands chiffres (24 px et +) */
+  --cp-teal-ink: #0B7A70;      /* turquoise du texte courant (contraste AA) */
+  --cp-teal-soft: #7FD3C8;     /* turquoise clair, sur fond marine */
+  --cp-teal-pale: #9FE3D9;     /* turquoise très clair, petits textes sur marine */
+  --cp-mint: #E3F3F0;          /* fond menthe (pastilles, remarques, bandeau) */
+
+  /* --- Neutres ----------------------------------------------------------- */
+  --cp-bg: #F4F7F9;            /* fond de page */
+  --cp-surface: #FFFFFF;       /* cartes */
+  --cp-surface-alt: #F7FAFB;   /* lignes de liste, total */
+  --cp-border: #E3E9EF;
+  --cp-border-soft: #EDF2F5;
+  --cp-border-dashed: #D5DEE8;
+
+  /* --- Texte ------------------------------------------------------------- */
+  --cp-text: var(--cp-navy);
+  --cp-text-muted: #5B6B7F;    /* libellés, méta (contraste 5,4:1 sur blanc) */
+  --cp-text-soft: #3F5166;     /* texte secondaire sur fond menthe */
+  --cp-on-navy: #FFFFFF;
+  --cp-on-navy-muted: #B9C6D6;
+  --cp-on-navy-soft: #D5DEE8;
+
+  /* --- Typographie ------------------------------------------------------- */
+  --cp-font-display: "Lexend", system-ui, sans-serif;     /* titres, chiffres */
+  --cp-font-body: "Nunito Sans", system-ui, sans-serif;   /* texte courant */
+
+  --cp-fs-xs: 12px;
+  --cp-fs-sm: 13px;
+  --cp-fs-base: 15px;
+  --cp-fs-md: 16px;
+  --cp-fs-lg: 18px;
+  --cp-fs-xl: 20px;
+  --cp-fs-2xl: 28px;
+  --cp-fs-3xl: 34px;
+  --cp-fs-kpi: 44px;
+  --cp-fs-hero: 52px;
+
+  /* --- Rayons ------------------------------------------------------------ */
+  --cp-r-sm: 10px;
+  --cp-r-md: 14px;
+  --cp-r-lg: 20px;
+  --cp-r-xl: 24px;
+  --cp-r-2xl: 28px;
+  --cp-r-pill: 999px;
+
+  /* --- Espacements ------------------------------------------------------- */
+  --cp-s-1: 4px;
+  --cp-s-2: 8px;
+  --cp-s-3: 12px;
+  --cp-s-4: 16px;
+  --cp-s-5: 20px;
+  --cp-s-6: 24px;
+  --cp-s-8: 32px;
+  --cp-s-10: 40px;
+  --cp-s-14: 56px;
+
+  /* --- Divers ------------------------------------------------------------ */
+  --cp-container: 1080px;      /* largeur max du contenu */
+  --cp-tap: 44px;              /* taille mini d'une zone cliquable */
+}

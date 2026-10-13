@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import AppHeader from "@/components/AppHeader";
+import HeaderFamille from "@/components/famille/HeaderFamille";
 import SuiviForm from "@/components/SuiviForm";
 import {
   getCompteById,
-  getEspaceFamille,
+  getInterventionsFamille,
   getSuivisDuClient,
 } from "@/lib/airtable";
 import { isDemoMode } from "@/lib/demo";
@@ -36,18 +36,16 @@ export default async function SuiviPage() {
     redirect("/");
   }
 
-  const [espace, suivis] = await Promise.all([
-    getEspaceFamille(profil.id),
+  const [interventions, suivis] = await Promise.all([
+    getInterventionsFamille(profil.id),
     getSuivisDuClient(profil.id),
   ]);
 
-  const dateParReleve = new Map(
-    espace.interventions.map((i) => [i.id, i.date])
-  );
+  const dateParReleve = new Map(interventions.map((i) => [i.id, i.date]));
 
   return (
-    <div className="min-h-screen bg-soft flex flex-col overflow-x-hidden">
-      <AppHeader active="suivi" />
+    <div className="cp-root min-h-screen bg-soft flex flex-col overflow-x-hidden">
+      <HeaderFamille actif="suivi" />
       <main className="flex-1 px-5 sm:px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] flex justify-center">
         <div className="w-full max-w-md lg:max-w-2xl">
           <h1 className="font-heading text-xl font-bold text-navy mb-2">
@@ -59,7 +57,7 @@ export default async function SuiviPage() {
             messages ne sont lus que par l&apos;équipe Caparel.
           </p>
 
-          <SuiviForm interventions={espace.interventions} />
+          <SuiviForm interventions={interventions} />
 
           <h2 className="font-heading text-base font-bold text-navy mt-8 mb-3">
             Vos messages

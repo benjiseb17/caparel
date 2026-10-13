@@ -12,10 +12,11 @@ import {
   getReleveHeuresIntervenant,
   calculerStatsMensuelles,
   getStatsAdmin,
-  getEspaceFamille,
+  getInterventionsFamille,
+  resumeMoisFamille,
   getSuivisDuClient,
 } from "@/lib/airtable";
-import AccueilFamille from "@/components/AccueilFamille";
+import AccueilFamille from "@/components/famille/AccueilFamille";
 import {
   isDemoMode,
   DEMO_INTERVENANT,
@@ -82,16 +83,22 @@ export default async function AccueilPage({
 
   // Une famille a son propre écran : rien de ce qui suit ne la concerne.
   if (profil?.role === "famille") {
-    const [espace, suivis] = await Promise.all([
-      getEspaceFamille(profil.id),
+    const [interventions, suivis] = await Promise.all([
+      getInterventionsFamille(profil.id),
       getSuivisDuClient(profil.id),
     ]);
+
     return (
       <AccueilFamille
         nomClient={profil.nomComplet}
-        espace={espace}
-        suivis={suivis}
-        mois={new Date()}
+        resume={resumeMoisFamille(interventions, refDate)}
+        derniereRemarque={suivis[0] || null}
+        dateParReleve={new Map(interventions.map((i) => [i.id, i.date]))}
+        mois={refDate}
+        libelleMois={label}
+        moisPrecedent={moisPrecedent}
+        moisSuivant={moisSuivant}
+        estMoisCourant={estMoisCourant}
       />
     );
   }

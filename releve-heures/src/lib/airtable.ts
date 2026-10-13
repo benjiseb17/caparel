@@ -766,25 +766,17 @@ export type InterventionVueFamille = {
   motPourLaFamille: string;
 };
 
-export type EspaceFamille = {
-  interventions: InterventionVueFamille[];
-  heuresMois: number;
-  montantMois: number;
-};
-
 /**
- * Ce qu'une famille voit de son propre suivi : ses interventions passées, de la
- * plus récente à la plus ancienne, et le cumul du mois en cours.
+ * Toutes les interventions réalisées chez un client, de la plus récente à la
+ * plus ancienne.
  *
- * Le montant d'une intervention est calculé avec le taux horaire de
- * l'intervenante qui l'a réalisée, comme ailleurs dans l'app. Le commentaire
- * interne n'est jamais exposé : seul `Mot pour la famille` l'est.
+ * Le montant est calculé avec le taux horaire de l'intervenante qui a réalisé
+ * l'intervention, comme ailleurs dans l'app. Le commentaire interne du relevé
+ * n'est jamais exposé : seul `Mot pour la famille` l'est.
  */
-export async function getEspaceFamille(
-  clientId: string,
-  maintenant = new Date(),
-  limite = 20
-): Promise<EspaceFamille> {
+export async function getInterventionsFamille(
+  clientId: string
+): Promise<InterventionVueFamille[]> {
   const [releveRecords, intervenantRecords] = await Promise.all([
     base(TABLES.releves)
       .select({ sort: [{ field: "Date", direction: "desc" }] })
@@ -802,46 +794,65 @@ export async function getEspaceFamille(
     ])
   );
 
-  const siens = releveRecords.filter((r) =>
-    ((r.get("Client") as string[] | undefined) || []).includes(clientId)
-  );
+  return releveRecords
+    .filter((r) =>
+      ((r.get("Client") as string[] | undefined) || []).includes(clientId)
+    )
+    .map((r) => {
+      const heures = (r.get("Heures realisees") as number) || 0;
+      const intervenante = intervenantes.get(
+        ((r.get("Intervenant") as string[]) || [])[0] || ""
+      );
 
-  let heuresMois = 0;
-  let montantMois = 0;
+      return {
+        id: r.id,
+        date: (r.get("Date") as string) || "",
+        intervenante: intervenante?.nom || "Intervenante inconnue",
+        heureArrivee: (r.get("Heure d'arrivee") as string) || "",
+        heureDepart: (r.get("Heure de depart") as string) || "",
+        heures,
+        montant: Math.round(heures * (intervenante?.taux || 0) * 100) / 100,
+        motPourLaFamille: (r.get("Mot pour la famille") as string) || "",
+      };
+    });
+}
 
-  const interventions = siens.map((r) => {
-    const heures = (r.get("Heures realisees") as number) || 0;
-    const intervenante = intervenantes.get(
-      ((r.get("Intervenant") as string[]) || [])[0] || ""
+export type ResumeMoisFamille = {
+  /** Les interventions du mois demandé, de la plus récente à la plus ancienne. */
+  interventions: InterventionVueFamille[];
+  heures: number;
+  montant: number;
+  /** Date de la plus récente intervention du mois, vide s'il n'y en a aucune. */
+  derniereDate: string;
+};
+
+/**
+ * Découpe une liste d'interventions sur un mois donné et en fait les totaux.
+ *
+ * Fonction pure : le mois affiché sur l'accueil change au gré des flèches, sans
+ * qu'il soit utile de réinterroger Airtable à chaque fois.
+ */
+export function resumeMoisFamille(
+  interventions: InterventionVueFamille[],
+  mois: Date
+): ResumeMoisFamille {
+  const duMois = interventions.filter((i) => {
+    const d = new Date(i.date);
+    return (
+      !Number.isNaN(d.getTime()) &&
+      d.getFullYear() === mois.getFullYear() &&
+      d.getMonth() === mois.getMonth()
     );
-    const montant = heures * (intervenante?.taux || 0);
-    const date = new Date((r.get("Date") as string) || "");
-
-    if (
-      !Number.isNaN(date.getTime()) &&
-      date.getFullYear() === maintenant.getFullYear() &&
-      date.getMonth() === maintenant.getMonth()
-    ) {
-      heuresMois += heures;
-      montantMois += montant;
-    }
-
-    return {
-      id: r.id,
-      date: (r.get("Date") as string) || "",
-      intervenante: intervenante?.nom || "Intervenante inconnue",
-      heureArrivee: (r.get("Heure d'arrivee") as string) || "",
-      heureDepart: (r.get("Heure de depart") as string) || "",
-      heures,
-      montant: Math.round(montant * 100) / 100,
-      motPourLaFamille: (r.get("Mot pour la famille") as string) || "",
-    };
   });
 
+  const heures = duMois.reduce((t, i) => t + i.heures, 0);
+  const montant = duMois.reduce((t, i) => t + i.montant, 0);
+
   return {
-    interventions: interventions.slice(0, limite),
-    heuresMois: Math.round(heuresMois * 100) / 100,
-    montantMois: Math.round(montantMois * 100) / 100,
+    interventions: duMois,
+    heures: Math.round(heures * 100) / 100,
+    montant: Math.round(montant * 100) / 100,
+    derniereDate: duMois[0]?.date || "",
   };
 }
 

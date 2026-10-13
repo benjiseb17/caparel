@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { creerSuivi, getCompteById, getEspaceFamille } from "@/lib/airtable";
+import {
+  creerSuivi,
+  getCompteById,
+  getInterventionsFamille,
+} from "@/lib/airtable";
 import { isDemoMode } from "@/lib/demo";
 
 const LONGUEUR_MAX = 2000;
@@ -49,8 +53,8 @@ export async function POST(request: Request) {
   // celles de cette famille, sans quoi n'importe qui pourrait rattacher un
   // commentaire à l'intervention d'un autre client.
   if (releveId) {
-    const espace = await getEspaceFamille(profil.id);
-    if (!espace.interventions.some((i) => i.id === releveId)) {
+    const interventions = await getInterventionsFamille(profil.id);
+    if (!interventions.some((i) => i.id === releveId)) {
       return NextResponse.json(
         { error: "Intervention introuvable." },
         { status: 400 }

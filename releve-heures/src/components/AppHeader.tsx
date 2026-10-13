@@ -32,15 +32,12 @@ const LIENS_REFERENT: Lien[] = [
   { href: "/familles", label: "Mes familles", key: "familles" },
 ];
 
-const LIENS_FAMILLE: Lien[] = [
-  ACCUEIL,
-  { href: "/suivi", label: "Suivi", key: "suivi" },
-];
-
+// Les familles ont leur propre en-tête (HeaderFamille), à la charte de leur
+// espace : elles ne passent jamais par celui-ci.
 const PAR_ROLE: Record<RoleCompte, Lien[]> = {
   intervenante: LIENS_INTERVENANTE,
   referent: LIENS_REFERENT,
-  famille: LIENS_FAMILLE,
+  famille: [ACCUEIL],
 };
 
 export default async function AppHeader({ active }: { active: Onglet }) {

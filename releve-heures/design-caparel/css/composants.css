@@ -1,0 +1,152 @@
+/* ==========================================================================
+   CAPAREL — Composants communs aux trois pistes
+   Dépend de tokens.css.
+   ========================================================================== */
+
+/* --- Base ---------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--cp-bg);
+  color: var(--cp-text);
+  font-family: var(--cp-font-body);
+  font-size: var(--cp-fs-base);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, ol, ul, dl, dd, figure, blockquote { margin: 0; }
+ol, ul { list-style: none; padding: 0; }
+a { color: var(--cp-teal-ink); }
+a:hover { color: var(--cp-navy); }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--cp-teal); outline-offset: 2px; }
+
+.cp-sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.cp-container {
+  max-width: var(--cp-container);
+  margin-inline: auto;
+  padding-inline: var(--cp-s-6);
+}
+
+/* --- Icônes (sprite SVG en tête de page, trait 1,8 px) --------------------- */
+.cp-icon {
+  width: 20px; height: 20px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.cp-icon--sm { width: 16px; height: 16px; }
+.cp-icon--xs { width: 14px; height: 14px; stroke-width: 2.4; }
+
+/* --- Logo ----------------------------------------------------------------- */
+/* Le pictogramme du kit est un substitut : utilise le logo officiel du projet. */
+.cp-logo {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--cp-navy); text-decoration: none;
+}
+.cp-logo:hover { color: var(--cp-navy); }
+.cp-logo__mark { width: 34px; height: 34px; flex: none; }
+.cp-logo__mark path { fill: none; stroke-width: 2.6; stroke-linecap: round; }
+.cp-logo__mark .is-teal { stroke: var(--cp-teal); }
+.cp-logo__mark .is-ink { stroke: currentColor; }
+.cp-logo__mark circle { fill: var(--cp-teal); }
+.cp-logo__text { display: flex; flex-direction: column; line-height: 1; }
+.cp-logo__name {
+  font-family: var(--cp-font-display); font-weight: 600;
+  font-size: 22px; letter-spacing: 0.04em;
+}
+.cp-logo__tagline { margin-top: 4px; font-size: 11px; color: var(--cp-text-muted); }
+
+.cp-logo--inverse, .cp-logo--inverse:hover { color: var(--cp-on-navy); }
+.cp-logo--inverse .cp-logo__tagline { color: var(--cp-on-navy-muted); }
+
+/* --- Titres et liens ------------------------------------------------------ */
+.cp-title {
+  font-family: var(--cp-font-display); font-weight: 600;
+  font-size: var(--cp-fs-xl); line-height: 1.2;
+}
+.cp-link { font-weight: 700; font-size: 14px; color: var(--cp-teal-ink); }
+
+/* --- Cartes --------------------------------------------------------------- */
+.cp-card {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-r-lg);
+  padding: var(--cp-s-6);
+}
+.cp-card__head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--cp-s-3); margin-bottom: var(--cp-s-4);
+}
+
+/* --- Avatars (initiale) --------------------------------------------------- */
+.cp-avatar {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--cp-navy); color: var(--cp-on-navy);
+  font-size: 13px; font-weight: 700;
+}
+.cp-avatar--soft { background: var(--cp-mint); color: var(--cp-teal-ink); }
+.cp-avatar--teal { background: var(--cp-teal); color: var(--cp-on-navy); }
+.cp-avatar--md { width: 40px; height: 40px; font-size: 16px; font-family: var(--cp-font-display); font-weight: 600; }
+.cp-avatar--lg { width: 64px; height: 64px; font-size: 26px; font-family: var(--cp-font-display); font-weight: 600; }
+
+/* --- Pastille d'icône ----------------------------------------------------- */
+.cp-chip-icon {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 40px; height: 40px; border-radius: 12px;
+  background: var(--cp-mint); color: var(--cp-teal-ink);
+}
+.cp-chip-icon--round { border-radius: 50%; }
+
+/* --- Boutons -------------------------------------------------------------- */
+.cp-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--cp-s-2);
+  min-height: 48px; padding: 0 22px;
+  border: 1.5px solid transparent; border-radius: var(--cp-r-md);
+  font-weight: 700; font-size: var(--cp-fs-base); text-decoration: none;
+}
+.cp-btn--primary { background: var(--cp-navy); color: var(--cp-on-navy); }
+.cp-btn--primary:hover { background: var(--cp-navy-hover); color: var(--cp-on-navy); }
+.cp-btn--outline { background: var(--cp-surface); border-color: var(--cp-navy); color: var(--cp-navy); }
+.cp-btn--outline:hover { background: var(--cp-surface-alt); color: var(--cp-navy); }
+.cp-btn--block { width: 100%; }
+.cp-btn--pill { border-radius: var(--cp-r-pill); }
+
+.cp-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: var(--cp-tap); height: var(--cp-tap);
+  border: 0; border-radius: 50%; background: transparent; color: inherit;
+}
+.cp-icon-btn:hover { background: rgba(127, 211, 200, 0.18); }
+
+/* --- Sélecteur de mois ---------------------------------------------------- */
+.cp-month {
+  display: inline-flex; align-items: center; gap: var(--cp-s-1);
+  padding: var(--cp-s-1);
+  background: var(--cp-surface); border: 1px solid var(--cp-border);
+  border-radius: var(--cp-r-pill);
+}
+.cp-month__label {
+  min-width: 120px; padding: 0 var(--cp-s-2); text-align: center;
+  font-family: var(--cp-font-display); font-weight: 500; font-size: var(--cp-fs-md);
+}
+.cp-month--on-navy {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: var(--cp-on-navy);
+}
+
+/* --- Badge de statut ------------------------------------------------------ */
+.cp-badge {
+  display: inline-flex; align-items: center; gap: var(--cp-s-1);
+  padding: 4px 10px; border-radius: var(--cp-r-pill);
+  background: var(--cp-surface); color: var(--cp-teal-ink);
+  font-size: var(--cp-fs-xs); font-weight: 700; white-space: nowrap;
+}
+.cp-badge--soft { background: var(--cp-mint); }
