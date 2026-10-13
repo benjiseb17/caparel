@@ -944,12 +944,35 @@
   width: 100%;
   min-width: 0;
   max-width: 100%;
+  /* Hauteur et interligne identiques : le texte est centré dans sa propre
+     boîte, que le conteneur centre à son tour. Sans cela, WebKit cale la
+     valeur sur une ligne de base qui la fait remonter de quelques pixels. */
+  height: 24px;
   padding: 0;
   border: 0;
   background: transparent;
   color: inherit;
   font: inherit;
   font-size: var(--cp-fs-md);
+  /* Après `font`, qui est un raccourci et réinitialiserait l'interligne. */
+  line-height: 24px;
+}
+/* Sur iOS, le contrôle natif ajoute ses propres marges autour de la valeur et
+   la peint plus haut que le centre. On neutralise son habillage : le champ se
+   comporte alors comme un champ texte ordinaire, qui centre son contenu.
+   Réservé au mobile, où Safari n'affiche de toute façon aucune icône. */
+@media (max-width: 640px) {
+  .cp-date input {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}
+.cp-date input::-webkit-date-and-time-value {
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 24px;
+  text-align: left;
 }
 .cp-date input:focus {
   outline: none;
