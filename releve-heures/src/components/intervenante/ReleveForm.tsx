@@ -135,7 +135,9 @@ export default function ReleveForm({ clients }: { clients: Client[] }) {
         <label className="cp-label" htmlFor="date">
           Date
         </label>
-        <div className={`cp-date${dateFuture ? " is-invalid" : ""}`}>
+        {/* Un label, pour que toucher n'importe où dans l'encart ouvre le
+            sélecteur : le contrôle natif ne couvre pas toute sa hauteur. */}
+        <label className={`cp-date${dateFuture ? " is-invalid" : ""}`}>
           <input
             id="date"
             type="date"
@@ -146,7 +148,7 @@ export default function ReleveForm({ clients }: { clients: Client[] }) {
             aria-invalid={dateFuture}
             aria-describedby={dateFuture ? "date-erreur" : undefined}
           />
-        </div>
+        </label>
         {dateFuture && (
           <p className="cp-error" id="date-erreur" role="alert">
             <Icone nom="alert" taille="sm" />

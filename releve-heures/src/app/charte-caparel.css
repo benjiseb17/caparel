@@ -915,8 +915,11 @@
   color: #c0392b;
 }
 
-/* Le cadre est porté par le conteneur, pas par le champ : le contrôle date
-   natif de Safari iOS ne respecte pas toujours width:100% et débordait. */
+/* Le cadre est porté par un `label`, pas par le champ lui-même : le contrôle
+   date natif de Safari iOS ne respecte pas toujours width:100% et débordait.
+   Le label rend tout l'encart tactile — 48 px — alors que le contrôle natif
+   n'en fait que 23, sans avoir à l'étirer : étiré, WebKit colle sa valeur en
+   haut de la boîte au lieu de la centrer. */
 .cp-date {
   display: flex;
   align-items: center;
@@ -938,9 +941,6 @@
 }
 .cp-date input {
   display: block;
-  /* Le champ occupe toute la hauteur du cadre : sinon le contrôle natif ne fait
-     que 23 px et la zone tactile tombe sous les 44 px exigés en mobile. */
-  align-self: stretch;
   width: 100%;
   min-width: 0;
   max-width: 100%;
