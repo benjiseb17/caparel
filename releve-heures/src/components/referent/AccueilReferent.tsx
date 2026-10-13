@@ -50,7 +50,7 @@ export default function AccueilReferent({
           </div>
 
           <Link
-            className="cp-btn cp-btn--surface"
+            className="cp-btn cp-btn--outline"
             href="/familles"
             style={{ position: "relative", zIndex: 1 }}
           >

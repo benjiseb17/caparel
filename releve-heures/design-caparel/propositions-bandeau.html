@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caparel — Pistes pour le bandeau d'accueil</title>
+<style>
+/* ==========================================================================
+   CAPAREL — Charte graphique (tokens)
+   Toutes les couleurs, polices, tailles, rayons et espacements passent par
+   ces variables. N'écris aucune couleur en dur ailleurs : utilise var(--cp-…).
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap");
+
+:root {
+  /* --- Couleurs de marque ------------------------------------------------ */
+  --cp-navy: #14294A;          /* bleu marine : texte principal, fonds forts */
+  --cp-navy-hover: #0E1F3A;    /* bleu marine au survol */
+  --cp-teal: #13A090;          /* turquoise : accents, décor, barres */
+  --cp-teal-strong: #0F8F84;   /* turquoise des grands chiffres (24 px et +) */
+  --cp-teal-ink: #0B7A70;      /* turquoise du texte courant (contraste AA) */
+  --cp-teal-soft: #7FD3C8;     /* turquoise clair, sur fond marine */
+  --cp-teal-pale: #9FE3D9;     /* turquoise très clair, petits textes sur marine */
+  --cp-mint: #E3F3F0;          /* fond menthe (pastilles, remarques, bandeau) */
+
+  /* --- Neutres ----------------------------------------------------------- */
+  --cp-bg: #F4F7F9;            /* fond de page */
+  --cp-surface: #FFFFFF;       /* cartes */
+  --cp-surface-alt: #F7FAFB;   /* lignes de liste, total */
+  --cp-border: #E3E9EF;
+  --cp-border-soft: #EDF2F5;
+  --cp-border-dashed: #D5DEE8;
+
+  /* --- Texte ------------------------------------------------------------- */
+  --cp-text: var(--cp-navy);
+  --cp-text-muted: #5B6B7F;    /* libellés, méta (contraste 5,4:1 sur blanc) */
+  --cp-text-soft: #3F5166;     /* texte secondaire sur fond menthe */
+  --cp-on-navy: #FFFFFF;
+  --cp-on-navy-muted: #B9C6D6;
+  --cp-on-navy-soft: #D5DEE8;
+
+  /* --- Typographie ------------------------------------------------------- */
+  --cp-font-display: "Lexend", system-ui, sans-serif;     /* titres, chiffres */
+  --cp-font-body: "Nunito Sans", system-ui, sans-serif;   /* texte courant */
+
+  --cp-fs-xs: 12px;
+  --cp-fs-sm: 13px;
+  --cp-fs-base: 15px;
+  --cp-fs-md: 16px;
+  --cp-fs-lg: 18px;
+  --cp-fs-xl: 20px;
+  --cp-fs-2xl: 28px;
+  --cp-fs-3xl: 34px;
+  --cp-fs-kpi: 44px;
+  --cp-fs-hero: 52px;
+
+  /* --- Rayons ------------------------------------------------------------ */
+  --cp-r-sm: 10px;
+  --cp-r-md: 14px;
+  --cp-r-lg: 20px;
+  --cp-r-xl: 24px;
+  --cp-r-2xl: 28px;
+  --cp-r-pill: 999px;
+
+  /* --- Espacements ------------------------------------------------------- */
+  --cp-s-1: 4px;
+  --cp-s-2: 8px;
+  --cp-s-3: 12px;
+  --cp-s-4: 16px;
+  --cp-s-5: 20px;
+  --cp-s-6: 24px;
+  --cp-s-8: 32px;
+  --cp-s-10: 40px;
+  --cp-s-14: 56px;
+
+  /* --- Divers ------------------------------------------------------------ */
+  --cp-container: 1080px;      /* largeur max du contenu */
+  --cp-tap: 44px;              /* taille mini d'une zone cliquable */
+}
+
+/* ==========================================================================
+   CAPAREL — Composants communs aux trois pistes
+   Dépend de tokens.css.
+   ========================================================================== */
+
+/* --- Base ---------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--cp-bg);
+  color: var(--cp-text);
+  font-family: var(--cp-font-body);
+  font-size: var(--cp-fs-base);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p, ol, ul, dl, dd, figure, blockquote { margin: 0; }
+ol, ul { list-style: none; padding: 0; }
+a { color: var(--cp-teal-ink); }
+a:hover { color: var(--cp-navy); }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--cp-teal); outline-offset: 2px; }
+
+.cp-sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.cp-container {
+  max-width: var(--cp-container);
+  margin-inline: auto;
+  padding-inline: var(--cp-s-6);
+}
+
+/* --- Icônes (sprite SVG en tête de page, trait 1,8 px) --------------------- */
+.cp-icon {
+  width: 20px; height: 20px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.cp-icon--sm { width: 16px; height: 16px; }
+.cp-icon--xs { width: 14px; height: 14px; stroke-width: 2.4; }
+
+/* --- Logo ----------------------------------------------------------------- */
+/* Le pictogramme du kit est un substitut : utilise le logo officiel du projet. */
+.cp-logo {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--cp-navy); text-decoration: none;
+}
+.cp-logo:hover { color: var(--cp-navy); }
+.cp-logo__mark { width: 34px; height: 34px; flex: none; }
+.cp-logo__mark path { fill: none; stroke-width: 2.6; stroke-linecap: round; }
+.cp-logo__mark .is-teal { stroke: var(--cp-teal); }
+.cp-logo__mark .is-ink { stroke: currentColor; }
+.cp-logo__mark circle { fill: var(--cp-teal); }
+.cp-logo__text { display: flex; flex-direction: column; line-height: 1; }
+.cp-logo__name {
+  font-family: var(--cp-font-display); font-weight: 600;
+  font-size: 22px; letter-spacing: 0.04em;
+}
+.cp-logo__tagline { margin-top: 4px; font-size: 11px; color: var(--cp-text-muted); }
+
+.cp-logo--inverse, .cp-logo--inverse:hover { color: var(--cp-on-navy); }
+.cp-logo--inverse .cp-logo__tagline { color: var(--cp-on-navy-muted); }
+
+/* --- Titres et liens ------------------------------------------------------ */
+.cp-title {
+  font-family: var(--cp-font-display); font-weight: 600;
+  font-size: var(--cp-fs-xl); line-height: 1.2;
+}
+.cp-link { font-weight: 700; font-size: 14px; color: var(--cp-teal-ink); }
+
+/* --- Cartes --------------------------------------------------------------- */
+.cp-card {
+  background: var(--cp-surface);
+  border: 1px solid var(--cp-border);
+  border-radius: var(--cp-r-lg);
+  padding: var(--cp-s-6);
+}
+.cp-card__head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--cp-s-3); margin-bottom: var(--cp-s-4);
+}
+
+/* --- Avatars (initiale) --------------------------------------------------- */
+.cp-avatar {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--cp-navy); color: var(--cp-on-navy);
+  font-size: 13px; font-weight: 700;
+}
+.cp-avatar--soft { background: var(--cp-mint); color: var(--cp-teal-ink); }
+.cp-avatar--teal { background: var(--cp-teal); color: var(--cp-on-navy); }
+.cp-avatar--md { width: 40px; height: 40px; font-size: 16px; font-family: var(--cp-font-display); font-weight: 600; }
+.cp-avatar--lg { width: 64px; height: 64px; font-size: 26px; font-family: var(--cp-font-display); font-weight: 600; }
+
+/* --- Pastille d'icône ----------------------------------------------------- */
+.cp-chip-icon {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 40px; height: 40px; border-radius: 12px;
+  background: var(--cp-mint); color: var(--cp-teal-ink);
+}
+.cp-chip-icon--round { border-radius: 50%; }
+
+/* --- Boutons -------------------------------------------------------------- */
+.cp-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--cp-s-2);
+  min-height: 48px; padding: 0 22px;
+  border: 1.5px solid transparent; border-radius: var(--cp-r-md);
+  font-weight: 700; font-size: var(--cp-fs-base); text-decoration: none;
+}
+.cp-btn--primary { background: var(--cp-navy); color: var(--cp-on-navy); }
+.cp-btn--primary:hover { background: var(--cp-navy-hover); color: var(--cp-on-navy); }
+.cp-btn--outline { background: var(--cp-surface); border-color: var(--cp-navy); color: var(--cp-navy); }
+.cp-btn--outline:hover { background: var(--cp-surface-alt); color: var(--cp-navy); }
+.cp-btn--block { width: 100%; }
+.cp-btn--pill { border-radius: var(--cp-r-pill); }
+
+.cp-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: var(--cp-tap); height: var(--cp-tap);
+  border: 0; border-radius: 50%; background: transparent; color: inherit;
+}
+.cp-icon-btn:hover { background: rgba(127, 211, 200, 0.18); }
+
+/* --- Sélecteur de mois ---------------------------------------------------- */
+.cp-month {
+  display: inline-flex; align-items: center; gap: var(--cp-s-1);
+  padding: var(--cp-s-1);
+  background: var(--cp-surface); border: 1px solid var(--cp-border);
+  border-radius: var(--cp-r-pill);
+}
+.cp-month__label {
+  min-width: 120px; padding: 0 var(--cp-s-2); text-align: center;
+  font-family: var(--cp-font-display); font-weight: 500; font-size: var(--cp-fs-md);
+}
+.cp-month--on-navy {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: var(--cp-on-navy);
+}
+
+/* --- Badge de statut ------------------------------------------------------ */
+.cp-badge {
+  display: inline-flex; align-items: center; gap: var(--cp-s-1);
+  padding: 4px 10px; border-radius: var(--cp-r-pill);
+  background: var(--cp-surface); color: var(--cp-teal-ink);
+  font-size: var(--cp-fs-xs); font-weight: 700; white-space: nowrap;
+}
+.cp-badge--soft { background: var(--cp-mint); }
+
+</style>
+<style>
+  body { padding: var(--cp-s-10) 0 var(--cp-s-14); }
+
+  .p-intro { margin-bottom: var(--cp-s-10); }
+  .p-intro h1 {
+    font-family: var(--cp-font-display); font-weight: 600;
+    font-size: var(--cp-fs-3xl); line-height: 1.15;
+  }
+  .p-intro p { margin-top: var(--cp-s-3); color: var(--cp-text-muted); max-width: 60ch; }
+
+  .p-case { margin-bottom: var(--cp-s-14); }
+  .p-case__num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--cp-navy); color: var(--cp-on-navy);
+    font-family: var(--cp-font-display); font-weight: 600; font-size: 14px;
+  }
+  .p-case__head { display: flex; align-items: center; gap: var(--cp-s-3); margin-bottom: 6px; }
+  .p-case__name { font-family: var(--cp-font-display); font-weight: 600; font-size: var(--cp-fs-xl); }
+  .p-case__note { margin-bottom: var(--cp-s-5); color: var(--cp-text-muted); max-width: 62ch; }
+
+  /* ---------- Le bandeau, structure commune ---------- */
+  .h {
+    position: relative; overflow: hidden;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: var(--cp-s-6); padding: 36px 40px;
+    border-radius: var(--cp-r-xl);
+  }
+  .h::before, .h::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+  .h::before { right: -70px; top: -90px; width: 300px; height: 300px; background: var(--cp-teal); opacity: 0.18; }
+  .h::after  { right: 150px; bottom: -130px; width: 220px; height: 220px; border: 2px solid var(--cp-teal); opacity: 0.4; }
+  .h > * { position: relative; z-index: 1; }
+  .h__who { display: flex; align-items: center; gap: var(--cp-s-5); }
+  .h__hello { font-size: var(--cp-fs-base); }
+  .h__name {
+    margin-top: 2px;
+    font-family: var(--cp-font-display); font-weight: 600;
+    font-size: var(--cp-fs-3xl); line-height: 1.15; letter-spacing: -0.01em;
+  }
+  .h__intro { margin-top: 6px; }
+
+  /* ---------- 0 · Marine, l'existant ---------- */
+  .h--navy { background: var(--cp-navy); color: var(--cp-on-navy); }
+  .h--navy .h__hello { color: var(--cp-on-navy-muted); }
+  .h--navy .h__intro { color: var(--cp-on-navy-soft); }
+
+  /* ---------- 1 · Menthe ---------- */
+  .h--mint { background: var(--cp-mint); color: var(--cp-navy); }
+  .h--mint .h__hello { color: var(--cp-text-soft); }
+  .h--mint .h__intro { color: var(--cp-text-soft); }
+  .h--mint::before { opacity: 0.22; }
+  .h--mint::after  { opacity: 0.35; }
+
+  /* ---------- 2 · Blanche, filet de couleur ---------- */
+  .h--white {
+    background: var(--cp-surface); color: var(--cp-navy);
+    border: 1px solid var(--cp-border);
+  }
+  .h--white .h__hello, .h--white .h__intro { color: var(--cp-text-muted); }
+  .h--white::before { opacity: 0.1; }
+  .h--white::after  { opacity: 0.25; }
+  .h--white .h__filet {
+    position: absolute; inset: 0 0 auto 0; height: 5px; z-index: 2;
+    background: linear-gradient(90deg, var(--cp-navy), var(--cp-teal));
+  }
+
+  /* ---------- 3 · Dégradé menthe vers blanc ---------- */
+  .h--fade {
+    background: linear-gradient(135deg, var(--cp-mint) 0%, var(--cp-surface) 70%);
+    color: var(--cp-navy);
+    border: 1px solid var(--cp-border-soft);
+  }
+  .h--fade .h__hello, .h--fade .h__intro { color: var(--cp-text-soft); }
+  .h--fade::before { opacity: 0.16; }
+  .h--fade::after  { opacity: 0.3; }
+
+  /* ---------- 4 · Bord turquoise ---------- */
+  .h--edge {
+    background: var(--cp-surface); color: var(--cp-navy);
+    border: 1px solid var(--cp-border);
+    border-left: 6px solid var(--cp-teal);
+  }
+  .h--edge .h__hello, .h--edge .h__intro { color: var(--cp-text-muted); }
+  .h--edge::before { opacity: 0.1; }
+  .h--edge::after  { display: none; }
+
+  /* ---------- Chiffres sous le bandeau, pour juger de l'ensemble ---------- */
+  .p-kpis { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--cp-s-4); margin-top: var(--cp-s-4); }
+  .p-kpi { display: flex; flex-direction: column; gap: 14px; }
+  .p-kpi__head { display: flex; align-items: center; justify-content: space-between; gap: var(--cp-s-3); }
+  .p-kpi__label { font-size: 14px; font-weight: 600; color: var(--cp-text-muted); }
+  .p-kpi__value { font-family: var(--cp-font-display); font-weight: 600; font-size: var(--cp-fs-kpi); line-height: 1; letter-spacing: -0.02em; }
+  .p-kpi__value--money { color: var(--cp-teal-strong); }
+  .p-kpi__meta { font-size: var(--cp-fs-sm); color: var(--cp-text-muted); }
+
+  @media (max-width: 640px) {
+    .h { flex-direction: column; align-items: stretch; gap: var(--cp-s-5); padding: 22px; border-radius: 22px; }
+    .h::after { display: none; }
+    .h__name { font-size: 26px; }
+    .h__intro { display: none; }
+    .h .cp-avatar--lg { width: 50px; height: 50px; font-size: 21px; }
+    .h__who { gap: 14px; }
+    .h .cp-month { justify-content: space-between; }
+    .p-kpis { grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--cp-s-3); }
+    .p-kpis .cp-card { padding: var(--cp-s-4); border-radius: 18px; }
+    .p-kpi__value { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-euro" viewBox="0 0 24 24"><path d="M17 6.5A7 7 0 1 0 17 17.5"/><path d="M4 10h9M4 14h9"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+</svg>
+
+<div class="cp-container p-intro">
+  <h1>Quatre pistes pour éclaircir le bandeau</h1>
+  <p>
+    Mêmes couleurs, mêmes polices, même structure : seule la surface du bandeau change.
+    Les chiffres sont rappelés sous chaque piste, pour juger de l'ensemble et pas du bandeau seul.
+  </p>
+</div>
+
+<!-- ============================================================= -->
+<script type="text/template" id="tpl"></script>
+
+<div class="cp-container p-case">
+  <div class="p-case__head"><span class="p-case__num">0</span><span class="p-case__name">Marine — l'actuel</span></div>
+  <p class="p-case__note">Pour comparaison. Beaucoup de contraste, le bandeau domine la page.</p>
+  <section class="h h--navy">
+    <div class="h__who">
+      <span class="cp-avatar cp-avatar--lg cp-avatar--teal" aria-hidden="true">C</span>
+      <div>
+        <p class="h__hello">Bonjour,</p>
+        <p class="h__name">Client Caparel</p>
+        <p class="h__intro">Voici le relevé des interventions à votre domicile.</p>
+      </div>
+    </div>
+    <div class="cp-month cp-month--on-navy">
+      <button class="cp-icon-btn" type="button" aria-label="Mois précédent"><svg class="cp-icon"><use href="#i-chevron-left"/></svg></button>
+      <span class="cp-month__label">Octobre 2026</span>
+      <button class="cp-icon-btn" type="button" aria-label="Mois suivant"><svg class="cp-icon"><use href="#i-chevron-right"/></svg></button>
+    </div>
+  </section>
+  <div class="p-kpis">
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Heures d'intervention</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-clock"/></svg></span></div><p class="p-kpi__value">11h00</p><p class="p-kpi__meta">Sur 2 interventions</p></div>
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Montant du mois</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-euro"/></svg></span></div><p class="p-kpi__value p-kpi__value--money">165 €</p></div>
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Interventions</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-calendar"/></svg></span></div><p class="p-kpi__value">2</p><p class="p-kpi__meta">Dernière le 07/10/2026</p></div>
+  </div>
+</div>
+
+<div class="cp-container p-case">
+  <div class="p-case__head"><span class="p-case__num">1</span><span class="p-case__name">Menthe</span></div>
+  <p class="p-case__note">Le vert pâle de la charte, déjà utilisé pour les remarques et les pastilles d'icône. Doux, lumineux, reste bien identifiable comme un bandeau.</p>
+  <section class="h h--mint">
+    <div class="h__who">
+      <span class="cp-avatar cp-avatar--lg cp-avatar--teal" aria-hidden="true">C</span>
+      <div>
+        <p class="h__hello">Bonjour,</p>
+        <p class="h__name">Client Caparel</p>
+        <p class="h__intro">Voici le relevé des interventions à votre domicile.</p>
+      </div>
+    </div>
+    <div class="cp-month">
+      <button class="cp-icon-btn" type="button" aria-label="Mois précédent"><svg class="cp-icon"><use href="#i-chevron-left"/></svg></button>
+      <span class="cp-month__label">Octobre 2026</span>
+      <button class="cp-icon-btn" type="button" aria-label="Mois suivant"><svg class="cp-icon"><use href="#i-chevron-right"/></svg></button>
+    </div>
+  </section>
+  <div class="p-kpis">
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Heures d'intervention</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-clock"/></svg></span></div><p class="p-kpi__value">11h00</p><p class="p-kpi__meta">Sur 2 interventions</p></div>
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Montant du mois</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-euro"/></svg></span></div><p class="p-kpi__value p-kpi__value--money">165 €</p></div>
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Interventions</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-calendar"/></svg></span></div><p class="p-kpi__value">2</p><p class="p-kpi__meta">Dernière le 07/10/2026</p></div>
+  </div>
+</div>
+
+<div class="cp-container p-case">
+  <div class="p-case__head"><span class="p-case__num">2</span><span class="p-case__name">Blanche, filet de couleur</span></div>
+  <p class="p-case__note">Le bandeau devient une carte comme les autres, avec un filet marine → turquoise en haut. C'est la piste la plus sobre : la couleur ne sert plus qu'à signaler.</p>
+  <section class="h h--white">
+    <span class="h__filet"></span>
+    <div class="h__who">
+      <span class="cp-avatar cp-avatar--lg cp-avatar--teal" aria-hidden="true">C</span>
+      <div>
+        <p class="h__hello">Bonjour,</p>
+        <p class="h__name">Client Caparel</p>
+        <p class="h__intro">Voici le relevé des interventions à votre domicile.</p>
+      </div>
+    </div>
+    <div class="cp-month">
+      <button class="cp-icon-btn" type="button" aria-label="Mois précédent"><svg class="cp-icon"><use href="#i-chevron-left"/></svg></button>
+      <span class="cp-month__label">Octobre 2026</span>
+      <button class="cp-icon-btn" type="button" aria-label="Mois suivant"><svg class="cp-icon"><use href="#i-chevron-right"/></svg></button>
+    </div>
+  </section>
+  <div class="p-kpis">
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Heures d'intervention</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-clock"/></svg></span></div><p class="p-kpi__value">11h00</p><p class="p-kpi__meta">Sur 2 interventions</p></div>
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Montant du mois</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-euro"/></svg></span></div><p class="p-kpi__value p-kpi__value--money">165 €</p></div>
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Interventions</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-calendar"/></svg></span></div><p class="p-kpi__value">2</p><p class="p-kpi__meta">Dernière le 07/10/2026</p></div>
+  </div>
+</div>
+
+<div class="cp-container p-case">
+  <div class="p-case__head"><span class="p-case__num">3</span><span class="p-case__name">Dégradé menthe</span></div>
+  <p class="p-case__note">Menthe en haut à gauche, blanc en bas à droite. Garde un peu de relief sans peser, et laisse respirer le cercle turquoise.</p>
+  <section class="h h--fade">
+    <div class="h__who">
+      <span class="cp-avatar cp-avatar--lg cp-avatar--teal" aria-hidden="true">C</span>
+      <div>
+        <p class="h__hello">Bonjour,</p>
+        <p class="h__name">Client Caparel</p>
+        <p class="h__intro">Voici le relevé des interventions à votre domicile.</p>
+      </div>
+    </div>
+    <div class="cp-month">
+      <button class="cp-icon-btn" type="button" aria-label="Mois précédent"><svg class="cp-icon"><use href="#i-chevron-left"/></svg></button>
+      <span class="cp-month__label">Octobre 2026</span>
+      <button class="cp-icon-btn" type="button" aria-label="Mois suivant"><svg class="cp-icon"><use href="#i-chevron-right"/></svg></button>
+    </div>
+  </section>
+  <div class="p-kpis">
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Heures d'intervention</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-clock"/></svg></span></div><p class="p-kpi__value">11h00</p><p class="p-kpi__meta">Sur 2 interventions</p></div>
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Montant du mois</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-euro"/></svg></span></div><p class="p-kpi__value p-kpi__value--money">165 €</p></div>
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Interventions</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-calendar"/></svg></span></div><p class="p-kpi__value">2</p><p class="p-kpi__meta">Dernière le 07/10/2026</p></div>
+  </div>
+</div>
+
+<div class="cp-container p-case">
+  <div class="p-case__head"><span class="p-case__num">4</span><span class="p-case__name">Bord turquoise</span></div>
+  <p class="p-case__note">Blanche, avec une barre turquoise sur le côté. La plus discrète des quatre — à retenir si le bandeau doit s'effacer devant les chiffres.</p>
+  <section class="h h--edge">
+    <div class="h__who">
+      <span class="cp-avatar cp-avatar--lg cp-avatar--teal" aria-hidden="true">C</span>
+      <div>
+        <p class="h__hello">Bonjour,</p>
+        <p class="h__name">Client Caparel</p>
+        <p class="h__intro">Voici le relevé des interventions à votre domicile.</p>
+      </div>
+    </div>
+    <div class="cp-month">
+      <button class="cp-icon-btn" type="button" aria-label="Mois précédent"><svg class="cp-icon"><use href="#i-chevron-left"/></svg></button>
+      <span class="cp-month__label">Octobre 2026</span>
+      <button class="cp-icon-btn" type="button" aria-label="Mois suivant"><svg class="cp-icon"><use href="#i-chevron-right"/></svg></button>
+    </div>
+  </section>
+  <div class="p-kpis">
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Heures d'intervention</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-clock"/></svg></span></div><p class="p-kpi__value">11h00</p><p class="p-kpi__meta">Sur 2 interventions</p></div>
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Montant du mois</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-euro"/></svg></span></div><p class="p-kpi__value p-kpi__value--money">165 €</p></div>
+    <div class="cp-card p-kpi"><div class="p-kpi__head"><span class="p-kpi__label">Interventions</span><span class="cp-chip-icon"><svg class="cp-icon"><use href="#i-calendar"/></svg></span></div><p class="p-kpi__value">2</p><p class="p-kpi__meta">Dernière le 07/10/2026</p></div>
+  </div>
+</div>
+
+</body>
+</html>

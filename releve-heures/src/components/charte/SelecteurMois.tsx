@@ -19,7 +19,7 @@ export default function SelecteurMois({
   estMoisCourant: boolean;
 }) {
   return (
-    <div className="cp-month cp-month--on-navy">
+    <div className="cp-month">
       <Link
         className="cp-icon-btn"
         href={`/?mois=${moisPrecedent}`}

@@ -293,14 +293,6 @@
   font-size: var(--cp-fs-md);
   text-transform: capitalize;
 }
-.cp-month--on-navy {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.18);
-  color: var(--cp-on-navy);
-}
-.cp-root .cp-month--on-navy a {
-  color: var(--cp-on-navy);
-}
 
 /* --- Badge de statut ------------------------------------------------------ */
 .cp-badge {
@@ -403,8 +395,12 @@
   gap: var(--cp-s-6);
   padding: 36px 40px;
   border-radius: var(--cp-r-xl);
-  background: var(--cp-navy);
-  color: var(--cp-on-navy);
+  /* Dégradé menthe : le bandeau reste un repère sans écraser la page, et le
+     texte en marine sur fond clair contraste mieux que l'inverse — ce qui
+     compte pour des lecteurs âgés. */
+  background: linear-gradient(135deg, var(--cp-mint) 0%, var(--cp-surface) 70%);
+  color: var(--cp-navy);
+  border: 1px solid var(--cp-border-soft);
 }
 .a-hero::before,
 .a-hero::after {
@@ -419,7 +415,7 @@
   width: 300px;
   height: 300px;
   background: var(--cp-teal);
-  opacity: 0.18;
+  opacity: 0.16;
 }
 .a-hero::after {
   right: 150px;
@@ -427,7 +423,7 @@
   width: 220px;
   height: 220px;
   border: 2px solid var(--cp-teal);
-  opacity: 0.4;
+  opacity: 0.3;
 }
 .a-hero > * {
   position: relative;
@@ -440,7 +436,7 @@
 }
 .a-hero__hello {
   font-size: var(--cp-fs-base);
-  color: var(--cp-on-navy-muted);
+  color: var(--cp-text-soft);
 }
 .a-hero__name {
   margin-top: 2px;
@@ -452,7 +448,7 @@
 }
 .a-hero__intro {
   margin-top: 6px;
-  color: var(--cp-on-navy-soft);
+  color: var(--cp-text-soft);
 }
 
 /* --- Chiffres clés -------------------------------------------------------- */
@@ -1119,18 +1115,6 @@
   }
 }
 
-/* Bouton clair sur le bandeau marine. */
-.cp-btn--surface,
-.cp-root a.cp-btn--surface {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.22);
-  color: var(--cp-on-navy);
-}
-.cp-btn--surface:hover,
-.cp-root a.cp-btn--surface:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: var(--cp-on-navy);
-}
 
 /* En-tête d'une fiche famille : nom à gauche, heures du mois à droite. */
 .a-famille__head {
