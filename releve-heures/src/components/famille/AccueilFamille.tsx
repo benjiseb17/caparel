@@ -24,6 +24,7 @@ function formatEnvoiLe(iso: string) {
 
 export default function AccueilFamille({
   nomClient,
+  photoUrl,
   resume,
   derniereRemarque,
   dateParReleve,
@@ -34,6 +35,7 @@ export default function AccueilFamille({
   estMoisCourant,
 }: {
   nomClient: string;
+  photoUrl: string;
   resume: ResumeMoisFamille;
   derniereRemarque: Suivi | null;
   dateParReleve: Map<string, string>;
@@ -50,9 +52,22 @@ export default function AccueilFamille({
       <main className="cp-container a-main">
         <section className="a-hero">
           <div className="a-hero__who">
-            <span className="cp-avatar cp-avatar--lg cp-avatar--teal" aria-hidden="true">
-              {initialesDe(nomClient).slice(0, 1)}
-            </span>
+            {photoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                className="a-hero__photo"
+                src={photoUrl}
+                alt=""
+                aria-hidden="true"
+              />
+            ) : (
+              <span
+                className="cp-avatar cp-avatar--lg cp-avatar--teal"
+                aria-hidden="true"
+              >
+                {initialesDe(nomClient)}
+              </span>
+            )}
             <div>
               <p className="a-hero__hello">Bonjour,</p>
               <h1 className="a-hero__name">{nomClient}</h1>

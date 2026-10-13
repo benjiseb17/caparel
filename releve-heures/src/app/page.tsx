@@ -86,6 +86,7 @@ export default async function AccueilPage({
     return (
       <AccueilFamille
         nomClient={profil.nomComplet}
+        photoUrl={profil.photoUrl}
         resume={resumeMoisFamille(interventions, refDate)}
         derniereRemarque={suivis[0] || null}
         dateParReleve={new Map(interventions.map((i) => [i.id, i.date]))}
