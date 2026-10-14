@@ -40,6 +40,8 @@ export const TABLES = {
   reinitialisations:
     process.env.AIRTABLE_TABLE_REINITIALISATIONS || "tbl1tA2DDGikRaOra", // Reinitialisations
   suivis: process.env.AIRTABLE_TABLE_SUIVIS || "tblxcmPuzVXXRoLyq", // Suivis
+  candidatures:
+    process.env.AIRTABLE_TABLE_CANDIDATURES || "tblQbOYHQi6aPJ3rk", // Candidatures
 };
 
 type AirtableAttachment = {
@@ -344,6 +346,35 @@ export async function creerLead(lead: NouveauLead) {
     Besoins: lead.besoins || [],
     Créneaux: lead.creneaux || [],
     Message: lead.message || "",
+  });
+
+  return record.id;
+}
+
+export type NouvelleCandidature = {
+  nom: string;
+  prenom: string;
+  telephone: string;
+  email: string;
+  ville?: string;
+  diplome?: string;
+  experience?: string;
+  disponibilites?: string[];
+  message?: string;
+};
+
+export async function creerCandidature(candidature: NouvelleCandidature) {
+  const record = await base(TABLES.candidatures).create({
+    Nom: candidature.nom,
+    Prénom: candidature.prenom,
+    Téléphone: candidature.telephone,
+    Email: candidature.email,
+    Ville: candidature.ville || "",
+    Diplôme: candidature.diplome || "",
+    Expérience: candidature.experience || "",
+    Disponibilités: candidature.disponibilites || [],
+    Message: candidature.message || "",
+    Statut: "Nouvelle",
   });
 
   return record.id;
