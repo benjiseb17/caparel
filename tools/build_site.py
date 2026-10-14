@@ -67,7 +67,7 @@ FAQ = [
      "<ul><li>Recherche, présélection et présentation d'auxiliaires de vie qualifiées</li><li>Aide aux formalités d'embauche et établissement du contrat de travail</li><li>Assistance au compte CESU / CESU+ et déclaration des heures auprès de l'URSSAF</li><li>Bulletins de salaire et documents administratifs associés</li><li>Proposition d'un remplaçant en cas d'absence, si vous le souhaitez</li><li>Suivi de l'accompagnement et remise annuelle des documents pour le crédit d'impôt</li></ul>",
      "Recherche et présentation d'auxiliaires de vie qualifiées, aide aux formalités d'embauche, contrat de travail, assistance CESU, bulletins de salaire, déclaration des heures, remplaçant en cas d'absence, suivi de l'accompagnement et documents annuels pour le crédit d'impôt."),
     ("Tarifs et aides fiscales", "Combien coûte une aide à domicile avec Caparel ?",
-     "<p>Le tarif horaire TTC est de 32,70 € jusqu'à 25 h par semaine (tranche A), 31,70 € de 26 h à 40 h (tranche B) et 28,70 € au-delà de 40 h (tranche C). Des forfaits existent aussi (nuit de 12 h, journée de 12 h, 24h/24, garde malade de nuit). Aucun frais d'inscription ni de résiliation n'est facturé. Détail sur la page <a href=\"/tarifs.html\">Nos tarifs</a>.</p>",
+     "<p>Le tarif horaire TTC est de 32,70 € jusqu'à 25 h par semaine (tranche A), 31,70 € de 26 h à 40 h (tranche B) et 28,70 € au-delà de 40 h (tranche C). Des forfaits existent aussi (nuit de 12 h, journée de 12 h, 24h/24, garde malade de nuit). Aucun frais d'inscription ni de résiliation n'est facturé. Détail sur la page <a href=\"/tarifs\">Nos tarifs</a>.</p>",
      "Le tarif horaire TTC est de 32,70 € jusqu'à 25 h par semaine, 31,70 € de 26 h à 40 h et 28,70 € au-delà de 40 h, soit 16,35 €, 15,85 € et 14,35 € après crédit d'impôt de 50 %. Aucun frais d'inscription ni de résiliation."),
     ("Tarifs et aides fiscales", "Comment fonctionne le crédit d'impôt de 50 % ?",
      "<p>Les dépenses engagées pour l'emploi d'un salarié à domicile ouvrent droit à un crédit d'impôt égal à 50 % des sommes versées (article 199 sexdecies du CGI). Le plafond est de 12 000 € de dépenses par an et par foyer, majoré dans certains cas (jusqu'à 15 000 €). Le crédit est remboursable : même si vous n'êtes pas imposable, vous recevez la différence en remboursement.</p>",
@@ -153,11 +153,11 @@ def head(title, desc, path, jsonld=None, preload_hero=False, cp=False):
 
 NAV = [
     ("/", "Accueil", "home"),
-    ("/services.html", "Nos services", "services"),
-    ("/tarifs.html", "Nos tarifs", "tarifs"),
+    ("/services", "Nos services", "services"),
+    ("/tarifs", "Nos tarifs", "tarifs"),
     ("/aide-a-domicile/", "Nos villes", "villes"),
-    ("/faq.html", "FAQ", "faq"),
-    ("/recrutement.html", "Recrutement", "recrutement"),
+    ("/faq", "FAQ", "faq"),
+    ("/recrutement", "Recrutement", "recrutement"),
 ]
 
 
@@ -185,7 +185,7 @@ def header(active):
 <div class="topbar"><div class="topbar-in">
   <img src="/images/sap.png" alt="Services à la personne" class="topbar-sap" width="199" height="148">
   <span>Avec l'avance immédiate du crédit d'impôt, <b>vous ne payez que la moitié.</b></span>
-  <a href="/tarifs.html#aides">En savoir plus sur nos tarifs</a>
+  <a href="/tarifs#aides">En savoir plus sur nos tarifs</a>
   <a href="{TEL_HREF}" class="topbar-tel">{ic("phone")}{TEL}</a>
 </div></div>
 <main id="main">
@@ -209,10 +209,10 @@ def footer():
         <h4>Navigation</h4>
         <ul>
           <li><a href="/">Accueil</a></li>
-          <li><a href="/services.html">Nos services</a></li>
-          <li><a href="/tarifs.html">Nos tarifs</a></li>
-          <li><a href="/faq.html">FAQ</a></li>
-          <li><a href="/recrutement.html">Recrutement</a></li>
+          <li><a href="/services">Nos services</a></li>
+          <li><a href="/tarifs">Nos tarifs</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/recrutement">Recrutement</a></li>
           <li><a href="/#contact">Contact</a></li>
         </ul>
       </div>
@@ -439,7 +439,7 @@ def hero_block(c=None):
     </div>
     <div class="hero-card-box">
       <h2>Vous cherchez un emploi<br>d'auxiliaire de vie ?</h2>
-      <a href="/recrutement.html" class="btn btn-navy">Je postule</a>
+      <a href="/recrutement" class="btn btn-navy">Je postule</a>
       <p>Rejoignez notre réseau d'intervenant(e)s</p>
     </div>
   </div>
@@ -498,7 +498,7 @@ def bottom_sections(cities_exclude, faq_title, faq_entries):
     <div class="faq-list">
       {faq_items(faq_entries, open_first=True)}
     </div>
-    <div class="faq-more"><a href="/faq.html" class="btn btn-outline">Voir toutes les questions</a></div>
+    <div class="faq-more"><a href="/faq" class="btn btn-outline">Voir toutes les questions</a></div>
   </div>
 </section>
 
@@ -509,7 +509,7 @@ def bottom_sections(cities_exclude, faq_title, faq_entries):
         <span class="eyebrow">Recrutement</span>
         <h2>Vous êtes auxiliaire de vie ? Rejoignez Caparel</h2>
         <p>Vous accompagnez des personnes âgées avec bienveillance et vous cherchez une structure qui vous encadre ? Postulez en quelques minutes.</p>
-        <a href="/recrutement.html" class="btn btn-primary">Découvrir nos offres</a>
+        <a href="/recrutement" class="btn btn-primary">Découvrir nos offres</a>
       </div>
       <div class="join-list">
         <div>{ic("heart")}Un métier utile, au plus près des familles</div>
@@ -580,8 +580,8 @@ def home_page(c=None):
 
 def page_services():
     desc = "Services d'aide à domicile Caparel : aide à la personne, aide au quotidien, assistance administrative, accompagnement et vie sociale, en mode mandataire. Dès 4 h par semaine, 24h/24 et 7j/7."
-    h = head("Nos services d'aide à domicile — Caparel", desc, "/services.html",
-             [breadcrumb_ld([("Accueil", "/"), ("Nos services", "/services.html")])])
+    h = head("Nos services d'aide à domicile — Caparel", desc, "/services",
+             [breadcrumb_ld([("Accueil", "/"), ("Nos services", "/services")])])
     h += header("services")
     cards = ""
     for icon, titre, items in SERVICES:
@@ -659,8 +659,8 @@ def page_services():
 
 def page_tarifs():
     desc = "Tarifs Caparel (mode mandataire) : de 28,70 € à 32,70 € TTC de l'heure, forfaits nuit, journée et 24h/24. Crédit d'impôt de 50 %, avance immédiate, aucun frais d'inscription."
-    h = head("Nos tarifs d'aide à domicile — Caparel", desc, "/tarifs.html",
-             [breadcrumb_ld([("Accueil", "/"), ("Nos tarifs", "/tarifs.html")])])
+    h = head("Nos tarifs d'aide à domicile — Caparel", desc, "/tarifs",
+             [breadcrumb_ld([("Accueil", "/"), ("Nos tarifs", "/tarifs")])])
     h += header("tarifs")
 
     def row(label, vals, heads):
@@ -749,8 +749,8 @@ def page_tarifs():
 
 def page_faq():
     desc = "FAQ Caparel : mode mandataire, tarifs, crédit d'impôt de 50 %, avance immédiate, délais de mise en place, auxiliaires de vie, urgences. Toutes les réponses à vos questions."
-    h = head("FAQ — Questions fréquentes sur l'aide à domicile | Caparel", desc, "/faq.html",
-             [faq_jsonld(FAQ), breadcrumb_ld([("Accueil", "/"), ("FAQ", "/faq.html")])])
+    h = head("FAQ — Questions fréquentes sur l'aide à domicile | Caparel", desc, "/faq",
+             [faq_jsonld(FAQ), breadcrumb_ld([("Accueil", "/"), ("FAQ", "/faq")])])
     h += header("faq")
     body = ""
     cats = []
@@ -781,8 +781,8 @@ def page_faq():
 
 def page_recrutement():
     desc = "Recrutement Caparel : devenez auxiliaire de vie / intervenant(e) à domicile auprès de personnes âgées à Neuilly-sur-Seine et dans les Hauts-de-Seine. Postulez en ligne."
-    h = head("Recrutement auxiliaire de vie à domicile — Caparel", desc, "/recrutement.html",
-             [breadcrumb_ld([("Accueil", "/"), ("Recrutement", "/recrutement.html")])])
+    h = head("Recrutement auxiliaire de vie à domicile — Caparel", desc, "/recrutement",
+             [breadcrumb_ld([("Accueil", "/"), ("Recrutement", "/recrutement")])])
     h += header("recrutement")
     dispo = "".join(
         f'\n            <label class="checkbox-item"><input type="checkbox" name="disponibilites" value="{v}">{v}</label>'
@@ -941,7 +941,7 @@ def city_pages():
              f"<p>Oui. Caparel intervient à {nom} et dans les communes voisines, depuis son siège de Neuilly-sur-Seine. Une visite d'évaluation à domicile est proposée sous 2 jours ouvrés.</p>",
              f"Oui. Caparel intervient à {nom} et dans les communes voisines, depuis son siège de Neuilly-sur-Seine. Visite d'évaluation sous 2 jours ouvrés."),
             ("", f"Combien coûte une aide à domicile à {nom} ?",
-             "<p>Le tarif horaire est de 32,70 € TTC jusqu'à 25 h par semaine, soit 16,35 € après crédit d'impôt de 50 % ; 31,70 € de 26 h à 40 h et 28,70 € au-delà. Aucun frais d'inscription ni de résiliation. <a href=\"/tarifs.html\">Voir tous les tarifs</a>.</p>",
+             "<p>Le tarif horaire est de 32,70 € TTC jusqu'à 25 h par semaine, soit 16,35 € après crédit d'impôt de 50 % ; 31,70 € de 26 h à 40 h et 28,70 € au-delà. Aucun frais d'inscription ni de résiliation. <a href=\"/tarifs\">Voir tous les tarifs</a>.</p>",
              "32,70 € TTC de l'heure jusqu'à 25 h par semaine, soit 16,35 € après crédit d'impôt de 50 %. Aucun frais d'inscription ni de résiliation."),
             ("", f"Sous quel délai l'accompagnement peut-il démarrer à {nom} ?",
              "<p>Après votre prise de contact, la visite d'évaluation est proposée sous 2 jours ouvrés. La mise en place intervient généralement sous 5 jours après validation du plan d'aide, sous réserve de la disponibilité d'un intervenant adapté.</p>",
@@ -1019,7 +1019,7 @@ def main():
     for p, c in pages.items():
         write(p, c)
 
-    urls = ["/", "/services.html", "/tarifs.html", "/faq.html", "/recrutement.html", "/aide-a-domicile/"]
+    urls = ["/", "/services", "/tarifs", "/faq", "/recrutement", "/aide-a-domicile/"]
     urls += [f"/aide-a-domicile/{c[0]}/" for c in CITIES]
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     for u in urls:
