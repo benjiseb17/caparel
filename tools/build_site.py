@@ -213,6 +213,7 @@ def footer():
           <li><a href="/tarifs">Nos tarifs</a></li>
           <li><a href="/faq">FAQ</a></li>
           <li><a href="/recrutement">Recrutement</a></li>
+          <li><a href="/demande">Demande de devis</a></li>
           <li><a href="/#contact">Contact</a></li>
         </ul>
       </div>
@@ -238,6 +239,13 @@ def footer():
     </div>
   </div>
 </footer>
+<nav class="float-nav" aria-label="Accès rapides">
+  <a class="fn fn-1" href="/demande" data-label="Répondre au formulaire" aria-label="Répondre au formulaire">{ic("formcheck")}<span>Formulaire</span></a>
+  <a class="fn fn-2" href="/aide-a-domicile/" data-label="Nos villes" aria-label="Nos villes">{ic("pin")}<span>Nos villes</span></a>
+  <a class="fn fn-3" href="/faq" data-label="Besoin d'aide et FAQ" aria-label="Besoin d'aide et FAQ">{ic("help")}<span>Aide &amp; FAQ</span></a>
+  <a class="fn fn-4" href="{TEL_HREF}" data-label="{TEL}" aria-label="Appeler le {TEL}">{ic("phone")}<span>Appeler</span></a>
+  <a class="fn fn-5" href="/recrutement" data-label="Recrutement" aria-label="Recrutement">{ic("user")}<span>Recrutement</span></a>
+</nav>
 <script src="/app.js" defer></script>
 </body>
 </html>
@@ -969,6 +977,25 @@ def city_pages():
     return pages
 
 
+def page_demande():
+    desc = "Demande de renseignements ou de devis gratuit Caparel : décrivez vos besoins d'aide à domicile, nous vous répondons sous 24 à 48h ouvrées."
+    h = head("Demande de renseignements et devis gratuit | Caparel", desc, "/demande",
+             [breadcrumb_ld([("Accueil", "/"), ("Demande de renseignements", "/demande")])])
+    h += header("")
+    h += f"""
+<section class="page-hero">
+  <div class="container">
+    <nav class="crumbs" aria-label="Fil d'Ariane"><a href="/">Accueil</a> › <span>Demande de renseignements</span></nav>
+    <h1>Une demande de renseignements ?</h1>
+    <p>Répondez au formulaire ci-dessous : nous vous recontactons sous 24 à 48h ouvrées pour évaluer votre situation. Le devis est gratuit. Vous préférez parler à quelqu'un ? Appelez le <a href="{TEL_HREF}" class="highlight"><b>{TEL}</b></a>.</p>
+  </div>
+</section>
+
+{contact_section()}"""
+    h += footer()
+    return h
+
+
 def page_villes_hub():
     desc = "Caparel intervient à Neuilly-sur-Seine, Paris, Levallois-Perret, Boulogne-Billancourt, Courbevoie, Puteaux, Suresnes, Clichy, Issy-les-Moulineaux et Saint-Cloud. Trouvez votre aide à domicile."
     h = head("Aide à domicile en Hauts-de-Seine et à Paris — nos villes | Caparel", desc, "/aide-a-domicile/",
@@ -1013,13 +1040,14 @@ def main():
         "/tarifs.html": page_tarifs(),
         "/faq.html": page_faq(),
         "/recrutement.html": page_recrutement(),
+        "/demande.html": page_demande(),
         "/aide-a-domicile/": page_villes_hub(),
     }
     pages.update(city_pages())
     for p, c in pages.items():
         write(p, c)
 
-    urls = ["/", "/services", "/tarifs", "/faq", "/recrutement", "/aide-a-domicile/"]
+    urls = ["/", "/services", "/tarifs", "/faq", "/recrutement", "/demande", "/aide-a-domicile/"]
     urls += [f"/aide-a-domicile/{c[0]}/" for c in CITIES]
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     for u in urls:
