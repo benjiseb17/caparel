@@ -2,354 +2,106 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Caparel — Aide à domicile aux personnes âgées</title>
-<meta name="description" content="Caparel, service mandataire d'aide à domicile pour personnes âgées à Neuilly-sur-Seine. Aide à la personne, entretien, accompagnement, 24h/24 et 7j/7.">
-<link rel="icon" href="icon-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
-<link rel="icon" href="icon-512.png" sizes="512x512" type="image/png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caparel — Aide à domicile aux personnes âgées à Neuilly-sur-Seine</title>
+<meta name="description" content="Caparel, service mandataire d&#x27;aide à domicile pour personnes âgées à Neuilly-sur-Seine et dans les Hauts-de-Seine. Aide à la personne, entretien, accompagnement, 24h/24 et 7j/7. Crédit d&#x27;impôt 50 %.">
+<link rel="canonical" href="https://caparel.fr/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="Caparel">
+<meta property="og:title" content="Caparel — Aide à domicile aux personnes âgées à Neuilly-sur-Seine">
+<meta property="og:description" content="Caparel, service mandataire d&#x27;aide à domicile pour personnes âgées à Neuilly-sur-Seine et dans les Hauts-de-Seine. Aide à la personne, entretien, accompagnement, 24h/24 et 7j/7. Crédit d&#x27;impôt 50 %.">
+<meta property="og:url" content="https://caparel.fr/">
+<meta property="og:image" content="https://caparel.fr/images/hero.jpg">
+<link rel="icon" href="/icon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png">
+<link rel="icon" href="/icon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="images/hero.jpg" fetchpriority="high">
-<style>
-  :root{
-    --navy:#12305c;
-    --navy-2:#1c4272;
-    --navylogo:#0e2a52;
-    --teal:#3fb6ae;
-    --teal-dark:#2c968f;
-    --coral:#f2a08c;
-    --coral-dark:#d9755f;
-    --sand:#f7c065;
-    --sand-dark:#c9812a;
-    --green:#5bc2de;
-    --green-dark:#1d6fa5;
-    --sky:#aed4e8;
-    --sky-dark:#2c6f92;
-    --pink:#e85f8a;
-    --ink:#20293a;
-    --muted:#67728a;
-    --line:#e9edf3;
-    --soft:#f6f8fb;
-    --soft-2:#eef6f5;
-    --white:#ffffff;
-    --r-lg:28px;
-    --r-md:18px;
-    --r-sm:12px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    font-family:'Inter',sans-serif;
-    color:var(--ink);
-    background:var(--white);
-    line-height:1.65;
-    -webkit-font-smoothing:antialiased;
-    font-size:16px;
-  }
-  h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;color:var(--navy);line-height:1.2;font-weight:700;}
-  a{text-decoration:none;color:inherit;}
-  ul{list-style:none;}
-  img,svg{display:block;}
-  .container{max-width:1120px;margin:0 auto;padding:0 24px;}
-  section{padding:96px 0;}
-  .highlight{color:var(--teal-dark);}
-  .icon{width:22px;height:22px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Atkinson+Hyperlegible:wght@400;700&family=Kalam:wght@700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="/images/hero.jpg" fetchpriority="high">
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/caparel-section.css">
 
-  .eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
-    color:var(--navylogo);
-    background:rgba(14,42,82,.08);
-    padding:8px 16px;border-radius:999px;margin-bottom:18px;
-  }
-  .section-head{max-width:600px;margin:0 auto 52px;text-align:center;}
-  .section-head h2{font-size:2rem;margin-bottom:14px;letter-spacing:-.01em;}
-  .section-head p{color:var(--muted);font-size:1.03rem;}
-
-  .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;
-    padding:14px 26px;border-radius:999px;font-weight:600;font-size:.94rem;
-    transition:transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
-    border:1.5px solid transparent;cursor:pointer;white-space:nowrap;
-  }
-  .btn-primary{background:var(--navylogo);color:#fff;}
-  .btn-primary:hover{background:var(--navy-2);transform:translateY(-1px);}
-  .btn-outline{border-color:var(--line);color:var(--navy);background:#fff;}
-  .btn-outline:hover{border-color:var(--navylogo);color:var(--navylogo);}
-  .btn-navy{background:var(--navylogo);color:#fff;}
-  .btn-navy:hover{background:var(--navy-2);transform:translateY(-1px);}
-  .btn-block{width:100%;}
-  .btn:disabled{opacity:.6;cursor:default;transform:none;}
-
-  /* HEADER */
-  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-  .nav{
-    display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"logo links cta";
-    align-items:center;gap:clamp(16px,3vw,48px);padding:14px clamp(20px,4vw,48px);max-width:1440px;margin:0 auto;
-  }
-  .logo{display:flex;align-items:center;gap:8px;grid-area:logo;justify-self:start;}
-  .logo-img{height:58px;width:auto;display:block;}
-
-  .nav-links{
-    display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;
-    gap:clamp(18px,3vw,40px);
-    font-weight:600;font-size:clamp(.88rem,.35vw + .76rem,1rem);color:var(--navy);
-    grid-area:links;justify-self:center;max-width:100%;
-    overflow-x:auto;
-    scrollbar-width:none;-ms-overflow-style:none;
-    -webkit-overflow-scrolling:touch;
-    padding:4px 2px;
-  }
-  .nav-links::-webkit-scrollbar{display:none;}
-  .nav-links a{white-space:nowrap;flex:0 0 auto;}
-  .nav-links a.active{color:var(--teal-dark);}
-  .nav-cta{display:flex;align-items:center;gap:18px;grid-area:cta;justify-self:end;}
-  .nav-phone{font-weight:600;color:var(--navy);font-size:.86rem;display:none;align-items:center;gap:7px;white-space:nowrap;border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;transition:border-color .15s;}
-  .nav-phone:hover{border-color:var(--teal);}
-  .nav-cta .btn-navy{padding:clamp(9px,1vw,14px) clamp(13px,1.8vw,26px);font-size:clamp(.78rem,.4vw + .66rem,.94rem);white-space:nowrap;}
-  @media (min-width: 641px){
-    .nav-phone{display:flex;}
-  }
-
-  /* HERO */
-  .hero{padding:64px 0 56px;background:var(--soft);}
-  .hero-card{
-    background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
-    padding:56px;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:stretch;
-    box-shadow:0 30px 60px -30px rgba(18,48,92,.12);
-  }
-  .hero h1{font-size:2.7rem;letter-spacing:-.02em;margin-bottom:20px;}
-  .hero p.lead{font-size:1.08rem;color:var(--muted);max-width:480px;margin-bottom:28px;}
-  .hero-facts{display:flex;flex-direction:column;gap:10px;margin-bottom:30px;}
-  .hero-fact{display:flex;align-items:center;gap:10px;font-size:.96rem;color:var(--ink);font-weight:500;}
-  .hero-fact .icon{color:var(--teal-dark);}
-  .hero-fact:nth-child(1) .icon{color:var(--sand-dark);}
-  .hero-fact:nth-child(2) .icon{color:var(--sky-dark);}
-  .hero-fact:nth-child(3) .icon{color:var(--coral-dark);}
-  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
-  .hero-visual{
-    background:var(--soft-2);
-    border:1px solid var(--line);
-    border-radius:var(--r-md);
-    min-height:380px;
-    display:flex;align-items:center;justify-content:center;
-    position:relative;overflow:hidden;
-  }
-  .hero-photo{width:100%;height:100%;object-fit:cover;}
-  .hero-partners{padding:20px 0 20px;}
-  #apropos{padding-top:32px;}
-
-  /* AVIS GOOGLE (bandeau dynamique, masqué tant que les avis ne sont pas chargés) */
-  .avis{padding:30px 0 0;}
-  .avis--loading{visibility:hidden;min-height:56px;}
-  .avis-head{display:flex;align-items:center;justify-content:center;gap:6px 20px;flex-wrap:wrap;text-align:center;}
-  .avis-score{display:flex;align-items:center;gap:10px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--navy);}
-  .avis-score b{font-size:1.6rem;line-height:1;}
-  .avis-stars{color:var(--sand);letter-spacing:2px;font-size:1.1rem;white-space:nowrap;}
-  .avis-meta{font-size:.9rem;color:var(--muted);}
-  .avis-meta a{color:var(--teal-dark);font-weight:600;}
-  .avis-meta a:hover{text-decoration:underline;}
-  .avis-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 24px;padding:4px 24px 8px;margin:16px -24px 0;scrollbar-width:thin;}
-  .avis-card{flex:0 0 min(320px,82vw);scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:22px;display:flex;flex-direction:column;gap:10px;}
-  .avis-card-top{display:flex;align-items:center;gap:12px;}
-  .avis-avatar{width:38px;height:38px;border-radius:50%;background:var(--soft-2);color:var(--teal-dark);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none;}
-  .avis-author{font-weight:600;color:var(--navy);font-size:.92rem;line-height:1.3;}
-  .avis-date{font-size:.78rem;color:var(--muted);}
-  .avis-text{font-size:.9rem;color:var(--ink);display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;}
-  .partners-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
-  .partner-pill{
-    display:flex;align-items:center;gap:8px;
-    background:#fff;border:1px solid var(--line);border-radius:999px;
-    padding:10px 18px;font-size:.84rem;font-weight:600;color:var(--navy);
-  }
-  .partner-pill .icon{width:16px;height:16px;color:var(--teal-dark);}
-  .partner-pill:nth-child(1) .icon{color:var(--sky-dark);}
-  .partner-pill:nth-child(2) .icon{color:var(--teal-dark);}
-  .partner-pill:nth-child(3) .icon{color:var(--sand-dark);}
-  .partner-pill:nth-child(4) .icon{color:var(--coral-dark);}
-
-  /* ABOUT */
-  .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:center;}
-  .about-grid.reverse{grid-template-columns:1.15fr .85fr;}
-  .about-visual{
-    border-radius:var(--r-md);min-height:340px;
-    display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
-    border:1px solid var(--line);
-  }
-  .about-photo{width:100%;height:100%;object-fit:cover;}
-  .about h2{font-size:2rem;margin-bottom:18px;letter-spacing:-.01em;}
-  .about p{color:var(--muted);margin-bottom:15px;}
-  .about-points{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px;}
-  .about-point{
-    display:flex;align-items:center;gap:10px;
-    background:var(--soft);border:1px solid var(--line);border-radius:var(--r-sm);
-    padding:14px 16px;font-size:.88rem;font-weight:600;color:var(--navy);
-  }
-  .about-point .icon{width:18px;height:18px;color:var(--teal-dark);}
-  .about-point:nth-child(1) .icon{color:var(--sky-dark);}
-  .about-point:nth-child(2) .icon{color:var(--teal-dark);}
-  .about-point:nth-child(3) .icon{color:var(--sand-dark);}
-  .about-point:nth-child(4) .icon{color:var(--coral-dark);}
-
-  /* APERCU (teasers Services / Tarifs) */
-  .apercu{background:var(--soft);}
-  .teaser-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-  .teaser-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:32px;transition:transform .18s ease, box-shadow .18s ease;display:block;}
-  .teaser-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -24px rgba(18,48,92,.18);}
-  .teaser-card .service-ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
-  .teaser-card .service-ic .icon{width:22px;height:22px;}
-  .teaser-card h3{font-size:1.25rem;margin-bottom:10px;}
-  .teaser-card p{color:var(--muted);font-size:.94rem;margin-bottom:18px;}
-  .teaser-link{color:var(--teal-dark);font-weight:700;font-size:.9rem;}
-
-  /* CONTACT */
-  .contact-grid{display:grid;grid-template-columns:1fr;gap:40px;}
-  .contact-info h2{font-size:1.9rem;margin-bottom:14px;letter-spacing:-.01em;}
-  .contact-info p{color:var(--muted);margin-bottom:30px;}
-  .contact-item{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px;}
-  .contact-item .ic{width:42px;height:42px;border-radius:12px;background:var(--soft);border:1px solid var(--line);color:var(--teal-dark);display:flex;align-items:center;justify-content:center;flex:none;}
-  .contact-item:nth-child(1) .ic{background:rgba(63,182,174,.16);color:var(--teal-dark);}
-  .contact-item:nth-child(2) .ic{background:rgba(247,192,101,.22);color:var(--sand-dark);}
-  .contact-item:nth-child(3) .ic{background:rgba(174,212,232,.32);color:var(--sky-dark);}
-  .contact-item:nth-child(4) .ic{background:rgba(242,160,140,.24);color:var(--coral-dark);}
-  .contact-item .ic .icon{width:19px;height:19px;}
-  .contact-item div{line-height:1.35;}
-  .contact-item b{display:block;color:var(--navy);font-size:.94rem;}
-  .contact-item div span{display:block;color:var(--muted);font-size:.88rem;margin-top:1px;}
-  .contact-form{background:var(--soft);border-radius:var(--r-md);padding:34px;border:1px solid var(--line);}
-  .contact-form h3{margin-bottom:6px;font-size:1.15rem;}
-  .contact-form p.hint{color:var(--muted);font-size:.86rem;margin-bottom:24px;}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-  .form-row.full{grid-template-columns:1fr;}
-  label{display:block;font-size:.8rem;font-weight:600;color:var(--navy);margin-bottom:6px;}
-  input,textarea,select{
-    width:100%;padding:12px 14px;border-radius:var(--r-sm);border:1px solid var(--line);font-family:inherit;font-size:.9rem;background:#fff;color:var(--ink);
-  }
-  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--teal);}
-  textarea{resize:vertical;min-height:96px;}
-  .contact-form button{margin-top:6px;}
-
-  .checkbox-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .checkbox-item{
-    display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);
-    padding:11px 14px;font-size:.86rem;color:var(--ink);cursor:pointer;transition:border-color .15s;
-  }
-  .checkbox-item:hover{border-color:var(--teal);}
-  .checkbox-item input{accent-color:var(--teal);width:16px;height:16px;flex:none;}
-  .checkbox-item.other-item{grid-column:1/-1;}
-
-  .form-status{margin-top:14px;font-size:.88rem;padding:12px 14px;border-radius:var(--r-sm);display:none;}
-  .form-status.show{display:block;}
-  .form-status.success{background:#e8f7f0;color:#1d7a4c;border:1px solid #bfe8d3;}
-  .form-status.error{background:#fdecec;color:#b3261e;border:1px solid #f3c6c4;}
-
-  /* FOOTER */
-  footer{background:var(--soft);border-top:1px solid var(--line);padding:60px 0 28px;}
-  .footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;margin-bottom:44px;}
-  .footer-logo{display:flex;align-items:center;margin-bottom:14px;}
-  .footer-logo .logo-img{height:64px;}
-  footer h4{color:var(--navy);font-size:.88rem;margin-bottom:16px;}
-  footer p{font-size:.88rem;color:var(--muted);line-height:1.7;max-width:280px;}
-  footer ul li{margin-bottom:11px;font-size:.88rem;color:var(--muted);}
-  footer ul li a:hover{color:var(--teal-dark);}
-  .footer-bottom{border-top:1px solid var(--line);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.8rem;color:var(--muted);}
-
-  @media (max-width: 960px){
-    section{padding:76px 0;}
-    .hero-card,.about-grid,.about-grid.reverse,.contact-grid{grid-template-columns:1fr;}
-    .footer-grid{grid-template-columns:1fr 1fr;}
-    .hero h1{font-size:2.2rem;}
-    .hero-card{padding:44px 32px;}
-    .about-visual,.hero-visual{min-height:260px;}
-    .contact-grid{gap:40px;}
-  }
-  @media (max-width: 640px){
-    section{padding:60px 0;}
-    .container{padding:0 20px;}
-    .avis-track{margin:16px -20px 0;padding-left:20px;padding-right:20px;scroll-padding:0 20px;}
-    .avis--loading{min-height:84px;}
-    .form-row{grid-template-columns:1fr;}
-    .checkbox-grid{grid-template-columns:1fr;}
-    .footer-grid{grid-template-columns:1fr;}
-    .footer-bottom{flex-direction:column;align-items:flex-start;gap:6px;}
-    .hero-card{padding:32px 22px;border-radius:22px;}
-    .hero h1{font-size:1.8rem;}
-    .hero p.lead{font-size:1rem;}
-    .about-points{grid-template-columns:1fr;}
-    .teaser-grid{grid-template-columns:1fr;}
-    .section-head h2{font-size:1.6rem;}
-    .nav{padding:12px 18px;grid-template-columns:1fr 1fr;grid-template-areas:"logo cta" "links links";row-gap:8px;}
-    .nav-links{justify-content:center;gap:20px;overflow-x:visible;padding:0;}
-  }
-  @media (max-width: 420px){
-    .nav-cta .btn-navy{padding:11px 14px;font-size:.82rem;}
-    .logo-img{height:44px;}
-  }
-</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "Caparel", "description": "Service mandataire d'aide à domicile aux personnes âgées à Neuilly-sur-Seine et dans les Hauts-de-Seine.", "url": "https://caparel.fr/", "logo": "https://caparel.fr/images/logo.png", "image": "https://caparel.fr/images/hero.jpg", "telephone": "+33664269303", "email": "contact@caparel.fr", "address": {"@type": "PostalAddress", "streetAddress": "6 rue Beffroy", "postalCode": "92200", "addressLocality": "Neuilly-sur-Seine", "addressCountry": "FR"}, "areaServed": [{"@type": "City", "name": "Neuilly-sur-Seine"}, {"@type": "City", "name": "Paris"}, {"@type": "City", "name": "Levallois-Perret"}, {"@type": "City", "name": "Boulogne-Billancourt"}, {"@type": "City", "name": "Courbevoie"}, {"@type": "City", "name": "Puteaux"}, {"@type": "City", "name": "Suresnes"}, {"@type": "City", "name": "Clichy"}, {"@type": "City", "name": "Issy-les-Moulineaux"}, {"@type": "City", "name": "Saint-Cloud"}], "openingHoursSpecification": {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "opens": "09:00", "closes": "18:00"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Qu'est-ce que le mode mandataire ?", "acceptedAnswer": {"@type": "Answer", "text": "Le mode mandataire repose sur un contrat de mandat administratif : vous confiez à Caparel, en votre nom, les démarches administratives liées à l'emploi de votre auxiliaire de vie. Vous restez l'employeur, Caparel agit en tant que mandataire pour vous accompagner et assurer le suivi."}}, {"@type": "Question", "name": "Suis-je l'employeur de l'auxiliaire de vie ?", "acceptedAnswer": {"@type": "Answer", "text": "Oui. Vous signez un contrat de travail (CDI ou CDD) avec votre salarié, régi par la convention collective des particuliers employeurs (IDCC 3239). Caparel s'occupe des formalités : contrat, bulletins de salaire, déclarations CESU."}}, {"@type": "Question", "name": "Que fait Caparel concrètement ?", "acceptedAnswer": {"@type": "Answer", "text": "Recherche et présentation d'auxiliaires de vie qualifiées, aide aux formalités d'embauche, contrat de travail, assistance CESU, bulletins de salaire, déclaration des heures, remplaçant en cas d'absence, suivi de l'accompagnement et documents annuels pour le crédit d'impôt."}}, {"@type": "Question", "name": "Combien coûte une aide à domicile avec Caparel ?", "acceptedAnswer": {"@type": "Answer", "text": "Le tarif horaire TTC est de 32,70 € jusqu'à 25 h par semaine, 31,70 € de 26 h à 40 h et 28,70 € au-delà de 40 h, soit 16,35 €, 15,85 € et 14,35 € après crédit d'impôt de 50 %. Aucun frais d'inscription ni de résiliation."}}, {"@type": "Question", "name": "Comment fonctionne le crédit d'impôt de 50 % ?", "acceptedAnswer": {"@type": "Answer", "text": "Les dépenses d'emploi d'un salarié à domicile ouvrent droit à un crédit d'impôt de 50 % des sommes versées, dans la limite de 12 000 € de dépenses par an et par foyer (jusqu'à 15 000 € selon la situation). Le crédit est remboursable même si vous n'êtes pas imposable."}}, {"@type": "Question", "name": "Qu'est-ce que l'avance immédiate de crédit d'impôt ?", "acceptedAnswer": {"@type": "Answer", "text": "Le service Avance immédiate de l'Urssaf déduit votre crédit d'impôt de chaque facture : vous ne payez que la moitié du montant. Le service est facultatif et sans frais, et Caparel vous accompagne dans l'inscription."}}]}</script>
 </head>
 <body>
-
-<!-- SVG ICON SPRITE -->
-<svg width="0" height="0" style="position:absolute">
-  <defs>
-    <symbol id="ic-phone" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.7 3.6 4.9 6.3 6.3l2.1-2.1c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1.1.5 1.1 1.1V20c0 .6-.5 1.1-1.1 1.1C10.6 21.1 2.9 13.4 2.9 3.2 2.9 2.6 3.4 2 4 2h3.5c.6 0 1.1.5 1.1 1.1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1L6.6 10.8Z"/></symbol>
-    <symbol id="ic-mail" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 7 9-7"/></symbol>
-    <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 21.5S4.5 14.9 4.5 9.5a7.5 7.5 0 1 1 15 0c0 5.4-7.5 12-7.5 12Z"/><circle cx="12" cy="9.5" r="2.6"/></symbol>
-    <symbol id="ic-check" viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></symbol>
-    <symbol id="ic-bed" viewBox="0 0 24 24"><path d="M2.5 18.5v-9a2 2 0 0 1 2-2h15a2 2 0 0 1 2 2v9M2.5 15.5h19M6 9.5V7a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 11 7v2.5"/></symbol>
-    <symbol id="ic-home" viewBox="0 0 24 24"><path d="M3.5 10.5 12 3l8.5 7.5"/><path d="M5.5 9v10a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1V9"/></symbol>
-    <symbol id="ic-doc" viewBox="0 0 24 24"><path d="M7 2.5h7l4 4v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z"/><path d="M14 2.5V7h4M9 12h6M9 15.5h6M9 8.5h2"/></symbol>
-    <symbol id="ic-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19.5c.6-3.4 3.1-5.5 6.2-5.5s5.6 2.1 6.2 5.5"/><circle cx="17.5" cy="8.5" r="2.6"/><path d="M15.5 14.3c2.6.4 4.5 2.3 5 5.2"/></symbol>
-    <symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 2.5 4.5 5.5v6c0 5 3.2 8.4 7.5 10 4.3-1.6 7.5-5 7.5-10v-6L12 2.5Z"/><path d="M8.7 12.2l2.3 2.3 4.3-4.3"/></symbol>
-    <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2"/><path d="M12 7v5.3l3.6 2.1"/></symbol>
-    <symbol id="ic-euro" viewBox="0 0 24 24"><path d="M18 5.5A8.5 8.5 0 1 0 18 18.5"/><path d="M3.5 10h9M3.5 14h7.5"/></symbol>
-    <symbol id="ic-repeat" viewBox="0 0 24 24"><path d="M4 9.5A7.5 7.5 0 0 1 19.8 7.2M20 3.5v4h-4M20 14.5A7.5 7.5 0 0 1 4.2 16.8M4 20.5v-4h4"/></symbol>
-  </defs>
-</svg>
-
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="ic-phone" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.7 3.6 4.9 6.3 6.3l2.1-2.1c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1.1.5 1.1 1.1V20c0 .6-.5 1.1-1.1 1.1C10.6 21.1 2.9 13.4 2.9 3.2 2.9 2.6 3.4 2 4 2h3.5c.6 0 1.1.5 1.1 1.1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1L6.6 10.8Z"/></symbol>
+<symbol id="ic-mail" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 6l9 7 9-7"/></symbol>
+<symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 21.5S4.5 14.9 4.5 9.5a7.5 7.5 0 1 1 15 0c0 5.4-7.5 12-7.5 12Z"/><circle cx="12" cy="9.5" r="2.6"/></symbol>
+<symbol id="ic-check" viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5"/></symbol>
+<symbol id="ic-bed" viewBox="0 0 24 24"><path d="M2.5 18.5v-9a2 2 0 0 1 2-2h15a2 2 0 0 1 2 2v9M2.5 15.5h19M6 9.5V7a1.5 1.5 0 0 1 1.5-1.5h2A1.5 1.5 0 0 1 11 7v2.5"/></symbol>
+<symbol id="ic-home" viewBox="0 0 24 24"><path d="M3.5 10.5 12 3l8.5 7.5"/><path d="M5.5 9v10a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1V9"/></symbol>
+<symbol id="ic-doc" viewBox="0 0 24 24"><path d="M7 2.5h7l4 4v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1Z"/><path d="M14 2.5V7h4M9 12h6M9 15.5h6M9 8.5h2"/></symbol>
+<symbol id="ic-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M2.8 19.5c.6-3.4 3.1-5.5 6.2-5.5s5.6 2.1 6.2 5.5"/><circle cx="17.5" cy="8.5" r="2.6"/><path d="M15.5 14.3c2.6.4 4.5 2.3 5 5.2"/></symbol>
+<symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 2.5 4.5 5.5v6c0 5 3.2 8.4 7.5 10 4.3-1.6 7.5-5 7.5-10v-6L12 2.5Z"/><path d="M8.7 12.2l2.3 2.3 4.3-4.3"/></symbol>
+<symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2"/><path d="M12 7v5.3l3.6 2.1"/></symbol>
+<symbol id="ic-euro" viewBox="0 0 24 24"><path d="M18 5.5A8.5 8.5 0 1 0 18 18.5"/><path d="M3.5 10h9M3.5 14h7.5"/></symbol>
+<symbol id="ic-repeat" viewBox="0 0 24 24"><path d="M4 9.5A7.5 7.5 0 0 1 19.8 7.2M20 3.5v4h-4M20 14.5A7.5 7.5 0 0 1 4.2 16.8M4 20.5v-4h4"/></symbol>
+<symbol id="ic-walk" viewBox="0 0 24 24"><circle cx="13" cy="4.5" r="1.8"/><path d="M9 20.5l2-6 2 2 3 1.5M11 14.5l1.5-4.5-3-1.5-3 3M9.5 9.5l3-2 3.5 1"/></symbol>
+<symbol id="ic-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></symbol>
+<symbol id="ic-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="ic-heart" viewBox="0 0 24 24"><path d="M12 20.5S3.5 15 3.5 8.9A4.4 4.4 0 0 1 12 7a4.4 4.4 0 0 1 8.5 1.9C20.5 15 12 20.5 12 20.5Z"/></symbol>
+<symbol id="ic-briefcase" viewBox="0 0 24 24"><rect x="3" y="7.5" width="18" height="12" rx="2"/><path d="M9 7.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v1.5M3 13h18"/></symbol>
+<symbol id="ic-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+</defs></svg>
+<a class="skip" href="#main">Aller au contenu</a>
 <header>
   <div class="nav">
-    <a href="#top" class="logo">
-      <img src="images/logo.png" alt="Caparel - Aide à domicile aux personnes âgées" class="logo-img" width="1872" height="562" decoding="async">
+    <a href="/" class="logo" aria-label="Caparel — accueil">
+      <img src="/images/logo.png" alt="Caparel - Aide à domicile aux personnes âgées" class="logo-img" width="1872" height="562" decoding="async">
     </a>
-    <nav class="nav-links">
-      <a href="index.html" class="active">Accueil</a>
-      <a href="services.html">Nos services</a>
-      <a href="tarifs.html">Nos tarifs</a>
+    <nav class="nav-links" id="navLinks" aria-label="Navigation principale">
+      <a href="/" class="active" aria-current="page">Accueil</a>
+      <a href="/services.html">Nos services</a>
+      <a href="/tarifs.html">Nos tarifs</a>
+      <a href="/aide-a-domicile/">Nos villes</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/recrutement.html">Recrutement</a>
     </nav>
     <div class="nav-cta">
-      <a href="tel:0664269303" class="nav-phone"><svg class="icon" style="width:16px;height:16px"><use href="#ic-phone"/></svg>06 64 26 93 03</a>
-      <a href="#contact" class="btn btn-navy">Nous contacter</a>
+      <a href="tel:0664269303" class="nav-phone"><svg class="icon" style="width:16px;height:16px" aria-hidden="true"><use href="#ic-phone"/></svg>06 64 26 93 03</a>
+      <a href="/#contact" class="btn btn-navy">Devis gratuit</a>
     </div>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navLinks"><svg class="icon" aria-hidden="true"><use href="#ic-menu"/></svg></button>
   </div>
 </header>
+<div class="topbar"><div class="topbar-in">
+  <img src="/images/sap.png" alt="Services à la personne" class="topbar-sap" width="199" height="148">
+  <span>Avec l'avance immédiate du crédit d'impôt, <b>vous ne payez que la moitié.</b></span>
+  <a href="/tarifs.html#aides">En savoir plus sur nos tarifs</a>
+  <a href="tel:0664269303" class="topbar-tel"><svg class="icon" aria-hidden="true"><use href="#ic-phone"/></svg>06 64 26 93 03</a>
+</div></div>
+<main id="main">
 
-<section class="hero" id="top">
-  <div class="container">
-    <div class="hero-card">
-      <div>
-        <span class="eyebrow"><svg class="icon" style="width:14px;height:14px"><use href="#ic-euro"/></svg>Crédit d'impôt de 50 % sur vos dépenses</span>
-        <h1>Vivre chez soi, entouré des <span class="highlight">bonnes personnes.</span></h1>
-        <p class="lead">Caparel est un service mandataire d'aide à domicile pour les personnes âgées, à Neuilly-sur-Seine et alentours : aide à la personne, entretien, accompagnement et démarches administratives.</p>
-        <div class="hero-facts">
-          <div class="hero-fact"><svg class="icon"><use href="#ic-clock"/></svg>Interventions dès 4h par semaine, jusqu'à 24h/24 et 7j/7</div>
-          <div class="hero-fact"><svg class="icon"><use href="#ic-users"/></svg>Vous restez employeur — nous gérons l'administratif</div>
-          <div class="hero-fact"><svg class="icon"><use href="#ic-shield"/></svg>Intervenants qualifiés et sélectionnés avec exigence</div>
-        </div>
-        <div class="hero-actions">
-          <a href="#contact" class="btn btn-primary">Demander un devis gratuit</a>
-          <a href="tel:0664269303" class="btn btn-outline"><svg class="icon" style="width:16px;height:16px"><use href="#ic-phone"/></svg>06 64 26 93 03</a>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <img src="images/hero.jpg" alt="Aide à domicile Caparel" class="hero-photo" width="1385" height="1136" fetchpriority="high" decoding="async">
-      </div>
+<section class="hero2" id="top">
+  <div class="container hero2-in">
+    <div class="hero2-text">
+      <span class="hero2-eyebrow">Aide à domicile · Neuilly-sur-Seine &amp; Hauts-de-Seine</span>
+      <h1>Vivre chez soi, entouré des <span class="mint">bonnes personnes.</span></h1>
+      <p class="lead">Caparel est un service mandataire d'aide à domicile pour les personnes âgées, à Neuilly-sur-Seine et alentours : aide à la personne, entretien, accompagnement et démarches administratives.</p>
     </div>
+    <div class="hero2-badge"><span class="big">50<small>%</small></span><span>d'avance immédiate<br>de crédit d'impôt</span></div>
   </div>
 </section>
+<div class="hero-cards">
+  <div class="container hero-cards-grid">
+    <div class="hero-card-box">
+      <h2>Besoin d'une<br>aide à domicile ?</h2>
+      <a href="#contact" class="btn btn-primary">C'est parti</a>
+      <p>Sans frais d'inscription ni de résiliation</p>
+      <a class="hero-card-tel" href="tel:0664269303"><svg class="icon" style="width:15px;height:15px" aria-hidden="true"><use href="#ic-phone"/></svg>ou appelez le 06 64 26 93 03</a>
+    </div>
+    <div class="hero-card-box">
+      <h2>Vous cherchez un emploi<br>d'auxiliaire de vie ?</h2>
+      <a href="/recrutement.html" class="btn btn-navy">Je postule</a>
+      <p>Rejoignez notre réseau d'intervenant(e)s</p>
+    </div>
+  </div>
+</div>
 
 <section class="avis avis--loading" id="avis" aria-label="Avis Google">
   <div class="container">
@@ -361,82 +113,191 @@
   </div>
 </section>
 
-<div class="hero-partners">
-  <div class="container">
-    <div class="partners-row">
-      <div class="partner-pill"><svg class="icon"><use href="#ic-shield"/></svg>Services à la personne</div>
-      <div class="partner-pill"><svg class="icon"><use href="#ic-users"/></svg>Mode mandataire</div>
-      <div class="partner-pill"><svg class="icon"><use href="#ic-euro"/></svg>Crédit d'impôt 50 %</div>
-      <div class="partner-pill"><svg class="icon"><use href="#ic-pin"/></svg>Neuilly-sur-Seine</div>
-    </div>
+<div class="trust">
+  <div class="container trust-row">
+    <div class="trust-item"><b>50 %</b><span>de crédit d'impôt, même non imposable</span></div>
+    <div class="trust-item"><b>dès 4 h</b><span>d'intervention par semaine</span></div>
+    <div class="trust-item"><b>24h/24 · 7j/7</b><span>selon vos besoins</span></div>
+    <div class="trust-item"><b>2 jours</b><span>ouvrés pour la visite d'évaluation</span></div>
   </div>
 </div>
 
-<section id="apropos">
-  <div class="container about-grid">
-    <div class="about-visual">
-      <img src="images/apropos.jpg" alt="Auxiliaire de vie Caparel avec une personne âgée" class="about-photo" width="1385" height="1136" loading="lazy" decoding="async">
+<div class="cp">
+
+  <!-- 1. Nos services -->
+  <section class="cp-services" id="services" aria-labelledby="cp-services-title">
+    <div class="cp-container">
+      <header class="cp-head cp-head--center">
+        <h2 class="cp-h2" id="cp-services-title">Nous vous aidons chez vous, au quotidien</h2>
+        <p class="cp-lead">De 4 heures par semaine jusqu'à 24&nbsp;h sur 24, 7&nbsp;jours sur&nbsp;7. Vous choisissez simplement ce dont vous avez besoin.</p>
+      </header>
+
+      <ul class="cp-tiles">
+        <li class="cp-tile cp-tile--teal">
+          <span class="cp-tile__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </span>
+          <h3 class="cp-h3">Les gestes du quotidien</h3>
+          <p>Se lever, se laver, s'habiller, bien manger. Une présence la nuit si besoin.</p>
+        </li>
+        <li class="cp-tile cp-tile--amber">
+          <span class="cp-tile__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </span>
+          <h3 class="cp-h3">La maison</h3>
+          <p>Ménage, linge, repas et courses. Un logement propre et sûr.</p>
+        </li>
+        <li class="cp-tile cp-tile--blue">
+          <span class="cp-tile__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+          </span>
+          <h3 class="cp-h3">Les papiers</h3>
+          <p>Courrier, classement des documents et démarches en ligne.</p>
+        </li>
+        <li class="cp-tile cp-tile--rose">
+          <span class="cp-tile__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </span>
+          <h3 class="cp-h3">Les sorties et la compagnie</h3>
+          <p>Rendez-vous médicaux, promenades, activités. Pour ne pas rester seul.</p>
+        </li>
+      </ul>
     </div>
-    <div class="about">
-      <span class="eyebrow">Qui sommes-nous</span>
-      <h2>Mettre l'humain au centre de l'accompagnement</h2>
-      <p>Caparel est un service mandataire d'aide à domicile qui permet à chacun de vivre chez soi, quels que soient l'âge, la santé ou la situation de vie.</p>
-      <p>Notre ambition : adapter nos services à vos besoins, respecter vos habitudes et votre intimité, tout en garantissant le professionnalisme et la fiabilité de notre accompagnement. Nos intervenants sont choisis pour leurs compétences, leur expérience et surtout leur sens de l'écoute et de la bienveillance.</p>
-      <p>Nous fonctionnons en <b>mode mandataire</b> : vous restez l'employeur de votre auxiliaire de vie et choisissez qui intervient chez vous, tandis que Caparel s'occupe de toutes les démarches administratives liées à cet emploi. Nous travaillons de concert avec les familles, les aidants, les proches et les partenaires sociaux ou médicaux pour offrir une prise en charge complète, stable et coordonnée.</p>
-      <div class="about-points">
-        <div class="about-point"><svg class="icon"><use href="#ic-users"/></svg>Employeur : vous</div>
-        <div class="about-point"><svg class="icon"><use href="#ic-shield"/></svg>Mode mandataire : Caparel</div>
-        <div class="about-point"><svg class="icon"><use href="#ic-repeat"/></svg>Intervenant stable et dédié</div>
-        <div class="about-point"><svg class="icon"><use href="#ic-clock"/></svg>Suivi continu assuré</div>
+  </section>
+
+  <!-- 2. Comment ça se passe ? (version ludique, style du livret Caparel) -->
+  <section class="cp-steps" id="comment-ca-se-passe" aria-labelledby="cp-steps-title">
+    <div class="cp-steps__deco cp-steps__deco--top" aria-hidden="true"></div>
+    <div class="cp-steps__deco cp-steps__deco--bottom" aria-hidden="true"></div>
+
+    <div class="cp-container cp-container--narrow">
+      <header class="cp-head cp-head--center">
+        <span class="cp-pill">Pas à pas</span>
+        <h2 class="cp-h2" id="cp-steps-title">Comment ça se passe&nbsp;?</h2>
+        <p class="cp-lead">Trois étapes simples. Nous nous occupons de tout.</p>
+      </header>
+
+      <ol class="cp-path">
+
+        <!-- Étape 1 : illustration à gauche -->
+        <li class="cp-step cp-step--teal">
+          <div class="cp-step__row">
+            <div class="cp-scene" aria-hidden="true">
+              <p class="cp-bubble">Bonjour&nbsp;! Parlez-moi de vos journées.</p>
+              <img loading="lazy" decoding="async" class="cp-avatar cp-avatar--lg" src="/images/avatar-sarah.png" alt="" width="200" height="200">
+              <span class="cp-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              </span>
+            </div>
+            <div class="cp-card">
+              <span class="cp-card__num" aria-hidden="true">1</span>
+              <p class="cp-kicker">Sous 2 jours ouvrés</p>
+              <h3 class="cp-h3">Nous venons chez vous</h3>
+              <p>Une personne de notre équipe vient vous voir. Nous faisons connaissance et nous écoutons vos besoins.</p>
+            </div>
+          </div>
+          <svg class="cp-trail" viewBox="0 0 1080 88" preserveAspectRatio="none" aria-hidden="true"><path d="M232 8 C232 64 848 24 848 80"/></svg>
+        </li>
+
+        <!-- Étape 2 : illustration à droite -->
+        <li class="cp-step cp-step--coral cp-step--reverse">
+          <div class="cp-step__row">
+            <div class="cp-scene" aria-hidden="true">
+              <p class="cp-bubble cp-bubble--right">Enchantée&nbsp;!</p>
+              <img loading="lazy" decoding="async" class="cp-avatar cp-avatar--duo-a" src="/images/avatar-martin.png" alt="" width="170" height="170">
+              <img loading="lazy" decoding="async" class="cp-avatar cp-avatar--duo-b" src="/images/avatar-ines.png" alt="" width="170" height="170">
+              <span class="cp-badge cp-badge--heart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              </span>
+            </div>
+            <div class="cp-card">
+              <span class="cp-card__num" aria-hidden="true">2</span>
+              <p class="cp-kicker">C'est vous qui décidez</p>
+              <h3 class="cp-h3">Vous choisissez votre auxiliaire de vie</h3>
+              <p>Nous vous présentons une personne qui vous correspond. Rien ne se fait sans votre accord.</p>
+            </div>
+          </div>
+          <svg class="cp-trail" viewBox="0 0 1080 88" preserveAspectRatio="none" aria-hidden="true"><path d="M848 8 C848 64 232 24 232 80"/></svg>
+        </li>
+
+        <!-- Étape 3 : illustration à gauche -->
+        <li class="cp-step cp-step--blue">
+          <div class="cp-step__row">
+            <div class="cp-scene" aria-hidden="true">
+              <p class="cp-bubble">À mardi, même heure&nbsp;!</p>
+              <img loading="lazy" decoding="async" class="cp-avatar cp-avatar--lg" src="/images/avatar-ines.png" alt="" width="200" height="200">
+              <span class="cp-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+              </span>
+            </div>
+            <div class="cp-card">
+              <span class="cp-card__num" aria-hidden="true">3</span>
+              <p class="cp-kicker">En général sous 5 jours</p>
+              <h3 class="cp-h3">L'aide commence</h3>
+              <p>Un planning adapté à votre rythme. C'est toujours la même personne qui vient chez vous.</p>
+            </div>
+          </div>
+        </li>
+
+      </ol>
+
+      <div class="cp-after">
+        <div class="cp-after__faces" aria-hidden="true">
+          <img loading="lazy" decoding="async" src="/images/avatar-martin.png" alt="" width="92" height="92">
+          <img loading="lazy" decoding="async" src="/images/avatar-thomas.png" alt="" width="92" height="92">
+        </div>
+        <div>
+          <p class="cp-after__title">Et après&nbsp;?</p>
+          <p>Nous restons en contact avec vous et vos proches. Si vos besoins changent, nous ajustons l'aide.</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="intervenants">
-  <div class="container about-grid reverse">
-    <div class="about">
-      <span class="eyebrow">Nos intervenantes</span>
-      <h2>Des auxiliaires de vie recrutées avec exigence</h2>
-      <p>Pour intervenir chez nos clients, nos aides à domicile doivent justifier d'un diplôme du secteur médico-social ou d'au moins 3 ans d'expérience auprès de personnes âgées.</p>
-      <p>Chaque candidate passe par un entretien approfondi : compétences, parcours, références vérifiées auprès des précédents employeurs, et expérience selon les situations (troubles cognitifs, aide à la mobilité, fin de vie).</p>
-      <p>Nous prenons ensuite le temps de croiser les besoins de votre proche avec le profil de l'intervenante — c'est cette étape de mise en correspondance qui fonde la confiance.</p>
-      <div class="about-points">
-        <div class="about-point"><svg class="icon"><use href="#ic-shield"/></svg>Diplômées ou expérimentées</div>
-        <div class="about-point"><svg class="icon"><use href="#ic-check"/></svg>Références vérifiées</div>
-        <div class="about-point"><svg class="icon"><use href="#ic-users"/></svg>Intervenante dédiée</div>
-        <div class="about-point"><svg class="icon"><use href="#ic-repeat"/></svg>Mise en correspondance avec vos besoins</div>
+  <!-- 3. Des personnes de confiance (fusion de « Qui sommes-nous » et « Auxiliaires recrutées ») -->
+  <section class="cp-trust" id="qui-sommes-nous" aria-labelledby="cp-trust-title">
+    <div class="cp-container cp-trust__grid">
+      <img loading="lazy" decoding="async" class="cp-trust__photo" src="/images/apropos.jpg" alt="Une auxiliaire de vie Caparel sourit à une dame âgée assise à sa table" width="1385" height="1136">
+      <div class="cp-trust__text">
+        <div class="cp-trust__intro">
+          <h2 class="cp-h2" id="cp-trust-title">Des personnes de confiance, chez vous</h2>
+          <p>Nos auxiliaires de vie sont diplômées ou ont au moins 3 ans d'expérience auprès des personnes âgées. Nous choisissons avec vous celle qui vous convient.</p>
+        </div>
+        <ul class="cp-checks">
+          <li><span class="cp-checks__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Toujours la même personne</li>
+          <li><span class="cp-checks__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Diplômée ou expérimentée</li>
+          <li><span class="cp-checks__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Références vérifiées</li>
+        </ul>
+        <div class="cp-note">
+          <p class="cp-note__title">Vous choisissez, nous nous occupons des papiers</p>
+          <p>Caparel est un service mandataire&nbsp;: vous êtes l'employeur de votre auxiliaire de vie, et nous faisons toutes les démarches à votre place.</p>
+        </div>
       </div>
     </div>
-    <div class="about-visual">
-      <img src="images/intervenants.jpg" alt="Auxiliaires de vie Caparel" class="about-photo" width="1385" height="1136" loading="lazy" decoding="async">
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="apercu">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Découvrir Caparel</span>
-      <h2>Ce que nous proposons</h2>
-      <p>Un accompagnement à la carte et des tarifs transparents, avec crédit d'impôt de 50 %.</p>
+  <!-- 4. 50 % pris en charge + contact -->
+  <section class="cp-half" aria-labelledby="cp-half-title">
+    <div class="cp-container">
+      <div class="cp-half__card">
+        <p class="cp-half__num" aria-hidden="true">50&nbsp;%</p>
+        <div class="cp-half__text">
+          <h2 class="cp-half__title" id="cp-half-title">Vous ne payez que la moitié</h2>
+          <p>Grâce à l'avance immédiate de crédit d'impôt&nbsp;: pour 200&nbsp;€ d'aide, vous payez 100&nbsp;€. Nous faisons l'inscription avec vous.</p>
+        </div>
+        <div class="cp-half__actions">
+          <a class="cp-btn cp-btn--primary" href="tel:+33664269303">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span class="cp-btn__label"><span>Appelez-nous</span><span class="cp-btn__sub">06&nbsp;64&nbsp;26&nbsp;93&nbsp;03</span></span>
+          </a>
+          <a class="cp-btn cp-btn--ghost" href="/tarifs.html">Voir les tarifs et aides</a>
+        </div>
+      </div>
     </div>
-    <div class="teaser-grid">
-      <a href="services.html" class="teaser-card">
-        <div class="service-ic" style="background:rgba(63,182,174,.22);color:var(--teal-dark);"><svg class="icon"><use href="#ic-home"/></svg></div>
-        <h3>Nos services</h3>
-        <p>Aide à la personne, entretien du logement, démarches administratives, accompagnement — et le mode mandataire qui vous laisse la main sur le choix de votre intervenant.</p>
-        <span class="teaser-link">Voir tous les services →</span>
-      </a>
-      <a href="tarifs.html" class="teaser-card">
-        <div class="service-ic" style="background:rgba(247,192,101,.3);color:var(--sand-dark);"><svg class="icon"><use href="#ic-euro"/></svg></div>
-        <h3>Nos tarifs</h3>
-        <p>Des tarifs clairs à l'heure ou au forfait, sans frais cachés, et le détail des aides fiscales pour alléger votre budget.</p>
-        <span class="teaser-link">Voir les tarifs et aides →</span>
-      </a>
-    </div>
-  </div>
-</section>
+  </section>
+
+</div>
+
 
 <section id="contact">
   <div class="container contact-grid">
@@ -457,8 +318,8 @@
           <div><label for="adresse">Adresse</label><input id="adresse" name="adresse" type="text" placeholder="Numéro et nom de rue"></div>
         </div>
         <div class="form-row">
-          <div><label for="ville">Ville</label><input id="ville" name="ville" type="text" placeholder="Votre ville"></div>
-          <div><label for="codePostal">Code postal</label><input id="codePostal" name="codePostal" type="text" inputmode="numeric" placeholder="92200"></div>
+          <div><label for="ville">Ville</label><input id="ville" name="ville" type="text" placeholder="Votre ville" value=""></div>
+          <div><label for="codePostal">Code postal</label><input id="codePostal" name="codePostal" type="text" inputmode="numeric" placeholder="92200" value=""></div>
         </div>
         <div class="form-row full">
           <label>Besoins d'aide à domicile</label>
@@ -486,7 +347,8 @@
           <div><label for="message">Message</label><textarea id="message" name="message" placeholder="Décrivez votre situation ou vos besoins..."></textarea></div>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Envoyer ma demande</button>
-        <div class="form-status" id="formStatus"></div>
+        <div class="form-status" role="status" aria-live="polite"></div>
+        <p class="form-legal">Les informations saisies sont utilisées par Caparel pour répondre à votre demande. Vous disposez d'un droit d'accès, de rectification et d'effacement : contact@caparel.fr.</p>
       </form>
     </div>
     <div class="contact-info">
@@ -494,182 +356,71 @@
       <h2>Échangeons sur vos besoins</h2>
       <p>Notre équipe vous répond rapidement pour évaluer votre situation et construire un accompagnement sur mesure.</p>
       <div class="contact-item">
-        <span class="ic"><svg class="icon"><use href="#ic-phone"/></svg></span>
-        <div><b>Téléphone</b><span>06 64 26 93 03</span></div>
+        <span class="ic"><svg class="icon" aria-hidden="true"><use href="#ic-phone"/></svg></span>
+        <div><b>Téléphone</b><span><a href="tel:0664269303">06 64 26 93 03</a> — 7j/7, 9h-18h</span></div>
       </div>
       <div class="contact-item">
-        <span class="ic"><svg class="icon"><use href="#ic-mail"/></svg></span>
-        <div><b>Email</b><span>contact@caparel.fr</span></div>
+        <span class="ic"><svg class="icon" aria-hidden="true"><use href="#ic-mail"/></svg></span>
+        <div><b>Email</b><span><a href="mailto:contact@caparel.fr">contact@caparel.fr</a> — réponse sous 24h</span></div>
       </div>
       <div class="contact-item">
-        <span class="ic"><svg class="icon"><use href="#ic-pin"/></svg></span>
+        <span class="ic"><svg class="icon" aria-hidden="true"><use href="#ic-pin"/></svg></span>
         <div><b>Adresse</b><span>6 rue Beffroy, 92200 Neuilly-sur-Seine</span></div>
       </div>
     </div>
   </div>
 </section>
-
+</main>
 <footer>
   <div class="container">
     <div class="footer-grid">
       <div>
-        <div class="footer-logo">
-          <img src="images/logo.png" alt="Caparel" class="logo-img" width="1872" height="562" loading="lazy" decoding="async">
-        </div>
+        <div class="footer-logo"><img src="/images/logo.png" alt="Caparel" class="logo-img" width="1872" height="562" loading="lazy" decoding="async"></div>
         <p>Service mandataire d'aide à domicile aux personnes âgées. Nous mettons l'humain au centre, avec professionnalisme et bienveillance.</p>
+        <div class="footer-sap"><img src="/images/sap.png" alt="Services à la personne" width="199" height="148" loading="lazy" decoding="async"><span>Service à la personne<br>Mode mandataire</span></div>
       </div>
       <div>
         <h4>Navigation</h4>
         <ul>
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="services.html">Nos services</a></li>
-          <li><a href="tarifs.html">Nos tarifs</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="/">Accueil</a></li>
+          <li><a href="/services.html">Nos services</a></li>
+          <li><a href="/tarifs.html">Nos tarifs</a></li>
+          <li><a href="/faq.html">FAQ</a></li>
+          <li><a href="/recrutement.html">Recrutement</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Nos villes</h4>
+        <ul>
+          <li><a href="/aide-a-domicile/neuilly-sur-seine/">Aide à domicile à Neuilly-sur-Seine</a></li>
+          <li><a href="/aide-a-domicile/paris/">Aide à domicile à Paris</a></li>
+          <li><a href="/aide-a-domicile/levallois-perret/">Aide à domicile à Levallois-Perret</a></li>
+          <li><a href="/aide-a-domicile/boulogne-billancourt/">Aide à domicile à Boulogne-Billancourt</a></li>
+          <li><a href="/aide-a-domicile/courbevoie/">Aide à domicile à Courbevoie</a></li>
+          <li><a href="/aide-a-domicile/puteaux/">Aide à domicile à Puteaux</a></li>
+          <li><a href="/aide-a-domicile/suresnes/">Aide à domicile à Suresnes</a></li>
+          <li><a href="/aide-a-domicile/clichy/">Aide à domicile à Clichy</a></li>
+          <li><a href="/aide-a-domicile/issy-les-moulineaux/">Aide à domicile à Issy-les-Moulineaux</a></li>
+          <li><a href="/aide-a-domicile/saint-cloud/">Aide à domicile à Saint-Cloud</a></li>
         </ul>
       </div>
       <div>
         <h4>Contact</h4>
         <ul>
-          <li>06 64 26 93 03</li>
-          <li>contact@caparel.fr</li>
+          <li><a href="tel:0664269303">06 64 26 93 03</a></li>
+          <li><a href="mailto:contact@caparel.fr">contact@caparel.fr</a></li>
           <li>6 rue Beffroy, 92200 Neuilly-sur-Seine</li>
+          <li>Accueil téléphonique 7j/7, 9h-18h</li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Caparel — Tous droits réservés</span>
-      <span>Service à la personne · Mode mandataire</span>
+      <span>© 2026 Caparel SAS — SIREN 992 659 839 — RCS Nanterre</span>
+      <span>Aide à domicile aux personnes âgées · Mode mandataire</span>
     </div>
   </div>
 </footer>
-
-<script>
-(function(){
-  var AVIS_ENDPOINT = "https://releve-heures-chi.vercel.app/api/avis";
-  var section = document.getElementById('avis');
-  if(!section) return;
-
-  function stars(n){
-    var full = Math.round(n);
-    return '\u2605'.repeat(full) + '\u2606'.repeat(Math.max(0, 5 - full));
-  }
-
-  fetch(AVIS_ENDPOINT)
-    .then(function(res){ if(!res.ok) throw new Error('avis ' + res.status); return res.json(); })
-    .then(function(data){
-      if(data.note == null){ section.hidden = true; return; }
-
-      document.getElementById('avisNote').textContent = data.note.toFixed(1).replace('.', ',');
-      document.getElementById('avisEtoiles').textContent = stars(data.note);
-      document.getElementById('avisCompte').textContent = data.nombreAvis + ' avis Google';
-      var lien = document.getElementById('avisLien');
-      if(data.lien) lien.href = data.lien; else lien.hidden = true;
-
-      var track = document.getElementById('avisTrack');
-      var liste = data.avis || [];
-      if(!liste.length) track.remove();
-      liste.forEach(function(a){
-        var card = document.createElement('article');
-        card.className = 'avis-card';
-
-        var top = document.createElement('div');
-        top.className = 'avis-card-top';
-        var avatar = document.createElement('div');
-        avatar.className = 'avis-avatar';
-        avatar.textContent = (a.auteur || '?').charAt(0).toUpperCase();
-        var who = document.createElement('div');
-        var name = document.createElement('div');
-        name.className = 'avis-author';
-        name.textContent = a.auteur;
-        var date = document.createElement('div');
-        date.className = 'avis-date';
-        date.textContent = a.date;
-        who.appendChild(name);
-        who.appendChild(date);
-        top.appendChild(avatar);
-        top.appendChild(who);
-
-        var rating = document.createElement('div');
-        rating.className = 'avis-stars';
-        rating.setAttribute('aria-label', a.note + ' sur 5');
-        rating.textContent = stars(a.note);
-
-        var text = document.createElement('p');
-        text.className = 'avis-text';
-        text.textContent = a.texte;
-
-        card.appendChild(top);
-        card.appendChild(rating);
-        card.appendChild(text);
-        track.appendChild(card);
-      });
-
-      section.classList.remove('avis--loading');
-    })
-    .catch(function(){ section.hidden = true; /* bandeau masque si les avis sont indisponibles */ });
-})();
-</script>
-
-<script>
-(function(){
-  var LEADS_ENDPOINT = "https://releve-heures-chi.vercel.app/api/leads";
-
-  var form = document.getElementById('contactForm');
-  var statusEl = document.getElementById('formStatus');
-  var submitBtn = form.querySelector('button[type="submit"]');
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-
-    var besoins = Array.prototype.slice.call(form.querySelectorAll('input[name="besoins"]:checked')).map(function(i){ return i.value; });
-    var creneaux = Array.prototype.slice.call(form.querySelectorAll('input[name="creneaux"]:checked')).map(function(i){ return i.value; });
-
-    var payload = {
-      nom: form.nom.value,
-      prenom: form.prenom.value,
-      telephone: form.tel.value,
-      email: form.email.value,
-      adresse: form.adresse.value,
-      ville: form.ville.value,
-      codePostal: form.codePostal.value,
-      besoins: besoins,
-      creneaux: creneaux,
-      message: form.message.value,
-      hp_check_7f2a: form.hp_check_7f2a.value
-    };
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Envoi en cours...";
-    statusEl.className = 'form-status';
-
-    fetch(LEADS_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    })
-    .then(function(res){
-      if(!res.ok) throw new Error('Leads API error ' + res.status);
-      return res.json();
-    })
-    .then(function(){
-      form.reset();
-      statusEl.textContent = "Merci, votre demande a bien été enregistrée. Notre équipe vous recontactera rapidement.";
-      statusEl.className = 'form-status show success';
-    })
-    .catch(function(err){
-      statusEl.textContent = "Une erreur est survenue lors de l'envoi. Merci de nous appeler au 06 64 26 93 03.";
-      statusEl.className = 'form-status show error';
-      console.error(err);
-    })
-    .finally(function(){
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Envoyer ma demande";
-    });
-  });
-})();
-</script>
-
+<script src="/app.js" defer></script>
 </body>
 </html>
