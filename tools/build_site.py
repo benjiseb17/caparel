@@ -916,8 +916,8 @@ def page_recrutement():
         </div>
         <div class="form-row full">
           <div class="file-field">
-            <label for="photo">Photo <em>(facultatif, JPG ou PNG)</em></label>
-            <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp">
+            <label for="photo">Photo <em>(obligatoire, JPG ou PNG)</em></label>
+            <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required>
             <span class="file-name" aria-live="polite"></span>
           </div>
         </div>

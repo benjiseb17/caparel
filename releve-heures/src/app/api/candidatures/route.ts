@@ -155,6 +155,13 @@ export async function POST(request: Request) {
     );
   }
 
+  if (!photo) {
+    return NextResponse.json(
+      { error: "La photo est obligatoire" },
+      { status: 400, headers }
+    );
+  }
+
   // Même logique que pour les leads : un faux positif d'autofill ne doit pas
   // faire perdre une vraie candidature, on l'enregistre en la marquant.
   const suspect = Boolean(hp_check_7f2a);

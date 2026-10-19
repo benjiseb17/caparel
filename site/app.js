@@ -207,7 +207,7 @@
       if(cv.size > MAX_CV) throw new Error('Le CV est trop volumineux (3 Mo maximum).');
       fd.append('cv', cv);
     }
-    if(!photo) return fd;
+    if(!photo) throw new Error('Merci d\'ajouter votre photo.');
     return compresserPhoto(photo).then(function(p){
       if(p.size > MAX_PHOTO) throw new Error('La photo est trop volumineuse (2 Mo maximum).');
       fd.append('photo', p, p.name);
