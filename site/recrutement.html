@@ -147,7 +147,7 @@
     </div>
     <div class="contact-form">
       <h3>Postuler en ligne</h3>
-      <p class="hint">Nous vous recontactons rapidement. Vous pourrez nous transmettre votre CV par email après notre premier échange.</p>
+      <p class="hint">Nous vous recontactons rapidement pour un premier échange téléphonique.</p>
       <form id="candidatureForm">
         <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true"><input type="text" name="hp_check_7f2a" id="hp_check_7f2a" tabindex="-1" autocomplete="off"></div>
         <div class="form-row">
@@ -193,11 +193,25 @@
           </div>
         </div>
         <div class="form-row full">
+          <div class="file-field">
+            <label for="cv">CV <em>(PDF ou Word, 3 Mo max)</em></label>
+            <input id="cv" name="cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+            <span class="file-name" aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="file-field">
+            <label for="photo">Photo <em>(facultatif, JPG ou PNG)</em></label>
+            <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp">
+            <span class="file-name" aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="form-row full">
           <div><label for="message">Message</label><textarea id="message" name="message" placeholder="Présentez-vous en quelques mots : parcours, secteur géographique, disponibilités…"></textarea></div>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Envoyer ma candidature</button>
         <div class="form-status" role="status" aria-live="polite"></div>
-        <p class="form-legal">Les informations saisies sont utilisées uniquement pour traiter votre candidature. Vous disposez d'un droit d'accès, de rectification et d'effacement : contact@caparel.fr.</p>
+        <p class="form-legal">Les informations, votre CV et votre photo sont utilisés uniquement pour traiter votre candidature et ne sont pas transmis à des tiers en dehors de votre mise en relation avec un particulier-employeur. Vous disposez d'un droit d'accès, de rectification et d'effacement : contact@caparel.fr.</p>
       </form>
     </div>
   </div>

@@ -380,6 +380,46 @@ export async function creerCandidature(candidature: NouvelleCandidature) {
   return record.id;
 }
 
+// Champs pièces jointes de la table Candidatures (identifiants des champs).
+const CHAMPS_CANDIDATURE = {
+  photo: "fldfnXBGbBUI6705x", // Photo
+  cv: "fldTIpPd0tvlwQwQN", // CV
+} as const;
+
+// Ajoute un fichier (envoyé en base64, 5 Mo max côté Airtable) dans un champ
+// pièce jointe d'une candidature déjà créée.
+export async function ajouterPieceJointeCandidature(
+  recordId: string,
+  champ: keyof typeof CHAMPS_CANDIDATURE,
+  fichier: { nom: string; type: string; contenu: Buffer }
+) {
+  const apiKey = process.env.AIRTABLE_API_KEY;
+  const baseId = process.env.AIRTABLE_BASE_ID;
+  if (!apiKey || !baseId) {
+    throw new Error("AIRTABLE_API_KEY ou AIRTABLE_BASE_ID manquant(s).");
+  }
+
+  const res = await fetch(
+    `https://content.airtable.com/v0/${baseId}/${recordId}/${CHAMPS_CANDIDATURE[champ]}/uploadAttachment`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contentType: fichier.type,
+        filename: fichier.nom,
+        file: fichier.contenu.toString("base64"),
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error(`Airtable uploadAttachment ${res.status}: ${await res.text()}`);
+  }
+}
+
 export type Releve = {
   id: string;
   date: string;

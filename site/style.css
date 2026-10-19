@@ -418,3 +418,9 @@ footer ul li a:hover{color:#fff;text-decoration:underline;}
   .fn-5 .icon{color:#1c4272;}
   body{padding-bottom:72px;}
 }
+
+/* Champs fichiers (candidature) */
+.file-field label em{font-style:normal;font-weight:500;color:var(--muted);}
+.file-field input[type=file]{padding:10px;background:#fff;border:1.5px dashed #b9c7d6;cursor:pointer;font-size:.86rem;}
+.file-field input[type=file]::file-selector-button{margin-right:12px;border:0;border-radius:999px;background:var(--navylogo);color:#fff;font-family:inherit;font-weight:600;font-size:.82rem;padding:8px 16px;cursor:pointer;}
+.file-name{display:block;margin-top:6px;font-size:.8rem;color:var(--teal-ink);font-weight:600;word-break:break-all;}
