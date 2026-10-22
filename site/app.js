@@ -197,7 +197,7 @@
     var typeRow = document.getElementById('sejourTypeRow');
     var typeInput = document.getElementById('typeTitreSejour');
     function maj(){
-      var autre = sel.value !== '' && sel.value !== 'Française';
+      var autre = sel.value !== '' && sel.value !== 'France';
       block.hidden = !autre;
       Array.prototype.forEach.call(radios, function(r){ r.disabled = !autre; r.required = autre; });
       var oui = autre && block.querySelector('input[name="titreSejourValide"]:checked') && block.querySelector('input[name="titreSejourValide"]:checked').value === 'Oui';
@@ -219,7 +219,7 @@
     fd.append('adresse', f.adresse.value);
     fd.append('ville', f.ville.value);
     fd.append('codePostal', f.codePostal.value);
-    var autre = f.nationaliteChoix.value !== 'Française';
+    var autre = f.nationaliteChoix.value !== 'France';
     fd.append('nationalite', f.nationaliteChoix.value);
     if(autre){
       var tsv = f.querySelector('input[name="titreSejourValide"]:checked');

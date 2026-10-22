@@ -153,7 +153,8 @@ export async function POST(request: Request) {
 
   // Question sur le titre de séjour : uniquement pour une nationalité autre
   // que française, où elle est alors obligatoire.
-  const etranger = Boolean(nationalite) && nationalite !== "Française";
+  const etranger =
+    Boolean(nationalite) && nationalite !== "France" && nationalite !== "Française";
   let titreSejour = "";
   if (etranger) {
     if (titreSejourValide === "Non") {
