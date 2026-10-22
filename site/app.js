@@ -197,13 +197,14 @@
     var typeRow = document.getElementById('sejourTypeRow');
     var typeInput = document.getElementById('typeTitreSejour');
     function maj(){
-      var autre = sel.value !== '' && sel.value !== 'France';
+      var autre = sel.value !== 'France';  // visible par défaut, masquée seulement si France
       block.hidden = !autre;
       Array.prototype.forEach.call(radios, function(r){ r.disabled = !autre; r.required = autre; });
       var oui = autre && block.querySelector('input[name="titreSejourValide"]:checked') && block.querySelector('input[name="titreSejourValide"]:checked').value === 'Oui';
       typeRow.hidden = !oui;
       typeInput.disabled = !oui; typeInput.required = !!oui;
     }
+    maj();
     sel.addEventListener('change', maj);
     Array.prototype.forEach.call(radios, function(r){ r.addEventListener('change', maj); });
     var form = document.getElementById('candidatureForm');
