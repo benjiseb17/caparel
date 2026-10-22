@@ -1246,7 +1246,6 @@ def page_candidature():
 <section class="page-hero">
   <div class="container">
     <h1>Candidature auxiliaire de vie</h1>
-    <p>Caparel accompagne les personnes âgées à domicile à Neuilly-sur-Seine et dans les Hauts-de-Seine. Remplissez le formulaire ci-dessous : nous vous recontactons rapidement pour un premier échange téléphonique.</p>
   </div>
 </section>
 
