@@ -424,3 +424,7 @@ footer ul li a:hover{color:#fff;text-decoration:underline;}
 .file-field input[type=file]{padding:10px;background:#fff;border:1.5px dashed #b9c7d6;cursor:pointer;font-size:.86rem;}
 .file-field input[type=file]::file-selector-button{margin-right:12px;border:0;border-radius:999px;background:var(--navylogo);color:#fff;font-family:inherit;font-weight:600;font-size:.82rem;padding:8px 16px;cursor:pointer;}
 .file-name{display:block;margin-top:6px;font-size:.8rem;color:var(--teal-ink);font-weight:600;word-break:break-all;}
+
+.sejour-block{margin-bottom:0;}
+.sejour-block[hidden],.form-row[hidden]{display:none;}
+.sejour-block .form-row.full:first-child{margin-top:0;}

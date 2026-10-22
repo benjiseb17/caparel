@@ -111,10 +111,11 @@ FAQ = [
 # --------------------------------------------------------------------------
 # Gabarits communs
 # --------------------------------------------------------------------------
-def head(title, desc, path, jsonld=None, preload_hero=False, cp=False):
+def head(title, desc, path, jsonld=None, preload_hero=False, cp=False, noindex=False):
     ld = ""
     for block in jsonld or []:
         ld += '<script type="application/ld+json">' + json.dumps(block, ensure_ascii=False) + "</script>\n"
+    robots = '<meta name="robots" content="noindex, nofollow">\n' if noindex else ""
     fonts = "Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700"
     cp_css = ""
     if cp:
@@ -128,7 +129,7 @@ def head(title, desc, path, jsonld=None, preload_hero=False, cp=False):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{escape(title)}</title>
 <meta name="description" content="{escape(desc, quote=True)}">
-<link rel="canonical" href="{BASE}{path}">
+{robots}<link rel="canonical" href="{BASE}{path}">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="Caparel">
@@ -787,15 +788,105 @@ def page_faq():
     return h
 
 
+def candidature_form():
+    dispo = "".join(
+        f'\n            <label class="checkbox-item"><input type="checkbox" name="disponibilites" value="{v}">{v}</label>'
+        for v in ["Temps partiel (journée)", "Temps plein", "Nuits", "Week-ends", "Remplacements ponctuels"]
+    )
+    return f"""<form id="candidatureForm">
+        <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true"><input type="text" name="hp_check_7f2a" id="hp_check_7f2a" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <div><label for="nom">Nom</label><input id="nom" name="nom" type="text" placeholder="Votre nom" required></div>
+          <div><label for="prenom">Prénom</label><input id="prenom" name="prenom" type="text" placeholder="Votre prénom" required></div>
+        </div>
+        <div class="form-row">
+          <div><label for="tel">Téléphone</label><input id="tel" name="tel" type="tel" placeholder="06 00 00 00 00" required></div>
+          <div><label for="email">Email</label><input id="email" name="email" type="email" placeholder="vous@email.fr" required></div>
+        </div>
+        <div class="form-row full">
+          <div><label for="adresse">Adresse</label><input id="adresse" name="adresse" type="text" placeholder="Numéro et nom de rue" autocomplete="street-address" required></div>
+        </div>
+        <div class="form-row">
+          <div><label for="codePostal">Code postal</label><input id="codePostal" name="codePostal" type="text" inputmode="numeric" pattern="[0-9]{{5}}" maxlength="5" placeholder="92200" autocomplete="postal-code" required></div>
+          <div><label for="ville">Ville</label><input id="ville" name="ville" type="text" placeholder="Votre ville" autocomplete="address-level2" required></div>
+        </div>
+        <div class="form-row full">
+          <div><label for="nationalite">Nationalité</label>
+            <select id="nationalite" name="nationaliteChoix" required>
+              <option value="">Sélectionnez…</option>
+              <option value="Française">Française</option>
+              <option value="Autre">Autre nationalité</option>
+            </select></div>
+        </div>
+        <div class="sejour-block" id="sejourBlock" hidden>
+          <div class="form-row full">
+            <div><label for="nationalitePrecision">Précisez votre nationalité</label><input id="nationalitePrecision" name="nationalitePrecision" type="text" placeholder="Votre nationalité" disabled></div>
+          </div>
+          <div class="form-row full">
+            <label id="sejourLabel">Disposez-vous d'un titre de séjour valide vous permettant de travailler en France ?</label>
+            <div class="checkbox-grid" role="radiogroup" aria-labelledby="sejourLabel">
+              <label class="checkbox-item"><input type="radio" name="titreSejourValide" value="Oui" disabled>Oui</label>
+              <label class="checkbox-item"><input type="radio" name="titreSejourValide" value="Non" disabled>Non</label>
+            </div>
+          </div>
+          <div class="form-row full" id="sejourTypeRow" hidden>
+            <div><label for="typeTitreSejour">Veuillez préciser le titre de séjour</label><input id="typeTitreSejour" name="typeTitreSejour" type="text" placeholder="Ex. carte de résident, carte de séjour…" disabled></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div><label for="diplome">Diplôme</label>
+            <select id="diplome" name="diplome">
+              <option value="">Sélectionnez…</option>
+              <option>DEAES</option>
+              <option>Titre professionnel ADVF</option>
+              <option>BEP CSS</option>
+              <option>DEAVS</option>
+              <option>Diplôme d'aide-soignant</option>
+              <option>Autre diplôme du secteur sanitaire ou social</option>
+              <option>Pas de diplôme, mais de l'expérience</option>
+            </select></div>
+          <div><label for="experience">Expérience auprès de personnes âgées</label>
+            <select id="experience" name="experience">
+              <option value="">Sélectionnez…</option>
+              <option>Aucune</option>
+              <option>Moins d'un an</option>
+              <option>1 à 3 ans</option>
+              <option>Plus de 3 ans</option>
+            </select></div>
+        </div>
+        <div class="form-row full">
+          <label>Vos disponibilités</label>
+          <div class="checkbox-grid">{dispo}
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="file-field">
+            <label for="cv">CV <em>(PDF ou Word, 3 Mo max)</em></label>
+            <input id="cv" name="cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+            <span class="file-name" aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="file-field">
+            <label for="photo">Photo <em>(obligatoire, JPG ou PNG)</em></label>
+            <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required>
+            <span class="file-name" aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div><label for="message">Message</label><textarea id="message" name="message" placeholder="Présentez-vous en quelques mots : parcours, secteur géographique, disponibilités…"></textarea></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Envoyer ma candidature</button>
+        <div class="form-status" role="status" aria-live="polite"></div>
+        <p class="form-legal">Les informations, votre CV et votre photo sont utilisés uniquement pour traiter votre candidature et ne sont pas transmis à des tiers en dehors de votre mise en relation avec un particulier-employeur. Vous disposez d'un droit d'accès, de rectification et d'effacement : {MAIL}.</p>
+      </form>"""
+
+
 def page_recrutement():
     desc = "Recrutement Caparel : devenez auxiliaire de vie / intervenant(e) à domicile auprès de personnes âgées à Neuilly-sur-Seine et dans les Hauts-de-Seine. Postulez en ligne."
     h = head("Recrutement auxiliaire de vie à domicile — Caparel", desc, "/recrutement",
              [breadcrumb_ld([("Accueil", "/"), ("Recrutement", "/recrutement")])])
     h += header("recrutement")
-    dispo = "".join(
-        f'\n            <label class="checkbox-item"><input type="checkbox" name="disponibilites" value="{v}">{v}</label>'
-        for v in ["Temps partiel (journée)", "Temps plein", "Nuits", "Week-ends", "Remplacements ponctuels"]
-    )
     h += f"""
 <section class="page-hero">
   <div class="container">
@@ -868,66 +959,7 @@ def page_recrutement():
     <div class="contact-form">
       <h3>Postuler en ligne</h3>
       <p class="hint">Nous vous recontactons rapidement pour un premier échange téléphonique.</p>
-      <form id="candidatureForm">
-        <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true"><input type="text" name="hp_check_7f2a" id="hp_check_7f2a" tabindex="-1" autocomplete="off"></div>
-        <div class="form-row">
-          <div><label for="nom">Nom</label><input id="nom" name="nom" type="text" placeholder="Votre nom" required></div>
-          <div><label for="prenom">Prénom</label><input id="prenom" name="prenom" type="text" placeholder="Votre prénom" required></div>
-        </div>
-        <div class="form-row">
-          <div><label for="tel">Téléphone</label><input id="tel" name="tel" type="tel" placeholder="06 00 00 00 00" required></div>
-          <div><label for="email">Email</label><input id="email" name="email" type="email" placeholder="vous@email.fr" required></div>
-        </div>
-        <div class="form-row full">
-          <div><label for="ville">Ville de résidence</label><input id="ville" name="ville" type="text" placeholder="Votre ville"></div>
-        </div>
-        <div class="form-row">
-          <div><label for="diplome">Diplôme</label>
-            <select id="diplome" name="diplome">
-              <option value="">Sélectionnez…</option>
-              <option>DEAES</option>
-              <option>Titre professionnel ADVF</option>
-              <option>BEP CSS</option>
-              <option>DEAVS</option>
-              <option>Diplôme d'aide-soignant</option>
-              <option>Autre diplôme du secteur sanitaire ou social</option>
-              <option>Pas de diplôme, mais de l'expérience</option>
-            </select></div>
-          <div><label for="experience">Expérience auprès de personnes âgées</label>
-            <select id="experience" name="experience">
-              <option value="">Sélectionnez…</option>
-              <option>Aucune</option>
-              <option>Moins d'un an</option>
-              <option>1 à 3 ans</option>
-              <option>Plus de 3 ans</option>
-            </select></div>
-        </div>
-        <div class="form-row full">
-          <label>Vos disponibilités</label>
-          <div class="checkbox-grid">{dispo}
-          </div>
-        </div>
-        <div class="form-row full">
-          <div class="file-field">
-            <label for="cv">CV <em>(PDF ou Word, 3 Mo max)</em></label>
-            <input id="cv" name="cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-            <span class="file-name" aria-live="polite"></span>
-          </div>
-        </div>
-        <div class="form-row full">
-          <div class="file-field">
-            <label for="photo">Photo <em>(obligatoire, JPG ou PNG)</em></label>
-            <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required>
-            <span class="file-name" aria-live="polite"></span>
-          </div>
-        </div>
-        <div class="form-row full">
-          <div><label for="message">Message</label><textarea id="message" name="message" placeholder="Présentez-vous en quelques mots : parcours, secteur géographique, disponibilités…"></textarea></div>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Envoyer ma candidature</button>
-        <div class="form-status" role="status" aria-live="polite"></div>
-        <p class="form-legal">Les informations, votre CV et votre photo sont utilisés uniquement pour traiter votre candidature et ne sont pas transmis à des tiers en dehors de votre mise en relation avec un particulier-employeur. Vous disposez d'un droit d'accès, de rectification et d'effacement : {MAIL}.</p>
-      </form>
+{candidature_form()}
     </div>
   </div>
 </section>
@@ -1010,6 +1042,34 @@ def page_demande():
     return h
 
 
+def page_candidature():
+    """Page de candidature non listée : pas dans le menu, ni le sitemap, ni indexée.
+    On la partage uniquement par lien."""
+    desc = "Formulaire de candidature Caparel."
+    h = head("Candidature auxiliaire de vie — Caparel", desc, "/candidature", noindex=True)
+    h += header("")
+    h += f"""
+<section class="page-hero">
+  <div class="container">
+    <h1>Candidature auxiliaire de vie</h1>
+    <p>Caparel accompagne les personnes âgées à domicile à Neuilly-sur-Seine et dans les Hauts-de-Seine. Remplissez le formulaire ci-dessous : nous vous recontactons rapidement pour un premier échange téléphonique.</p>
+  </div>
+</section>
+
+<section style="padding-top:40px">
+  <div class="container" style="max-width:760px">
+    <div class="contact-form">
+      <h3>Postuler en ligne</h3>
+      <p class="hint">Merci de remplir les informations demandées : seuls le CV, le diplôme, l'expérience, les disponibilités et le message sont facultatifs.</p>
+      {candidature_form()}
+    </div>
+  </div>
+</section>
+"""
+    h += footer()
+    return h
+
+
 def page_villes_hub():
     desc = "Caparel intervient à Neuilly-sur-Seine, Paris, Levallois-Perret, Boulogne-Billancourt, Courbevoie, Puteaux, Suresnes, Clichy, Issy-les-Moulineaux et Saint-Cloud. Trouvez votre aide à domicile."
     h = head("Aide à domicile en Hauts-de-Seine et à Paris — nos villes | Caparel", desc, "/aide-a-domicile/",
@@ -1055,6 +1115,7 @@ def main():
         "/faq.html": page_faq(),
         "/recrutement.html": page_recrutement(),
         "/demande.html": page_demande(),
+        "/candidature.html": page_candidature(),
         "/aide-a-domicile/": page_villes_hub(),
     }
     pages.update(city_pages())

@@ -356,12 +356,20 @@ export type NouvelleCandidature = {
   prenom: string;
   telephone: string;
   email: string;
+  adresse?: string;
   ville?: string;
+  codePostal?: string;
+  nationalite?: string;
+  titreSejour?: string; // réponse à la question sur le titre de séjour (si non français)
   diplome?: string;
   experience?: string;
   disponibilites?: string[];
   message?: string;
 };
+
+// Champ « Disposez-vous d'un titre de séjour valide… » (nom très long : on
+// l'adresse par son identifiant).
+const CHAMP_TITRE_SEJOUR = "fldIOe1KvGiWBaWNq";
 
 export async function creerCandidature(candidature: NouvelleCandidature) {
   const record = await base(TABLES.candidatures).create({
@@ -369,7 +377,11 @@ export async function creerCandidature(candidature: NouvelleCandidature) {
     Prénom: candidature.prenom,
     Téléphone: candidature.telephone,
     Email: candidature.email,
+    Adresse: candidature.adresse || "",
     Ville: candidature.ville || "",
+    "Code postal": candidature.codePostal || "",
+    Nationalité: candidature.nationalite || "",
+    [CHAMP_TITRE_SEJOUR]: candidature.titreSejour || "",
     Diplôme: candidature.diplome || "",
     Expérience: candidature.experience || "",
     Disponibilités: candidature.disponibilites || [],

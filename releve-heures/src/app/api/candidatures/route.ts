@@ -93,7 +93,12 @@ export async function POST(request: Request) {
         prenom: texte("prenom"),
         telephone: texte("telephone"),
         email: texte("email"),
+        adresse: texte("adresse"),
         ville: texte("ville"),
+        codePostal: texte("codePostal"),
+        nationalite: texte("nationalite"),
+        titreSejourValide: texte("titreSejourValide"),
+        typeTitreSejour: texte("typeTitreSejour"),
         diplome: texte("diplome"),
         experience: texte("experience"),
         disponibilites: formData.getAll("disponibilites").map(String),
@@ -110,7 +115,12 @@ export async function POST(request: Request) {
     prenom,
     telephone,
     email,
+    adresse,
     ville,
+    codePostal,
+    nationalite,
+    titreSejourValide,
+    typeTitreSejour,
     diplome,
     experience,
     disponibilites,
@@ -121,7 +131,12 @@ export async function POST(request: Request) {
     prenom?: string;
     telephone?: string;
     email?: string;
+    adresse?: string;
     ville?: string;
+    codePostal?: string;
+    nationalite?: string;
+    titreSejourValide?: string;
+    typeTitreSejour?: string;
     diplome?: string;
     experience?: string;
     disponibilites?: string[];
@@ -134,6 +149,23 @@ export async function POST(request: Request) {
       { error: "Champs requis manquants" },
       { status: 400, headers }
     );
+  }
+
+  // Question sur le titre de séjour : uniquement pour une nationalité autre
+  // que française, où elle est alors obligatoire.
+  const etranger = Boolean(nationalite) && nationalite !== "Française";
+  let titreSejour = "";
+  if (etranger) {
+    if (titreSejourValide === "Non") {
+      titreSejour = "Non";
+    } else if (titreSejourValide === "Oui" && typeTitreSejour?.trim()) {
+      titreSejour = `Oui — ${typeTitreSejour.trim()}`;
+    } else {
+      return NextResponse.json(
+        { error: "Merci de préciser votre titre de séjour" },
+        { status: 400, headers }
+      );
+    }
   }
 
   // Fichiers : validés AVANT de créer la candidature, pour ne pas enregistrer
@@ -176,7 +208,11 @@ export async function POST(request: Request) {
       prenom,
       telephone,
       email,
+      adresse,
       ville,
+      codePostal,
+      nationalite,
+      titreSejour,
       diplome,
       experience,
       disponibilites,

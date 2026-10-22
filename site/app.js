@@ -187,13 +187,47 @@
     };
   }, "Merci ! Votre demande a bien été envoyée. Nous vous recontactons sous 24 à 48h ouvrées.");
 
+  // Candidature : la question sur le titre de séjour n'apparaît que si la
+  // nationalité n'est pas française.
+  (function(){
+    var sel = document.getElementById('nationalite');
+    var block = document.getElementById('sejourBlock');
+    if(!sel || !block) return;
+    var precision = document.getElementById('nationalitePrecision');
+    var radios = block.querySelectorAll('input[name="titreSejourValide"]');
+    var typeRow = document.getElementById('sejourTypeRow');
+    var typeInput = document.getElementById('typeTitreSejour');
+    function maj(){
+      var autre = sel.value === 'Autre';
+      block.hidden = !autre;
+      precision.disabled = !autre; precision.required = autre;
+      Array.prototype.forEach.call(radios, function(r){ r.disabled = !autre; r.required = autre; });
+      var oui = autre && block.querySelector('input[name="titreSejourValide"]:checked') && block.querySelector('input[name="titreSejourValide"]:checked').value === 'Oui';
+      typeRow.hidden = !oui;
+      typeInput.disabled = !oui; typeInput.required = !!oui;
+    }
+    sel.addEventListener('change', maj);
+    Array.prototype.forEach.call(radios, function(r){ r.addEventListener('change', maj); });
+    var form = document.getElementById('candidatureForm');
+    if(form) form.addEventListener('reset', function(){ setTimeout(maj, 0); });
+  })();
+
   wire('candidatureForm', 'candidatures', function(f){
     var fd = new FormData();
     fd.append('nom', f.nom.value);
     fd.append('prenom', f.prenom.value);
     fd.append('telephone', f.tel.value);
     fd.append('email', f.email.value);
+    fd.append('adresse', f.adresse.value);
     fd.append('ville', f.ville.value);
+    fd.append('codePostal', f.codePostal.value);
+    var autre = f.nationaliteChoix.value === 'Autre';
+    fd.append('nationalite', autre ? f.nationalitePrecision.value.trim() : 'Française');
+    if(autre){
+      var tsv = f.querySelector('input[name="titreSejourValide"]:checked');
+      fd.append('titreSejourValide', tsv ? tsv.value : '');
+      fd.append('typeTitreSejour', f.typeTitreSejour.value);
+    }
     fd.append('diplome', f.diplome.value);
     fd.append('experience', f.experience.value);
     checked(f, 'disponibilites').forEach(function(d){ fd.append('disponibilites', d); });

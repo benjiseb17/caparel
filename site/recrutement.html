@@ -148,7 +148,7 @@
     <div class="contact-form">
       <h3>Postuler en ligne</h3>
       <p class="hint">Nous vous recontactons rapidement pour un premier échange téléphonique.</p>
-      <form id="candidatureForm">
+<form id="candidatureForm">
         <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true"><input type="text" name="hp_check_7f2a" id="hp_check_7f2a" tabindex="-1" autocomplete="off"></div>
         <div class="form-row">
           <div><label for="nom">Nom</label><input id="nom" name="nom" type="text" placeholder="Votre nom" required></div>
@@ -159,7 +159,34 @@
           <div><label for="email">Email</label><input id="email" name="email" type="email" placeholder="vous@email.fr" required></div>
         </div>
         <div class="form-row full">
-          <div><label for="ville">Ville de résidence</label><input id="ville" name="ville" type="text" placeholder="Votre ville"></div>
+          <div><label for="adresse">Adresse</label><input id="adresse" name="adresse" type="text" placeholder="Numéro et nom de rue" autocomplete="street-address" required></div>
+        </div>
+        <div class="form-row">
+          <div><label for="codePostal">Code postal</label><input id="codePostal" name="codePostal" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="92200" autocomplete="postal-code" required></div>
+          <div><label for="ville">Ville</label><input id="ville" name="ville" type="text" placeholder="Votre ville" autocomplete="address-level2" required></div>
+        </div>
+        <div class="form-row full">
+          <div><label for="nationalite">Nationalité</label>
+            <select id="nationalite" name="nationaliteChoix" required>
+              <option value="">Sélectionnez…</option>
+              <option value="Française">Française</option>
+              <option value="Autre">Autre nationalité</option>
+            </select></div>
+        </div>
+        <div class="sejour-block" id="sejourBlock" hidden>
+          <div class="form-row full">
+            <div><label for="nationalitePrecision">Précisez votre nationalité</label><input id="nationalitePrecision" name="nationalitePrecision" type="text" placeholder="Votre nationalité" disabled></div>
+          </div>
+          <div class="form-row full">
+            <label id="sejourLabel">Disposez-vous d'un titre de séjour valide vous permettant de travailler en France ?</label>
+            <div class="checkbox-grid" role="radiogroup" aria-labelledby="sejourLabel">
+              <label class="checkbox-item"><input type="radio" name="titreSejourValide" value="Oui" disabled>Oui</label>
+              <label class="checkbox-item"><input type="radio" name="titreSejourValide" value="Non" disabled>Non</label>
+            </div>
+          </div>
+          <div class="form-row full" id="sejourTypeRow" hidden>
+            <div><label for="typeTitreSejour">Veuillez préciser le titre de séjour</label><input id="typeTitreSejour" name="typeTitreSejour" type="text" placeholder="Ex. carte de résident, carte de séjour…" disabled></div>
+          </div>
         </div>
         <div class="form-row">
           <div><label for="diplome">Diplôme</label>
