@@ -3,6 +3,7 @@
 recrutement, pages villes). Le CSS et le JS sont partagés (site/style.css,
 site/app.js). Usage : python3 tools/build_site.py
 """
+import datetime
 import json
 import os
 from html import escape
@@ -13,7 +14,7 @@ BASE = "https://caparel.fr"
 TEL = "06 64 26 93 03"
 TEL_HREF = "tel:0664269303"
 MAIL = "contact@caparel.fr"
-LASTMOD = "2026-10-14"
+LASTMOD = datetime.date.today().isoformat()  # date de génération
 
 CP_SECTION = open(os.path.join(ROOT, "tools", "cp_section.html"), encoding="utf-8").read()
 SPRITE = open(os.path.join(ROOT, "tools", "sprite.svg"), encoding="utf-8").read()
