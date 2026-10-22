@@ -193,14 +193,12 @@
     var sel = document.getElementById('nationalite');
     var block = document.getElementById('sejourBlock');
     if(!sel || !block) return;
-    var precision = document.getElementById('nationalitePrecision');
     var radios = block.querySelectorAll('input[name="titreSejourValide"]');
     var typeRow = document.getElementById('sejourTypeRow');
     var typeInput = document.getElementById('typeTitreSejour');
     function maj(){
-      var autre = sel.value === 'Autre';
+      var autre = sel.value !== '' && sel.value !== 'Française';
       block.hidden = !autre;
-      precision.disabled = !autre; precision.required = autre;
       Array.prototype.forEach.call(radios, function(r){ r.disabled = !autre; r.required = autre; });
       var oui = autre && block.querySelector('input[name="titreSejourValide"]:checked') && block.querySelector('input[name="titreSejourValide"]:checked').value === 'Oui';
       typeRow.hidden = !oui;
@@ -221,8 +219,8 @@
     fd.append('adresse', f.adresse.value);
     fd.append('ville', f.ville.value);
     fd.append('codePostal', f.codePostal.value);
-    var autre = f.nationaliteChoix.value === 'Autre';
-    fd.append('nationalite', autre ? f.nationalitePrecision.value.trim() : 'Française');
+    var autre = f.nationaliteChoix.value !== 'Française';
+    fd.append('nationalite', f.nationaliteChoix.value);
     if(autre){
       var tsv = f.querySelector('input[name="titreSejourValide"]:checked');
       fd.append('titreSejourValide', tsv ? tsv.value : '');
