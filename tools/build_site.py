@@ -426,8 +426,8 @@ def hero_block(c=None):
         eyebrow = "Aide à domicile aux personnes âgées"
     else:
         titre = 'Vivre chez soi, entouré des <span class="mint">bonnes personnes.</span>'
-        lead = "Caparel est un service mandataire d'aide à domicile pour les personnes âgées, à Neuilly-sur-Seine et alentours : aide à la personne, entretien, accompagnement et démarches administratives."
-        eyebrow = "Aide à domicile · Neuilly-sur-Seine &amp; Hauts-de-Seine"
+        lead = "Caparel est un service mandataire d'aide à domicile pour les personnes âgées, à Paris et en Île-de-France : aide à la personne, entretien, accompagnement et démarches administratives."
+        eyebrow = "Aide à domicile · Paris &amp; Île-de-France"
     return f"""<section class="hero2" id="top">
   <div class="container hero2-in">
     <div class="hero2-text">
